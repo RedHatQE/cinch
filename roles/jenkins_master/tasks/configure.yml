@@ -1,0 +1,38 @@
+- name: set Jenkins Java options
+  template:
+    src: sysconfig_jenkins
+    dest: /etc/sysconfig/jenkins
+    owner: root
+    group: root
+    mode: 0600
+  become: true
+  notify: restart Jenkins
+
+- name: update ulimits
+  become: true
+  template:
+    src: 99-jenkins.conf
+    dest: /etc/security/limits.d/99-jenkins.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart Jenkins
+
+- name: ensure SSH directory exists
+  file:
+    name: "{{ ansible_user_dir }}/.ssh"
+    state: directory
+
+- name: upload SSH key
+  copy:
+    src: "{{ jenkins_ssh_private_key }}"
+    dest: "{{ ansible_user_dir }}/.ssh/id_rsa"
+  notify: regenerate SSH key
+
+- name: ensure Jenkins home is writable by jenkins
+  file:
+    dest: "{{ jenkins_home }}"
+    owner: jenkins
+    group: jenkins
+    state: directory
+  become: true
