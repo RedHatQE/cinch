@@ -15,13 +15,21 @@ As a qiuck start, you can copy one of the folders in the "inventory" folder to
 a new name "local" and modify the hosts file and any group_vars files to point
 to the options you want.
 
+Development
+-----------
+
 If you are looking to just mess around with either development or take it for
-a spin, you can jump into the vagrant/master folder and muuter ./full_cycle.sh
+a spin, you can jump into the vagrant/master folder and mutter ./full_cycle.sh
 to get a local VM up and going and configured to run Jenkins master with all
 of the default options from this playbook. If you have access to extra RHEL7
 licenses, you can run from the vagrant/master_rhel folder, instead, but you
 will need to pass through at least an additional option that points the system
 to your RHEL repository mirror infrastructure.
+
+For more information, check out the file docs/development.md
+
+Settings
+--------
 
 Some notable defaults for Jenkins masters currently enabled are
 - Java 8
