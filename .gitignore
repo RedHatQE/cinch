@@ -1,5 +1,7 @@
 .venv
 site.retry
+inventory/local/*
+.vagrant
 
 *.swp
 *.swo

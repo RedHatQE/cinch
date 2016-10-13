@@ -1,0 +1,4 @@
+dependencies:
+  - role: certificate_authority
+  - role: repositories
+  - role: jenkins_common

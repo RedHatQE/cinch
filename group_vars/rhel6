@@ -1,24 +1,37 @@
-repositories:
-  - name: epel
+all_repositories:
+  latest:
+    name: rhel6-latest
+    baseurl: "{{ rhel_base }}/$basearch/os/"
+  optional:
+    name: rhel6-optional
+    baseurl: "{{ rhel_base }}/$basearch/optional/os/"
+  extras:
+    name: rhel6-extras
+    baseurl: "{{ rhel_base }}/$basearch/extras/os/"
+  epel:
+    name: epel
     mirrorlist: "{{ fedora_mirrors }}repo=epel-6"
-  - name: epel-testing
-    mirrorlist: "{{ fedora_mirrors }}repo=testing-epel6"
-  - name: epel
-    mirrorlist: "{{ fedora_mirrors }}repo=epel-6"
-    includepkgs:
-      - python-html5lib
-      - python-beautifulsoup4
-      - python-blessings
-      - python-html5lib # Duplication is present in old version - typo?
-  - name: rhel6-latest
-    baseurl: "{{ rhel_base }}/latest-RHEL-6/compose/Server/x86_64/os/"
-  - name: rhel6-optional
-    baseurl: "{{ rhel_base }}/latest-RHEL-6/compose/Server/optional/x86_64/os/"
-  - name: rhel6-extras
-    baseurl: "{{ rhel_base }}/latest-EXTRAS-6-RHEL-6/compose/Server/x86_64/os/"
-  - name: rhscl-python27
-    baseurl: https://www.softwarecollections.org/repos/rhscl/python27/epel-6-x86_64/
+  rhscl_python27:
+    name: rhscl-python27
+    baseurl: https://www.softwarecollections.org/repos/rhscl/python27/epel-6-$basearch/
 
 repository_downloads:
   - http://example.com/repo-with-conserver.repo
   - https://beaker-project.org/yum/beaker-client-RedHatEnterpriseLinux.repo
+
+# These types of repositories will download the requested URL into the /etc/yum.repos.d
+# folder in order to enable them
+all_download_repositories:
+  beaker: https://beaker-project.org/yum/beaker-client-RedHatEnterpriseLinux.repo
+  jenkins: http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
+
+jenkins_slave_repositories:
+  - "{{ all_repositories.latest }}"
+  - "{{ all_repositories.optional }}"
+  - "{{ all_repositories.extras }}"
+  - "{{ all_repositories.epel }}"
+  - "{{ all_repositories.rhscl_python27 }}"
+
+jenkins_slave_download_repositories:
+  - "{{ all_download_repositories.conserver }}"
+  - "{{ all_download_repositories.beaker }}"

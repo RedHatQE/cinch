@@ -1,3 +1,2 @@
-certificate_authority_url: http://example.com/example_cert.crt
-certificate_authority_certname: newca
+certificate_authority_urls: []
 certificate_authority_validate_certs: false

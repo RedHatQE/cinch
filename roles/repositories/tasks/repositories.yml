@@ -9,3 +9,4 @@
     description: '{{ item.description | default("Repository installed by Ansible") }}'
     mirrorlist: '{{ item.mirrorlist | default(omit) }}'
     baseurl: '{{ item.baseurl | default(omit) }}'
+  register: repositories

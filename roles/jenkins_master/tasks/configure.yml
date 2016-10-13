@@ -25,8 +25,9 @@
 
 - name: upload SSH key
   copy:
-    src: "{{ jenkins_ssh_private_key }}"
+    src: "{{ jenkins_ssh_keyfile }}"
     dest: "{{ ansible_user_dir }}/.ssh/id_rsa"
+    mode: 0600
   notify: regenerate SSH key
 
 - name: ensure Jenkins home is writable by jenkins

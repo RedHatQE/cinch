@@ -27,7 +27,7 @@ https_enabled: false
 # jenkins_ssl_key: jenkins.key
 # Local path to a private SSH keyfile to upload into the remote system and
 # to set as an authorized keyfile for the Jenkins user
-jenkins_ssh_private_key: id_rsa
+jenkins_ssh_keyfile: id_rsa
 # The version of Jenkins to install from the repository. The only use for
 # this value is constructing the name of the RPM below, so there is no need
 # to override this just outside of changing RPM name

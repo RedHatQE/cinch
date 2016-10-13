@@ -59,7 +59,7 @@
 
 - name: force handlers
   meta: flush_handlers
-     
+
 - name: wait for Jenkins to start up
   wait_for:
     port: "{{ https_enabled | ternary(443, 80) }}"

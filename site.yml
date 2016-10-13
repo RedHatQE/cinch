@@ -4,8 +4,18 @@
   roles:
     - certificate_authority
 
+- name: configure repositories
+  hosts: repositories
+  roles:
+    - repositories
+
 - name: configure jenkins masters
   hosts: jenkins_master
   roles:
-    - repositories
     - jenkins_master
+
+- name: configure jenkins slaves
+  become: true
+  hosts: jenkins_slave
+  roles:
+    - jenkins_slave

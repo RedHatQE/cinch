@@ -4,6 +4,8 @@
     state: started
     delay: 15
 
+# TODO: When the Ansible SSH user is root, why is the jar file saved to /root
+# and not /var/lib/jenkins?
 - name: download jenkins CLI
   get_url:
     url: "{{ https_enabled | ternary('https', 'http') }}://localhost/jnlpJars/jenkins-cli.jar"
