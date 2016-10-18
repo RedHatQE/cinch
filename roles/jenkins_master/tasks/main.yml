@@ -1,4 +1,5 @@
 - name: check Jenkins global security
+  become: false
   jenkins_security_enabled:
     jenkins_home: "{{ jenkins_home }}"
 
@@ -17,7 +18,6 @@
   include: iptables.yml
 
 - name: configure Jenkins for HTTPS
-  become: true
   include: https.yml
   when: https_enabled
 
@@ -25,13 +25,13 @@
   include: configure.yml
 
 - name: startup Jenkins
-  become: true
   service:
     name: jenkins
     state: started
     enabled: true
 
 - name: configure CLI users
+  become: false
   include: cli-users.yml
   when: jenkins_security_enabled
 

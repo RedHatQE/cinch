@@ -1,5 +1,4 @@
 - name: install repository
-  become: true
   yum_repository:
     name: '{{ item.name }}'
     failovermethod: '{{ item.failovermethod | default(repository_defaults.failovermethod) }}'

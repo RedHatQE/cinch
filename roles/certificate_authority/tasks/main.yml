@@ -1,5 +1,4 @@
 - name: install certificate authority
-  become: true
   get_url:
     url: "{{ item }}"
     dest: /etc/pki/ca-trust/source/anchors/
@@ -8,6 +7,5 @@
   register: cert_download
 
 - name: install certificate authority
-  become: true
   command: update-ca-trust
   when: cert_download.changed

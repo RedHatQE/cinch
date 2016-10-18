@@ -1,39 +1,18 @@
 - name: install beaker client
-  become: true
   yum:
     name: libxslt-python,beaker-client
     state: present
   when: install_beaker
 
 - name: install java
-  become: true
   yum:
-    name: "{{ java_rpm }}"
+    name: "{{ item }}"
     state: present
+  with_items:
+    - java-1.{{ java_version }}.0-openjdk
+    - java-1.{{ java_version }}.0-openjdk-devel
 
 - name: upload common requirements file
   copy:
     src: requirements-common.txt
     dest: /tmp/requirements-common.txt
-
-- name: ensure user's .ssh folder exists
-  become: true
-  file:
-    dest: "{{ jenkins_user_home }}/.ssh"
-    state: directory
-    owner: "{{ jenkins_user }}"
-
-- name: add private SSH key
-  become: true
-  copy:
-    src: "{{ jenkins_ssh_keyfile }}"
-    dest: "{{ jenkins_user_home }}/.ssh/id_rsa"
-    owner: "{{ jenkins_user }}"
-    mode: 0600
-  register: ssh_private
-
-- name: generate public SSH key
-  become: true
-  shell: "ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub"
-  become_user: "{{ jenkins_user }}"
-  when: ssh_private.changed

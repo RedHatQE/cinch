@@ -15,10 +15,6 @@ all_repositories:
     name: rhscl-python27
     baseurl: https://www.softwarecollections.org/repos/rhscl/python27/epel-6-$basearch/
 
-repository_downloads:
-  - http://example.com/repo-with-conserver.repo
-  - https://beaker-project.org/yum/beaker-client-RedHatEnterpriseLinux.repo
-
 # These types of repositories will download the requested URL into the /etc/yum.repos.d
 # folder in order to enable them
 all_download_repositories:
@@ -33,5 +29,4 @@ jenkins_slave_repositories:
   - "{{ all_repositories.rhscl_python27 }}"
 
 jenkins_slave_download_repositories:
-  - "{{ all_download_repositories.conserver }}"
   - "{{ all_download_repositories.beaker }}"

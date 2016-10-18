@@ -58,10 +58,6 @@ jenkins_home: /var/lib/jenkins
 # such as one would pass to yum or dnf or a full path to the RPM file
 # (including a full URL). See note above on the variable "jenkins_version"
 jenkins_rpm: jenkins-{{ jenkins_version }}-1.1
-# The Java version to install. Older versions are deprecated and will not be
-# supported beyond the EOL support for their packages in the distribution of
-# choice
-java_version: 8
 # A set of command-line Java options to be passed into Jenkins. These values
 # can be anything accepted either by Jenkins or by the JVM
 jenkins_java_options:

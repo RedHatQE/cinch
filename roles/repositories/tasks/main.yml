@@ -7,7 +7,6 @@
   register: repository_download
 
 - name: import repository keys
-  become: true
   rpm_key:
     key: "{{ item.key }}"
     state: present
@@ -15,6 +14,5 @@
   with_items: "{{ rpm_key_imports }}"
 
 - name: clean yum cache
-  become: true
   shell: yum clean all
   when: repositories.changed or repository_download.changed

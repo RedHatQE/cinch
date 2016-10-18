@@ -34,7 +34,6 @@ jenkins_slave_repositories:
   - "{{ all_repositories.epel }}"
 
 jenkins_slave_download_repositories:
-  - "{{ all_download_repositories.conserver }}"
   - "{{ all_download_repositories.beaker }}"
 
 jenkins_master_repositories:

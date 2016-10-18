@@ -5,11 +5,9 @@
     owner: root
     group: root
     mode: 0600
-  become: true
   notify: restart Jenkins
 
 - name: update ulimits
-  become: true
   template:
     src: 99-jenkins.conf
     dest: /etc/security/limits.d/99-jenkins.conf
@@ -36,4 +34,3 @@
     owner: jenkins
     group: jenkins
     state: directory
-  become: true

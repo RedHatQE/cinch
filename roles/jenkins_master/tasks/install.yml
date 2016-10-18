@@ -1,5 +1,4 @@
 - name: install httpd if needed
-  become: true
   yum:
     name: httpd
     state: present
@@ -7,13 +6,11 @@
 
 # TODO: This tends to hang forever and the yum process eventually dies
 #- name: upgrade base system
-#  become: true
 #  yum:
 #    name: "*"
 #    state: latest
 
 - name: install necessary RPM files
-  become: true
   yum:
     name: "{{ item }}"
     state: present
@@ -23,7 +20,6 @@
     - nss
     - iptables
     - iptables-services
-    - java-1.{{ java_version }}.0-openjdk
     - "{{ jenkins_rpm }}"
     - graphviz
     - lftp
@@ -54,4 +50,3 @@
     line: "exclude={{ upgrade_blacklist | join(' ') }}"
     state: present
     regexp: "^exclude=.*$"
-  become: true

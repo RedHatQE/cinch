@@ -1,4 +1,5 @@
 - name: wait for Jenkins to start up
+  become: false
   wait_for:
     port: "{{ https_enabled | ternary(443, 80) }}"
     state: started
@@ -13,9 +14,9 @@
     force: true
     validate_certs: false
   become_user: jenkins
-  become: true
 
 - name: configure CLI users appropriately
+  become: false
   jenkins_cli_user:
     jenkins_home: "{{ jenkins_home }}"
     key_file: "{{ ansible_user_dir }}/.ssh/id_rsa.pub"
