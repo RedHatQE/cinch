@@ -12,6 +12,7 @@ function playbook {
     source "${TOP}/.venv/bin/activate"
     directory="${1}"
     shift
+    export ANSIBLE_CONFIG="${TOP}/vagrant/ansible.cfg"
     ansible-playbook -i "${TOP}/vagrant/${directory}/hosts" "${TOP}/site.yml" \
         -e "vagrant_dir=${TOP}/vagrant/${directory}" \
         "$@" || exit 1

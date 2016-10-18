@@ -1,0 +1,96 @@
+- name: install rpm packages
+  yum:
+    name: "{{ jslave_rpm_deps | join(',') }}"
+    state: present
+
+- name: install pip packages
+  pip:
+    requirements: /tmp/requirements-common.txt
+    state: present
+
+- name: install additional pip packages
+  pip:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - ansible==1.8.4
+    - nose
+
+- name: add host to hosts file
+  lineinfile:
+    line: "{{ ansible_ssh_host }} {{ inventory_hostname }}.localdomain"
+    dest: /etc/hosts
+
+- name: create jenkins user
+  user:
+    name: jenkins
+    password: "{{ jenkins_user_password }}"
+
+- name: give jenkins user sudo access
+  lineinfile:
+    dest: /etc/sudoers
+    line: "jenkins  ALL=(ALL)   NOPASSWD: ALL"
+
+- name: ensure user's .ssh folder exists
+  file:
+    dest: "{{ jenkins_user_home }}/.ssh"
+    state: directory
+    owner: "{{ jenkins_user }}"
+
+- name: add private SSH key
+  copy:
+    src: "{{ jenkins_ssh_keyfile }}"
+    dest: "{{ jenkins_user_home }}/.ssh/id_rsa"
+    owner: "{{ jenkins_user }}"
+    mode: 0600
+  register: ssh_private
+
+- name: generate public SSH key
+  shell: "ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub"
+  become_user: "{{ jenkins_user }}"
+  when: ssh_private.changed
+
+- name: fetch swarm download
+  get_url:
+    dest: "{{ jenkins_user_home }}/{{ jswarm_filename }}"
+    url: "{{ jswarm_download }}"
+
+- name: create jswarm command
+  set_fact:
+    _jswarm_command: >
+      /usr/bin/java -Xmx2048m -jar {{ jenkins_user_home }}/{{ jswarm_filename }}
+      -master {{ jenkins_master_url }}
+      -name {{ jslave_name }}
+      -executors {{ jswarm_execs }}
+      -labels {{ jslave_label }}
+      -fsroot {{ jswarm_home }}
+      -mode exclusive
+      -disableSslVerification
+      -deleteExistingClients
+
+- name: install swarm to rc.local
+  # TODO: replace with upstart file and systemd service
+  lineinfile:
+    dest: /etc/rc.d/rc.local
+
+    line: "nohup {{ _jswarm_command | trim() }} 1>/tmp/jslave.log 2>&1 &"
+    mode: a+x
+    create: true
+    state: present
+
+- name: add username
+  set_fact:
+    _jswarm_command: "{{ _jswarm_command | trim() }} -username {{ jenkins_slave_username }}"
+  when: jenkins_slave_username != ''
+
+- name: add password
+  set_fact:
+    _jswarm_command: "{{ _jswarm_command | trim() }} -password {{ jenkins_slave_password }}"
+  when: jenkins_slave_password != ''
+
+- name: execute swarm
+  # TODO: add error handling if process exits
+  become_user: "{{ run_swarm_as_jenkins | ternary('jenkins', 'root') }}"
+  shell: "nohup {{ _jswarm_command | trim() }} 1>/tmp/jslave.log 2>&1 &"
+  args:
+    creates: /tmp/jslave.log

@@ -1,4 +1,5 @@
 - name: wait for Jenkins to start up
+  become: false
   wait_for:
     port: "{{ https_enabled | ternary(443, 80) }}"
     state: started
@@ -31,7 +32,6 @@
   notify: restart Jenkins
 
 - name: run update center configure script
-  become: true
   become_user: jenkins
   jenkins_update_center:
     update_center_id: "{{ item.id }}"
@@ -40,7 +40,6 @@
   notify: restart Jenkins
 
 - name: create cert path
-  become: true
   file:
     dest: "{{ jenkins_home }}/update-center-rootCAs"
     state: directory
@@ -48,7 +47,6 @@
     group: jenkins
 
 - name: copy cert file
-  become: true
   copy:
     src: "{{ update_center_certificate }}"
     dest: "{{ jenkins_home }}/update-center-rootCAs/update-center.crt"
@@ -59,14 +57,16 @@
 
 - name: force handlers
   meta: flush_handlers
-     
+
 - name: wait for Jenkins to start up
+  become: false
   wait_for:
     port: "{{ https_enabled | ternary(443, 80) }}"
     state: started
     delay: 15
 
 - name: filter plugin list
+  become: false
   set_fact:
     _jenkins_plugins: "{{ _jenkins_plugins | default([]) | union([item.split('=')[0]]) }}"
   with_items: "{{ jenkins_plugins }}"

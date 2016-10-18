@@ -5,7 +5,6 @@
     enabled: false
 
 - name: set iptables rules forwarding port to Jenkins default port
-  become: true
   iptables:
     chain: PREROUTING
     destination_port: "{{ https_enabled | ternary(443, 80) }}"
@@ -18,7 +17,6 @@
   register: forward_rule
 
 - name: set iptables rule forwarding loopback to Jenkins default port
-  become: true
   iptables:
     chain: OUTPUT
     table: nat
@@ -33,7 +31,6 @@
   register: loopback_rule
 
 - name: set iptables rule forwarding for real address to loopback
-  become: true
   iptables:
     chain: OUTPUT
     table: nat
@@ -46,13 +43,11 @@
   register: real_address_rule
 
 - name: save iptables
-  become: true
   shell: service iptables save
   changed_when: false
   when: forward_rule.changed or loopback_rule.changed or real_address_rule.changed
 
 - name: start iptables
-  become: true
   service:
     name: iptables
     state: started

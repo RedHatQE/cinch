@@ -1,11 +1,24 @@
 - name: configure certificate authority, if necessary
+  become: true
   hosts: certificate_authority
   gather_facts: false
   roles:
     - certificate_authority
 
-- name: configure jenkins masters
-  hosts: jenkins_master
+- name: configure repositories
+  become: true
+  hosts: repositories
   roles:
     - repositories
+
+- name: configure jenkins masters
+  become: true
+  hosts: jenkins_master
+  roles:
     - jenkins_master
+
+- name: configure jenkins slaves
+  become: true
+  hosts: jenkins_slave
+  roles:
+    - jenkins_slave

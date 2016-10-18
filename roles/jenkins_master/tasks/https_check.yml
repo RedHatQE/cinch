@@ -1,5 +1,4 @@
 - name: check for HTTPS port
-  become: true
   line_match:
     file: /etc/sysconfig/jenkins
     line: ^JENKINS_HTTPS_PORT=['"]?8443['"]?
@@ -7,7 +6,6 @@
   register: _https_port
 
 - name: check for httpsKeyStore
-  become: true
   line_match:
     file: /etc/sysconfig/jenkins
     line: ^JENKINS_ARGS=['"]?.*httpsKeyStore.*['"]

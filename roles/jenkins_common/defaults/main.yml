@@ -1,5 +1,8 @@
 install_beaker: true
-jswarm_version: 1.22
-java_rpm: java-1.8.0-openjdk,java-1.8.0-openjdk-devel
+jswarm_version: 2.1
 jenkins_slave_username: ''
 jenkins_slave_password: ''
+# The Java version to install. Older versions are deprecated and will not be
+# supported beyond the EOL support for their packages in the distribution of
+# choice
+java_version: 8

@@ -27,7 +27,7 @@ https_enabled: false
 # jenkins_ssl_key: jenkins.key
 # Local path to a private SSH keyfile to upload into the remote system and
 # to set as an authorized keyfile for the Jenkins user
-jenkins_ssh_private_key: id_rsa
+jenkins_ssh_keyfile: id_rsa
 # The version of Jenkins to install from the repository. The only use for
 # this value is constructing the name of the RPM below, so there is no need
 # to override this just outside of changing RPM name
@@ -58,10 +58,6 @@ jenkins_home: /var/lib/jenkins
 # such as one would pass to yum or dnf or a full path to the RPM file
 # (including a full URL). See note above on the variable "jenkins_version"
 jenkins_rpm: jenkins-{{ jenkins_version }}-1.1
-# The Java version to install. Older versions are deprecated and will not be
-# supported beyond the EOL support for their packages in the distribution of
-# choice
-java_version: 8
 # A set of command-line Java options to be passed into Jenkins. These values
 # can be anything accepted either by Jenkins or by the JVM
 jenkins_java_options:

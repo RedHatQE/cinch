@@ -1,26 +1,16 @@
 - name: install httpd if needed
-  become: true
   yum:
     name: httpd
     state: present
   when: https_enabled
 
-- name: pin certain packages
-  lineinfile:
-    dest: /etc/yum.conf
-    line: "exclude={{ upgrade_blacklist | join(' ') }}"
-    state: present
-    regexp: "^exclude=.*$"
-  become: true
-
-- name: upgrade base system
-  become: true
-  yum:
-    name: "*"
-    state: latest
+# TODO: This tends to hang forever and the yum process eventually dies
+#- name: upgrade base system
+#  yum:
+#    name: "*"
+#    state: latest
 
 - name: install necessary RPM files
-  become: true
   yum:
     name: "{{ item }}"
     state: present
@@ -30,7 +20,6 @@
     - nss
     - iptables
     - iptables-services
-    - java-1.{{ java_version }}.0-openjdk
     - "{{ jenkins_rpm }}"
     - graphviz
     - lftp
@@ -52,3 +41,12 @@
     - python-novaclient
     - python-neutronclient
     - wget
+
+# This blacklist must be done *after* the package installation defined above,
+# otherwise packages can be blacklisted before they are installed initially.
+- name: pin certain packages
+  lineinfile:
+    dest: /etc/yum.conf
+    line: "exclude={{ upgrade_blacklist | join(' ') }}"
+    state: present
+    regexp: "^exclude=.*$"

@@ -1,13 +1,18 @@
 - include: repositories.yml
   with_items: "{{ repositories }}"
+  register: repositories
 
 - include: repository_download.yml
   with_items: "{{ download_repositories }}"
+  register: repository_download
 
 - name: import repository keys
-  become: true
   rpm_key:
     key: "{{ item.key }}"
     state: present
     validate_certs: "{{ item.validate_certs }}"
   with_items: "{{ rpm_key_imports }}"
+
+- name: clean yum cache
+  shell: yum clean all
+  when: repositories.changed or repository_download.changed

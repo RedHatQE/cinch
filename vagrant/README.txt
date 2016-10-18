@@ -3,7 +3,7 @@ can be orchestratred together for development and testing, or just for trying
 the playbooks in a non-destructive and low-maintenance setting.
 
 You can choose to manually invoke "vagrant up" if you have options you would
-like to pass to Vagrant. Alternatively, ./full_cycle.sh will destroy any 
+like to pass to Vagrant. Alternatively, ./full_cycle.sh will destroy any
 currently running VMs from that machine, spin up fresh ones, and run the
 playbooks.
 

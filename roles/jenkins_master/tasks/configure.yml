@@ -5,11 +5,9 @@
     owner: root
     group: root
     mode: 0600
-  become: true
   notify: restart Jenkins
 
 - name: update ulimits
-  become: true
   template:
     src: 99-jenkins.conf
     dest: /etc/security/limits.d/99-jenkins.conf
@@ -25,8 +23,9 @@
 
 - name: upload SSH key
   copy:
-    src: "{{ jenkins_ssh_private_key }}"
+    src: "{{ jenkins_ssh_keyfile }}"
     dest: "{{ ansible_user_dir }}/.ssh/id_rsa"
+    mode: 0600
   notify: regenerate SSH key
 
 - name: ensure Jenkins home is writable by jenkins
@@ -35,4 +34,3 @@
     owner: jenkins
     group: jenkins
     state: directory
-  become: true

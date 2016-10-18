@@ -1,5 +1,4 @@
 - name: install repository
-  become: true
   yum_repository:
     name: '{{ item.name }}'
     failovermethod: '{{ item.failovermethod | default(repository_defaults.failovermethod) }}'
@@ -9,3 +8,4 @@
     description: '{{ item.description | default("Repository installed by Ansible") }}'
     mirrorlist: '{{ item.mirrorlist | default(omit) }}'
     baseurl: '{{ item.baseurl | default(omit) }}'
+  register: repositories

@@ -32,7 +32,6 @@
   when: ssl_certificate_upload.changed
 
 - name: generate pkcs12 version of certificate file
-  become: true
   become_user: jenkins
   shell: >
     openssl pkcs12 -export -in jenkins.crt -inkey jenkins.key -out jenkins.p12
@@ -43,7 +42,6 @@
 
 - name: import key tool to Java keystore
   become_user: jenkins
-  become: true
   shell: >
     keytool -importkeystore -deststorepass {{ keystore_pass }} -destkeypass {{ keystore_pass }}
     -destkeystore {{ jenkins_home }}/.ssl/keystore -srckeystore {{ jenkins_home }}/.ssl/jenkins.p12

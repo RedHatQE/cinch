@@ -1,4 +1,4 @@
-repositories:
+_repositories:
   - name: epel-testing
     mirrorlist: "{{ fedora_mirrors }}repo=testing-epel7"
   - name: epel
@@ -6,9 +6,16 @@ repositories:
   - name: cloud
     baseurl: "{{ centos_mirrors }}/$releasever/cloud/$basearch/openstack-liberty/"
 
-download_repositories:
+_download_repositories:
   - http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
+  - https://beaker-project.org/yum/beaker-client-CentOS.repo
 
 rpm_key_imports:
   - key: http://pkg.jenkins-ci.org/redhat-stable/jenkins.io.key
     validate_certs: true
+
+jenkins_slave_repositories: "{{ _repositories }}"
+jenkins_slave_download_repositories: "{{ _download_repositories }}"
+
+jenkins_master_repositories: "{{ _repositories }}"
+jenkins_master_download_repositories: "{{ _download_repositories }}"
