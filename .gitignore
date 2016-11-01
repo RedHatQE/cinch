@@ -5,3 +5,6 @@ inventory/local/*
 
 *.swp
 *.swo
+*.pyc
+*.pyo
+*.egg-info
