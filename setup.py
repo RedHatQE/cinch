@@ -9,7 +9,7 @@ with open(path.join(here, 'README.md')) as f:
 
 setup(
     name='cinch',
-    version='0.1',
+    version='0.1.6',
     description='Cinch continuous integration setup',
     long_description=description,
     url='https://github.com/RedHatQE/cinch',
@@ -23,27 +23,14 @@ setup(
         'Programming Language :: Python :: 2.7'
     ],
     keywords='continuous integration, ci, jenkins',
-    packages=find_packages('cinch'),
-    extras_require={
-        'dev': [
-            'ipython'
-        ]
-    },
-    data_files=[
-        ('cinch', [
-            'site.yml',
-            'library',
-            'roles',
-            'group_vars',
-            'files'
-        ])
-    ],
+    packages=find_packages(exclude=('library', 'bin')),
+    include_package_data=True,
     install_requires=[
         'ansible==2.1.*'
     ],
     entry_points={
         'console_scripts': [
-            'cinch=cinch.bin.cinch'
+            'cinch=cinch.bin.entry_point:cinch'
         ]
     }
 )

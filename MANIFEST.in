@@ -1,0 +1,5 @@
+recursive-include cinch/files *
+recursive-include cinch/group_vars *
+recursive-include cinch/library *
+recursive-include cinch/roles *
+include cinch/site.yml
