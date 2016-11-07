@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from plumbum import local
 from plumbum.commands.processes import ProcessExecutionError
 from os import path
@@ -31,10 +33,10 @@ def call_ansible(inventory, *args):
         ansible.run(ansible_args, stdout=sys.stdout, stderr=sys.stderr)
         exit_code = 0
     except ProcessExecutionError as ex:
-        print("Error encountered while executing ansible-playbook.", sys.stderr)
+        print("Error encountered while executing ansible-playbook.", file=sys.stderr)
         exit_code = ex.retcode
     except Exception as ex:
-        print("Unknown error occurred: {0}".format(ex))
+        print("Unknown error occurred: {0}".format(ex), file=sys.stderr)
         print_exc()
         exit_code = 255
     return exit_code
