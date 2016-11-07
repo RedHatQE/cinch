@@ -19,14 +19,15 @@ setup(
         'Development Status :: 3 - Alpha',
         'Intended Audience :: QE, Administrators',
         'Topic :: Software Development :: Continuous Integration',
-        'Licenese :: OSI Approved :: GPL Version 3',
+        'License :: OSI Approved :: GPL Version 3',
         'Programming Language :: Python :: 2.7'
     ],
     keywords='continuous integration, ci, jenkins',
     packages=find_packages(exclude=('library', 'bin')),
     include_package_data=True,
     install_requires=[
-        'ansible==2.1.*'
+        'ansible<2.2',
+        'plumbum==1.6.2'
     ],
     entry_points={
         'console_scripts': [

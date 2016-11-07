@@ -1,23 +1,33 @@
 #!/usr/bin/env python
 from __future__ import print_function
-from ansible.cli.playbook import PlaybookCLI as CLI
-from argparse import ArgumentParser, FileType
+from argparse import ArgumentParser, REMAINDER
 from os import path
+from wrappers import call_ansible
 
-import ansible.constants as C
 import os
-import shutil
 import sys
-import traceback
-
-
-BASE = path.abspath(path.join(path.dirname(__file__), '..'))
 
 
 def cinch():
+    """
+    Entry point for the "cinch" CLI that merely wrapps the ansible-playbook
+    command and pre-fills its path to the site.yml file for Cinch. The cinch
+    tool requires a single argument - the Ansible inventory file - and accepts
+    an arbitrary number of extra arguments that are passed through to the
+    ansible-playbook executable.
+
+    :return: Exit code 0 if the execution is completed successfully, or 255
+    if an unknown error occurs. If ansible-playbook exits with an error code,
+    this executable will exit with the same code.
+    """
+    # Parse the command line arguments
     parser = ArgumentParser(description=
             'A wrapper around Cinch for the most common use case')
+    # The inventory file that the user provides which will get passed along to
+    # Ansible for its consumption
     parser.add_argument('inventory')
+    # All remaining arguments are passed through, untouched, to Ansible
+    parser.add_argument('args', nargs=REMAINDER)
     args = parser.parse_args()
     if len(args.inventory) > 0:
         if args.inventory[0] == '/':
@@ -26,23 +36,7 @@ def cinch():
             inventory = path.join(os.getcwd(), args.inventory)
     else:
         raise Exception("Inventory path needs to be non-empty")
-    ansible_args = [
-        'ansible-playbook',
-        path.join(BASE, 'site.yml'),
-        '-i', inventory,
-        '-v'
-    ]
-    print(ansible_args)
-    try:
-        cli = CLI(ansible_args)
-        cli.parse()
-        exit_code = cli.run()
-    except Exception as ex:
-        print("Error detected: {0}".format(str(ex)), sys.stderr)
-        print(traceback.format_exc())
-        exit_code = 250
-    finally:
-        shutil.rmtree(C.DEFAULT_LOCAL_TMP, True)
+    exit_code = call_ansible(inventory, args.args)
     sys.exit(exit_code)
 
 

@@ -8,3 +8,4 @@ inventory/local/*
 *.pyc
 *.pyo
 *.egg-info
+.idea
