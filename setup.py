@@ -9,7 +9,7 @@ with open(path.join(here, 'README.md')) as f:
 
 setup(
     name='cinch',
-    version='0.1.6',
+    version='0.2.0',
     description='Cinch continuous integration setup',
     long_description=description,
     url='https://github.com/RedHatQE/cinch',
