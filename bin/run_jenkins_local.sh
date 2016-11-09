@@ -8,7 +8,7 @@ TOP=$(dirname $(readlink -f $(dirname $0)))
 /bin/bash "${TOP}/bin/ensure_virtualenv.sh"
 source "${TOP}/.venv/bin/activate"
 
-ansible-playbook -i "${TOP}/configure/inventory/local/hosts" "${TOP}/configure/site.yml" "$@"
+cinch "${TOP}/inventory/local/hosts" "$@"
 
 ANSIBLE_EXIT=$?
 

@@ -13,7 +13,7 @@ function playbook {
     directory="${1}"
     shift
     export ANSIBLE_CONFIG="${TOP}/vagrant/ansible.cfg"
-    ansible-playbook -i "${TOP}/vagrant/${directory}/hosts" "${TOP}/site.yml" \
+    cinch "${TOP}/vagrant/${directory}/hosts" \
         -e "vagrant_dir=${TOP}/vagrant/${directory}" \
         "$@" || exit 1
     deactivate

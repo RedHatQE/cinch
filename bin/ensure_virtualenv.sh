@@ -9,5 +9,5 @@ fi
 
 # Update the virtualenv to include all the necessary utilities
 source "${TOP}/.venv/bin/activate"
-pip install pip==8.1.2
-pip install -r "${TOP}/requirements.txt"
+pip install pip==9.0.1
+pip install -e "${TOP}"
