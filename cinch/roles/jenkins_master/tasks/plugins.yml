@@ -65,16 +65,10 @@
     state: started
     delay: 15
 
-- name: filter plugin list
-  become: false
-  set_fact:
-    _jenkins_plugins: "{{ _jenkins_plugins | default([]) | union([item.split('=')[0]]) }}"
-  with_items: "{{ jenkins_plugins }}"
-
 - name: install plugins
-  jenkins_cli:
-    command: install-plugin
-    arguments: "{{ _jenkins_plugins | join(' ') }}"
+  jenkins_plugins:
+    plugin: "{{ item.split('=')[0] }}"
     validate_certs: false
     use_ssl: "{{ https_enabled }}"
   notify: restart Jenkins
+  with_items: "{{ jenkins_plugins }}"
