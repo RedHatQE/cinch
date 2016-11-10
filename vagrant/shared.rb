@@ -6,8 +6,13 @@ def vm(config, name, base_box="centos/7")
         nodeconfig.vm.hostname = name + ".box"
         nodeconfig.vm.network "private_network", ip: "192.168.8.#{$ip}", netmask: "255.255.255.0"
         $ip += 1
-        nodeconfig.vm.provision "ansible" do |ansible|
-            yield ansible if block_given?
+        if block_given?
+            nodeconfig.vm.provision "ansible" do |ansible|
+                    ansible.playbook = "../../cinch/site.yml"
+                    ansible.limit = "all"
+                    ansible.verbose = "-v"
+                    yield ansible
+            end
         end
     end
 end

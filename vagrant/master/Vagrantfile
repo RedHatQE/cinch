@@ -1,8 +1,8 @@
 require "../shared.rb"
 
 Vagrant.configure("2") do |config|
-    vm(config, "master") do |ansible|
-        ansible.playbook = "../../cinch/site.yml"
+    vm(config, "master")
+    ansible(config) do |ansible|
         ansible.groups = {
             "jenkins_master" => ["master"],
             "cent7" => ["master"],
