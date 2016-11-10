@@ -1,5 +1,13 @@
 require "../shared.rb"
 
 Vagrant.configure("2") do |config|
-    vm(config, "master")
+    vm(config, "master") do |ansible|
+        ansible.playbook = "../../cinch/site.yml"
+        ansible.groups = {
+            "jenkins_master" => ["master"],
+            "cent7" => ["master"],
+            "jenkins_master:vars" => {"jenkins_ssl_cert" => "vagrant/master/jenkins.crt",
+                           "jenkins_ssl_key" => "vagrant/master/jenkins.key"}
+        }
+    end
 end
