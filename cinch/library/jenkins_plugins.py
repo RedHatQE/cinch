@@ -42,16 +42,17 @@ def install_plugin(plugin):
     run_jenkins_cli('install-plugin', plugin)
 
 
-def check_plugin(plugin):
+def get_plugin_list():
     """
     Checks the selected server to determine if this plugin is already installed
     """
     out, err = run_jenkins_cli('list-plugins')
     lines = out.split('\n')
+    plugins = []
     for line in lines:
-        if line.startswith(plugin):
-            return True
-    return False
+        parts = line.split(' ')
+        plugins.append(parts[0])
+    return plugins
 
 
 def main():
@@ -59,7 +60,7 @@ def main():
     global server
     module = AnsibleModule(
         argument_spec = {
-            'plugin': {'type': 'str'},
+            'plugins': {'type': 'list'},
             'working_dir': {'default': '~/'},
             'use_ssl': {'type': 'bool', 'default': True},
             'validate_certs': {'type': 'bool', 'default': True},
@@ -73,11 +74,17 @@ def main():
     if not path.exists(jar_file):
         module.fail_json(msg='You must download the jenkins-cli.jar file to the specified working_dir path')
     changed = False
-    exists = check_plugin(args.plugin)
-    if not exists:
-        install_plugin(args.plugin)
-        changed = True
-    module.exit_json(changed=changed)
+    plugins = get_plugin_list()
+    unchanged = []
+    installed = []
+    for plugin in args.plugins:
+        if plugin not in plugins:
+            install_plugin(plugin)
+            changed = True
+            installed.append(plugin)
+        else:
+            unchanged.append(plugin)
+    module.exit_json(changed=changed, installed=installed, unchanged=unchanged)
 
 
 main()

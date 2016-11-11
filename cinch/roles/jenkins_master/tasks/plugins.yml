@@ -25,7 +25,7 @@
 - name: run Jenkins global config
   jenkins_cli:
     command: groovy
-    arguments: groovy_set_jenkins_cfg.java
+    arguments: "{{ ansible_user_dir }}/groovy_set_jenkins_cfg.java"
     validate_certs: false
     use_ssl: "{{ https_enabled }}"
   when: groovy_script.changed
@@ -65,10 +65,15 @@
     state: started
     delay: 15
 
+- name: filter plugin list
+  become: false
+  set_fact:
+    _jenkins_plugins: "{{ _jenkins_plugins | default([]) | union([item.split('=')[0]]) }}"
+  with_items: "{{ jenkins_plugins }}"
+
 - name: install plugins
   jenkins_plugins:
-    plugin: "{{ item.split('=')[0] }}"
+    plugins: "{{ _jenkins_plugins }}"
     validate_certs: false
     use_ssl: "{{ https_enabled }}"
   notify: restart Jenkins
-  with_items: "{{ jenkins_plugins }}"
