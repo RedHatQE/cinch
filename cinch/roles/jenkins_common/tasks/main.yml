@@ -16,3 +16,21 @@
   copy:
     src: requirements-common.txt
     dest: /tmp/requirements-common.txt
+
+- name: ensure SSH directory exists
+  file:
+    name: "{{ ansible_user_dir }}/.ssh"
+    state: directory
+
+- name: add private SSH key
+  copy:
+    src: "{{ jenkins_ssh_keyfile }}"
+    dest: "{{ jenkins_user_home }}/.ssh/id_rsa"
+    owner: "{{ jenkins_user }}"
+    mode: 0600
+  register: ssh_private
+
+- name: generate public SSH key
+  shell: "ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub"
+  become_user: "{{ jenkins_user }}"
+  when: ssh_private.changed

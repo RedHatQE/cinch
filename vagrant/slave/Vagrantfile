@@ -9,12 +9,13 @@ Vagrant.configure("2") do |config|
             "cent7" => ["master", "slave"],
             "repositories" => ["master", "slave"],
             "jenkins_slave:vars" => {
-                "jenkins_url" => "https://192.168.8.2:8080",
+                "jenkins_master_url" => "http://192.168.8.2:8080",
                 "jenkins_user_password" => "vagrant"
             },
             "jenkins_master:vars" => {
                 "jenkins_ssl_cert" => "vagrant/master/jenkins.crt",
-                "jenkins_ssl_key" => "vagrant/master/jenkins.key"
+                "jenkins_ssl_key" => "vagrant/master/jenkins.key",
+                "https_enabled" => "False"
             }
         }
     end
