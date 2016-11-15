@@ -22,3 +22,6 @@
     owner: jenkins
     group: jenkins
     state: directory
+
+- name: flush handlers
+  meta: flush_handlers

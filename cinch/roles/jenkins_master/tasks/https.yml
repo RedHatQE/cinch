@@ -50,20 +50,6 @@
   register: keytool_import
   changed_when: "'already exists' not in keytool_import.stderr and 'already exists' not in keytool_import.stdout"
 
-- name: modify system Jenkins config file
-  lineinfile:
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
-    dest: /etc/sysconfig/jenkins
-    state: present
-  with_items:
-    - regexp: ^JENKINS_PORT=.*
-      line: JENKINS_PORT="-1"
-    - regexp: ^JENKINS_HTTPS_PORT=.*
-      line: JENKINS_HTTPS_PORT="8443"
-    - regexp: ^JENKINS_ARGS=.*
-      line: JENKINS_ARGS="--httpsKeyStore={{ jenkins_home }}/.ssl/keystore --httpsKeyStorePassword={{ keystore_pass }}"
-
 - name: configuring httpd to forward port 80 traffic to port 443
   lineinfile:
     line: "{{ item }}"

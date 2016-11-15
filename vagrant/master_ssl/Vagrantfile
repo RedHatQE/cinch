@@ -1,0 +1,14 @@
+require "../shared.rb"
+
+Vagrant.configure("2") do |config|
+    vm(config, "master") do |ansible|
+        ansible.groups = {
+            "jenkins_master" => ["master"],
+            "cent7" => ["master"],
+            "repositories" => ["master"],
+            "jenkins_master:vars" => {"jenkins_ssl_cert" => "../vagrant/master_ssl/jenkins.crt",
+                           "jenkins_ssl_key" => "../vagrant/master_ssl/jenkins.key",
+                           "https_enabled" => "True"}
+        }
+    end
+end
