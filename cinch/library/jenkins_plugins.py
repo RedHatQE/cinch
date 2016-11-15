@@ -32,14 +32,16 @@ def run_jenkins_cli(command, *args):
     base_args.extend(args)
     command = Popen(base_args, stdout=PIPE, stderr=PIPE)
     out, err = command.communicate()
+    if command.returncode != 0:
+        raise Exception(out + err)
     return out, err
 
 
-def install_plugin(plugin):
+def install_plugin(*plugins):
     """
     Installs the specified plugin
     """
-    run_jenkins_cli('install-plugin', plugin)
+    run_jenkins_cli('install-plugin', *plugins)
 
 
 def get_plugin_list():
@@ -73,18 +75,30 @@ def main():
     # Basic sanity, to ensure the jar file is present
     if not path.exists(jar_file):
         module.fail_json(msg='You must download the jenkins-cli.jar file to the specified working_dir path')
+    # Default initialized values
     changed = False
-    plugins = get_plugin_list()
-    unchanged = []
-    installed = []
-    for plugin in args.plugins:
-        if plugin not in plugins:
-            install_plugin(plugin)
-            changed = True
-            installed.append(plugin)
-        else:
-            unchanged.append(plugin)
-    module.exit_json(changed=changed, installed=installed, unchanged=unchanged)
+    unchanged = set()
+    installed = set()
+    to_install = set(args.plugins)
+    tries = 0
+    # Give three tries, because Jenkins seems to only install some plugins, at random times
+    while len(to_install) > 0 and tries < 3:
+        # Fetch list of current plugins, construct list of plugins not yet installed
+        current_plugins = set(get_plugin_list())
+        to_install -= current_plugins
+        if len(to_install) == 0:
+            break
+        # If we reach here even once, we're going to be changing system state
+        changed = True
+        install_plugin(*to_install)
+        # Keep a set of plugins that were actually installed
+        installed |= to_install
+        tries += 1
+    unchanged = set(args.plugins) - installed
+    module.exit_json(changed=changed,
+            installed=list(installed),
+            unchanged=list(unchanged),
+            tries=tries)
 
 
 main()
