@@ -8,17 +8,20 @@ from os import path
 # Default values, just to create globals, these values are overridden elsewhere
 jar_file = path.expanduser("~/jenkins-cli.jar")
 server = "http://localhost:8080"
+validate_certs = True
 
 
 def set_globals(args):
     global jar_file
     global server
+    global validate_certs
     jar_file = path.join(path.expanduser(args.working_dir), 'jenkins-cli.jar') 
     if args.use_ssl:
         protocol = "https"
     else:
         protocol = "http"
     server = "{0}://{1}{2}".format(protocol, args.server, args.server_path)
+    validate_certs = args.validate_certs
 
 
 def run_jenkins_cli(command, *args):
@@ -28,6 +31,8 @@ def run_jenkins_cli(command, *args):
     :returns (out, err) The stdout and stderr of the process
     """
     base_args = ['java', '-jar', jar_file, '-s', server]
+    if not validate_certs:
+        base_args.append('-noCertificateCheck')
     base_args.append(command)
     base_args.extend(args)
     command = Popen(base_args, stdout=PIPE, stderr=PIPE)
@@ -59,7 +64,6 @@ def get_plugin_list():
 
 def main():
     global jar_file
-    global server
     module = AnsibleModule(
         argument_spec = {
             'plugins': {'type': 'list'},
