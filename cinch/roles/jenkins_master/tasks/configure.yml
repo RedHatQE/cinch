@@ -16,21 +16,12 @@
     mode: 0644
   notify: restart Jenkins
 
-- name: ensure SSH directory exists
-  file:
-    name: "{{ ansible_user_dir }}/.ssh"
-    state: directory
-
-- name: upload SSH key
-  copy:
-    src: "{{ jenkins_ssh_keyfile }}"
-    dest: "{{ ansible_user_dir }}/.ssh/id_rsa"
-    mode: 0600
-  notify: regenerate SSH key
-
 - name: ensure Jenkins home is writable by jenkins
   file:
     dest: "{{ jenkins_home }}"
     owner: jenkins
     group: jenkins
     state: directory
+
+- name: flush handlers
+  meta: flush_handlers

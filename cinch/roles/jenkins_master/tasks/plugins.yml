@@ -25,7 +25,7 @@
 - name: run Jenkins global config
   jenkins_cli:
     command: groovy
-    arguments: groovy_set_jenkins_cfg.java
+    arguments: "{{ ansible_user_dir }}/groovy_set_jenkins_cfg.java"
     validate_certs: false
     use_ssl: "{{ https_enabled }}"
   when: groovy_script.changed
@@ -72,9 +72,8 @@
   with_items: "{{ jenkins_plugins }}"
 
 - name: install plugins
-  jenkins_cli:
-    command: install-plugin
-    arguments: "{{ _jenkins_plugins | join(' ') }}"
+  jenkins_plugins:
+    plugins: "{{ _jenkins_plugins }}"
     validate_certs: false
     use_ssl: "{{ https_enabled }}"
   notify: restart Jenkins

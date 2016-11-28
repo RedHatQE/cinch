@@ -13,10 +13,6 @@ jswarm_execs: 10
 jswarm_home: /home/jenkins
 # Whether the swarm should execute as the jenkins user. False means it will exec as root
 run_swarm_as_jenkins: false
-# The home directory for the user who will be executing the swarm process
-jenkins_user_home: /root
-# The name of the user who will be executing the swarm process
-jenkins_user: root
 
 # These are variables which you probably don't want to
 # override, but which you are free to override if you

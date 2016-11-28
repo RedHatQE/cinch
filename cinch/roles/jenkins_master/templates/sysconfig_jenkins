@@ -52,7 +52,7 @@ JENKINS_JAVA_OPTIONS="-Djava.awt.headless=true {{ jenkins_java_options | join(' 
 # Port Jenkins is listening on.
 # Set to -1 to disable
 #
-JENKINS_PORT="8080"
+JENKINS_PORT="{{ https_enabled | ternary(-1, 8080) }}"
 
 ## Type:        string
 ## Default:     ""
@@ -70,7 +70,7 @@ JENKINS_LISTEN_ADDRESS=""
 # HTTPS port Jenkins is listening on.
 # Default is disabled.
 #
-JENKINS_HTTPS_PORT=""
+JENKINS_HTTPS_PORT="{{ https_enabled | ternary(8443, '') }}"
 
 ## Type:        string
 ## Default:     ""
@@ -157,4 +157,4 @@ JENKINS_HANDLER_IDLE="20"
 # Pass arbitrary arguments to Jenkins.
 # Full option list: java -jar jenkins.war --help
 #
-JENKINS_ARGS=""
+JENKINS_ARGS="{{ https_enabled | ternary('--httpsKeyStore=' + jenkins_home + '/.ssl/keystore --httpsKeyStorePassword=' + keystore_pass, '') }}"

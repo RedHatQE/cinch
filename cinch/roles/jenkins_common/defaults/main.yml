@@ -2,6 +2,13 @@ install_beaker: true
 jswarm_version: 2.1
 jenkins_slave_username: ''
 jenkins_slave_password: ''
+# The home directory for the user who will be executing the swarm process
+jenkins_user_home: /root
+# The name of the user who will be executing the swarm process
+jenkins_user: root
+# Local path to a private SSH keyfile to upload into the remote system and
+# to set as an authorized keyfile for the Jenkins user
+jenkins_ssh_keyfile: id_rsa
 # The Java version to install. Older versions are deprecated and will not be
 # supported beyond the EOL support for their packages in the distribution of
 # choice

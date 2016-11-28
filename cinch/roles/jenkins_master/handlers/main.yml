@@ -7,9 +7,3 @@
   service:
     name: jenkins
     state: restarted
-
-- name: regenerate SSH key
-  become: false
-  shell: >
-    ssh-keygen -y -f "{{ ansible_user_dir }}/.ssh/id_rsa" > "{{ ansible_user_dir }}/.ssh/id_rsa.pub" &&
-    cat "{{ ansible_user_dir }}/.ssh/id_rsa.pub" >> "{{ ansible_user_dir }}/.ssh/authorized_keys"
