@@ -2,7 +2,12 @@ language: python
 python:
     - "2.7"
 install: tests/install.sh
-before_install: sudo tests/before_install.sh
+addons:
+  apt:
+    sources:
+      - debian-sid
+    packages:
+      - shellcheck
 script: tests/${TEST}
 env:
     - TEST=lint.sh
