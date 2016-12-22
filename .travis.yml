@@ -2,7 +2,7 @@ language: python
 python:
     - "2.7"
 install: tests/install.sh
-before_install: tests/before_install.sh
+before_install: sudo tests/before_install.sh
 script: tests/${TEST}
 env:
     - TEST=lint.sh
