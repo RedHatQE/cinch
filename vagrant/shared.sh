@@ -20,7 +20,7 @@ function playbook {
 }
 
 function vagrant_cycle {
-    cd "${TOP}/vagrant/${1}/"
+    cd "${TOP}/vagrant/${1}/" || exit 1
     vagrant destroy -f || exit 1
     vagrant up || exit 1
 }
