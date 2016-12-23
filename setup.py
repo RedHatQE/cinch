@@ -17,9 +17,12 @@ setup(
     license='GPLv3',
     classifiers=[
         'Development Status :: 3 - Alpha',
-        'Intended Audience :: QE, Administrators',
-        'Topic :: Software Development :: Continuous Integration',
-        'License :: OSI Approved :: GPL Version 3',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Information Technology',
+        'Topic :: Software Development :: Quality Assurance',
+        'Topic :: Software Development :: Testing',
+        'Topic :: Software Development :: Build Tools',
+        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Programming Language :: Python :: 2.7'
     ],
     keywords='continuous integration, ci, jenkins',
