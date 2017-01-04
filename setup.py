@@ -36,5 +36,10 @@ setup(
         'console_scripts': [
             'cinch=cinch.bin.entry_point:cinch'
         ]
+    },
+    extras_require={
+        'lint': [
+            'flake8'
+        ]
     }
 )
