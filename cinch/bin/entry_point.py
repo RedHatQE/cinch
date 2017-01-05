@@ -61,9 +61,9 @@ def cinchpin():
     # provides which will get passed along to linchpin for its consumption
     parser.add_argument('-w', '--workdir', default=getcwd())
     # All remaining arguments are passed through, untouched, to linchpin
-    parser.add_argument('args', nargs='*')
+    parser.add_argument('arg')
     args = parser.parse_args()
-    exit_code = call_linchpin(args.workdir, args.args)
+    exit_code = call_linchpin(args.workdir, args.arg)
     sys.exit(exit_code)
 
 

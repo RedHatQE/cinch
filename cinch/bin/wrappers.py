@@ -37,7 +37,7 @@ def call_ansible(inventory, *args):
     command_handler(ansible, ansible_args)
 
 
-def call_linchpin(work_dir, *args):
+def call_linchpin(work_dir, arg):
     """
     Wraps a call out to the linchpin executable, and then kicks off a cinch
     Ansible playbook if necessary.
@@ -48,16 +48,11 @@ def call_linchpin(work_dir, *args):
     :return: The exit code returned from linchpin, or 255 if errors come from
     elsewhere
     """
-    # Construct the arguments to pass to linchpin by munging the arguments
-    # provided to this method
-    linchpin_args = list()
-    linchpin_args.extend(args)
     # cinch will only support a subset of linchpin subcommands
     supported_cmds = ['rise']
-    for cmd in linchpin_args[0]:
-        if cmd not in supported_cmds:
-            raise Exception('linchpin command \'' + cmd + '\' not '
-                            'supported by cinch')
+    if arg not in supported_cmds:
+        raise Exception('linchpin command \'' + arg + '\' not '
+                        'supported by cinch')
     # Attempt to open the linch-pin PinFile
     try:
         with open(path.join(work_dir, 'PinFile')) as pin_file:
@@ -100,12 +95,12 @@ def call_linchpin(work_dir, *args):
 
     with pushd(work_dir):
         linchpin = local['linchpin']
-        exit_code = command_handler(linchpin, linchpin_args)
+        exit_code = command_handler(linchpin, arg)
     # If linchpin is asked to provision resources, we will then run our
     # cinch playbooks
     # TODO: Add support for 'drop' and other supported linchpin command
     # subsets
-    if 'rise' in linchpin_args[0] and exit_code == 0:
+    if arg == 'rise' and exit_code == 0:
         call_ansible(path.join(work_dir, 'inventory', inventory_file))
 
 
