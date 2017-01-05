@@ -59,9 +59,11 @@ def cinchpin():
                                         'most common use case')
     # The linch-pin working directory containing a PinFile that the user
     # provides which will get passed along to linchpin for its consumption
-    parser.add_argument('-w', '--workdir', default=getcwd())
+    parser.add_argument('-w', '--workdir', default=getcwd(),
+                        help='''path to linch-pin working directory containing a
+                        PinFile''')
     # All remaining arguments are passed through, untouched, to linchpin
-    parser.add_argument('arg')
+    parser.add_argument('arg', help='argument to pass to the linchpin command')
     args = parser.parse_args()
     exit_code = call_linchpin(args.workdir, args.arg)
     sys.exit(exit_code)
