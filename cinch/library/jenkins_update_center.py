@@ -2,6 +2,7 @@ import os
 import xml.etree.ElementTree as ET
 from ansible.module_utils.basic import AnsibleModule
 
+
 # replace default update center with our own
 def set_default(tree, url):
     default_update_center = tree.find(".//site[id='default']")
@@ -12,6 +13,7 @@ def set_default(tree, url):
         new_url.text = url
         return True
     return False
+
 
 # append additional update centers
 def append(tree, site_id, url):
@@ -34,6 +36,7 @@ def append(tree, site_id, url):
             return True
         return False
 
+
 def main():
     module = AnsibleModule(
         argument_spec={
@@ -42,13 +45,17 @@ def main():
             'update_center_url': {'required': True}
         }
     )
-    update_ctr_config = os.path.join(module.params['jenkins_home'], 'hudson.model.UpdateCenter.xml')
+    update_ctr_config = os.path.join(module.params['jenkins_home'],
+                                     'hudson.model.UpdateCenter.xml')
     tree = ET.parse(update_ctr_config)
     if module.params['update_center_id'] == 'default':
         changed = set_default(tree, module.params['update_center_url'])
     else:
-        changed = append(tree, module.params['update_center_id'], module.params['update_center_url'])
+        changed = append(tree,
+                         module.params['update_center_id'],
+                         module.params['update_center_url'])
     tree.write(update_ctr_config, encoding='UTF-8')
     module.exit_json(changed=changed)
+
 
 main()
