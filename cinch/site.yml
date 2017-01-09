@@ -1,3 +1,9 @@
+- name: wait for SSH
+  hosts: all
+  gather_facts: false
+  roles:
+    - check_ssh
+
 - name: configure certificate authority, if necessary
   become: true
   hosts: certificate_authority
