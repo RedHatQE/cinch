@@ -34,8 +34,8 @@ def cinch():
         else:
             inventory = path.join(getcwd(), args.inventory)
     else:
-        raise Exception("Inventory path needs to be non-empty")
-    exit_code = call_ansible(inventory, args.args)
+        raise Exception('Inventory path needs to be non-empty')
+    exit_code = call_ansible(inventory, 'site.yml', args.args)
     sys.exit(exit_code)
 
 
@@ -70,5 +70,5 @@ def cinchpin():
 
 
 if __name__ == '__main__':
-    print("You should not invoke this file directly.")
+    print('You should not invoke this file directly.')
     sys.exit(1)
