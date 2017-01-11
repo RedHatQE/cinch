@@ -3,6 +3,11 @@
 # Author: Greg Hellings - <ghelling@redhat.com> or <greg.hellings@gmail.com>
 #
 # Module to configure users in Jenkins authorized to use CLI
+import xml.etree.ElementTree as ET
+import os
+from ansible.module_utils.basic import AnsibleModule
+
+
 DOCUMENTATION = '''
 ---
 version_added: "2.1"
@@ -30,22 +35,19 @@ options:
 author: Gregory Hellings
 '''
 
-import xml.etree.ElementTree as ET
-import os
-import sys
-from ansible.module_utils.basic import *
 
 def main():
     module = AnsibleModule(
         argument_spec={
-            'jenkins_home': { 'required': True },
-            'key_file': { 'required': True },
-            'state': { 'choices': ['present'], 'default': 'present' }
+            'jenkins_home': {'required': True},
+            'key_file': {'required': True},
+            'state': {'choices': ['present'], 'default': 'present'}
         },
         supports_check_mode=False
     )
-    jenkins_config = os.path.join(module.params['jenkins_home'], "config.xml")
-    user_config_path = os.path.join(module.params['jenkins_home'], "users" )
+    params = type('Params', (object,), module.params)
+    jenkins_config = os.path.join(params.jenkins_home, "config.xml")
+    user_config_path = os.path.join(params.jenkins_home, "users")
     tree = ET.parse(jenkins_config)
     root = tree.getroot()
     roles = root.getiterator("role")
@@ -54,9 +56,10 @@ def main():
         for role in roles:
             name = role.attrib.get("name")
             if name == "admin":
-                pub_key = os.popen("cat {0}".format(module.params['key_file'])).read()
+                pub_key = os.popen("cat {0}".format(params.key_file)).read()
                 for sid in role.getiterator("sid"):
-                    user_cfg_file = os.path.join(user_config_path, sid.text, "config.xml")
+                    user_cfg_file = os.path.join(user_config_path,
+                                                 sid.text, "config.xml")
                     usertree = ET.parse(user_cfg_file)
                     userroot = usertree.getroot()
                     keyroot = userroot.find("properties")
@@ -82,8 +85,8 @@ def main():
             usertree.write(user_cfg_file, encoding="UTF-8")
         module.exit_json(changed=changed)
     else:
-        module.fail_json(msg="Roles not found - have you configured an admin using "
-                " the Role-based Authorization Strategy?")
+        module.fail_json(msg="Roles not found - have you configured an admin "
+                         "using the Role-based Authorization Strategy?")
 
-from ansible.module_utils.basic import *
+
 main()

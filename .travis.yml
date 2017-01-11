@@ -1,13 +1,20 @@
+# General Travis config
 language: python
-python:
+python: # Only one version for now
     - "2.7"
-install: tests/install.sh
+cache: pip
+
+# Installation of the system
 addons:
   apt:
     sources:
       - debian-sid
     packages:
       - shellcheck
+install: tests/install.sh
 script: tests/${TEST}
+
+# Test matrix will be constructed from here. Listing out each set of tests
+# to execute will permit them to be executed in parallel
 env:
     - TEST=lint.sh

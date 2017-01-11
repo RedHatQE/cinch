@@ -2,7 +2,7 @@
   set_fact:
     check_ssh_cmd: >-
       ansible --ssh-extra-args='-o StrictHostKeyChecking=no'
-      -i {{ inventory_dir }}/{{ inventory_file | basename }}
+      -i {{ inventory_dir }}/{{ (inventory_file | string | default('')) | basename }}
       {{ host }} -m ping
 
 - name: check for SSH connectivity and authentication

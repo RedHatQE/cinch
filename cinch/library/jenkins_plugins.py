@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from subprocess import Popen, PIPE
-from ansible.module_utils.basic import *
+from ansible.module_utils.basic import AnsibleModule
 from os import path
 
 
@@ -15,7 +15,7 @@ def set_globals(args):
     global jar_file
     global server
     global validate_certs
-    jar_file = path.join(path.expanduser(args.working_dir), 'jenkins-cli.jar') 
+    jar_file = path.join(path.expanduser(args.working_dir), 'jenkins-cli.jar')
     if args.use_ssl:
         protocol = "https"
     else:
@@ -65,7 +65,7 @@ def get_plugin_list():
 def main():
     global jar_file
     module = AnsibleModule(
-        argument_spec = {
+        argument_spec={
             'plugins': {'type': 'list'},
             'working_dir': {'default': '~/'},
             'use_ssl': {'type': 'bool', 'default': True},
@@ -78,31 +78,37 @@ def main():
     set_globals(args)
     # Basic sanity, to ensure the jar file is present
     if not path.exists(jar_file):
-        module.fail_json(msg='You must download the jenkins-cli.jar file to the specified working_dir path')
+        module.fail_json(msg='You must download the jenkins-cli.jar file to '
+                             'the specified working_dir path')
     # Default initialized values
     changed = False
     unchanged = set()
     installed = set()
     to_install = set(args.plugins)
     tries = 0
-    # Give three tries, because Jenkins seems to only install some plugins, at random times
+    # Give three tries, because randomly Jenkins only installs some plugins
     while len(to_install) > 0 and tries < 3:
-        # Fetch list of current plugins, construct list of plugins not yet installed
-        current_plugins = set(get_plugin_list())
-        to_install -= current_plugins
-        if len(to_install) == 0:
-            break
-        # If we reach here even once, we're going to be changing system state
-        changed = True
-        install_plugin(*to_install)
-        # Keep a set of plugins that were actually installed
-        installed |= to_install
+        try:
+            # Fetch list of current plugins
+            current_plugins = set(get_plugin_list())
+            # Construct list of plugins not yet installed
+            to_install -= current_plugins
+            if len(to_install) == 0:
+                break
+            # If we reach here, we're going to be changing system state
+            changed = True
+            install_plugin(*to_install)
+            # Keep a set of plugins that were actually installed
+            installed |= to_install
+        except Exception as e:
+            if tries >= 3:
+                raise e
         tries += 1
     unchanged = set(args.plugins) - installed
     module.exit_json(changed=changed,
-            installed=list(installed),
-            unchanged=list(unchanged),
-            tries=tries)
+                     installed=list(installed),
+                     unchanged=list(unchanged),
+                     tries=tries)
 
 
 main()
