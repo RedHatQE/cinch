@@ -88,17 +88,21 @@ def main():
     tries = 0
     # Give three tries, because randomly Jenkins only installs some plugins
     while len(to_install) > 0 and tries < 3:
-        # Fetch list of current plugins
-        current_plugins = set(get_plugin_list())
-        # Construct list of plugins not yet installed
-        to_install -= current_plugins
-        if len(to_install) == 0:
-            break
-        # If we reach here even once, we're going to be changing system state
-        changed = True
-        install_plugin(*to_install)
-        # Keep a set of plugins that were actually installed
-        installed |= to_install
+        try:
+            # Fetch list of current plugins
+            current_plugins = set(get_plugin_list())
+            # Construct list of plugins not yet installed
+            to_install -= current_plugins
+            if len(to_install) == 0:
+                break
+            # If we reach here, we're going to be changing system state
+            changed = True
+            install_plugin(*to_install)
+            # Keep a set of plugins that were actually installed
+            installed |= to_install
+        except Exception as e:
+            if tries >= 3:
+                raise e
         tries += 1
     unchanged = set(args.plugins) - installed
     module.exit_json(changed=changed,
