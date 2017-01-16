@@ -6,11 +6,18 @@ from plumbum.commands.processes import ProcessExecutionError
 from traceback import print_exc
 
 import os
-import yaml
 import sys
+import yaml
 
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# Link to our docs with configuration examples
+DOCS = 'http://example.com'
+# Skeleton text to insert in YAML config files
+SKEL_TEXT = '''---
+# Add your cinch {0} configuration here
+# Examples: {1}
+'''
 
 
 def call_ansible(inventory, playbook, *args):
@@ -85,44 +92,47 @@ def call_linchpin(work_dir, arg):
     # Set up a linch-pin+cinch configuration skeleton for later use if the
     # 'init' subcommand was executed previously
     if arg == 'init':
-        # Consistent filename to use for various linch-pin YAML configurations
-        # for 'cinchpin'
-        config_file = 'cinch.yml'
-        # Cinch layout and topology paths to be added to linch-pin PinFile
-        config_setup = {
-            'cinch': {
-                'topology': config_file,
-                'layout': config_file
-            }
-        }
-        # These are the first-level config paths that linch-pin creates for us
-        # in the working directory
-        local_paths = ['layouts', 'topologies']
-        # Link to our docs with configuration examples
-        docs = 'http://example.com'
-        # Skeleton text to insert in YAML config files
-        skel_text = '''---
-# Add your cinch {0} configuration here
-# Examples: {1}
-'''
-
-        # Overwrite the PinFile that linch-pin created with our configuration
-        pin_file = os.path.join(work_dir, 'PinFile')
-        with open(pin_file, 'w') as f:
-            yaml.dump(config_setup, f, default_flow_style=False)
-
-        # Write out the skeletons and inform the user that they exist
-        for local_path in local_paths:
-            path = os.path.join(work_dir, local_path, config_file)
-            with open(path, 'w') as f:
-                f.write(skel_text.format(local_path, docs))
-            print('Please configure this file to use cinch: ' + path)
-        print('Example configurations: ' + docs)
+        cinchpin_init(work_dir)
 
     # If linchpin is asked to provision resources, we will then run our
     # cinch provisioning playbook
     if arg == 'rise' and exit_code == 0:
         call_ansible(inventory_path, 'site.yml')
+
+
+def cinchpin_init(work_dir):
+    """
+    Set up a linch-pin+cinch configuration skeleton
+
+    :param work_dir: The linch-pin working directory that contains a PinFile
+    and associated configuration files
+    """
+    # Consistent filename to use for various linch-pin YAML configurations
+    # for 'cinchpin'
+    config_file = 'cinch.yml'
+    # Cinch layout and topology paths to be added to linch-pin PinFile
+    config_setup = {
+        'cinch': {
+            'topology': config_file,
+            'layout': config_file
+        }
+    }
+    # These are the first-level config paths that linch-pin creates for us
+    # in the working directory
+    local_paths = ['layouts', 'topologies']
+
+    # Overwrite the PinFile that linch-pin created with our configuration
+    pin_file = os.path.join(work_dir, 'PinFile')
+    with open(pin_file, 'w') as f:
+        yaml.dump(config_setup, f, default_flow_style=False)
+
+    # Write out the skeletons and inform the user that they exist
+    for local_path in local_paths:
+        path = os.path.join(work_dir, local_path, config_file)
+        with open(path, 'w') as f:
+            f.write(SKEL_TEXT.format(local_path, DOCS))
+        print('Please configure this file to use cinch: ' + path)
+    print('Example configurations: ' + DOCS)
 
 
 def get_inventory(work_dir):
@@ -169,6 +179,8 @@ def command_handler(command, args):
     Generic function to run external programs.
     :param command: Exectuable to run
     :param args: arguments to be given to the external executable
+    :return: The exit code of the external command, or exit code 255 if we are
+    unable to determine the exit code
     """
     try:
         command.run(args, stdout=sys.stdout, stderr=sys.stderr)
