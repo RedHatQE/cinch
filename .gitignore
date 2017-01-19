@@ -2,6 +2,8 @@
 *.retry
 inventory/local/*
 .vagrant
+# generated docs
+docs/build/
 
 *.swp
 *.swo
