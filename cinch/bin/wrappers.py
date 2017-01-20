@@ -12,7 +12,7 @@ import yaml
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 # Link to our docs with configuration examples
-DOCS = 'http://example.com'
+DOCS = 'http://redhatqe-cinch.rtfd.io'
 # Skeleton text to insert in YAML config files
 SKEL_TEXT = '''---
 # Add your cinch {0} configuration here
