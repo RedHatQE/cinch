@@ -1,3 +1,5 @@
+![alt text](https://travis-ci.org/RedHatQE/cinch.svg?branch=master "build status")
+
 # cinch
 
 This folder contains an Ansible playbook for standing up and configuring
