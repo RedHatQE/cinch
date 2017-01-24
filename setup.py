@@ -31,7 +31,8 @@ setup(
     install_requires=[
         'ansible>=2.1',
         'plumbum>=1.6.0',
-        'linchpin>=0.8.1'
+        'linchpin>=0.8.2',
+        'sphinx_rtd_theme'
     ],
     entry_points={
         'console_scripts': [

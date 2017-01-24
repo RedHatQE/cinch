@@ -18,3 +18,4 @@ script: tests/${TEST}
 # to execute will permit them to be executed in parallel
 env:
     - TEST=lint.sh
+    - TEST=docs.sh
