@@ -35,6 +35,8 @@ install the following system packages:
 -  OpenSSL development package
 -  libyaml development package
 -  virtualenv package
+-  libffi development package
+-  libvirt development package
 
 Use your system package manager to install these packages, if they are not
 already present. Note that you will need to install the development version of
@@ -44,7 +46,7 @@ libraries during its install of Ansible and dependencies.
 Here is an example of installing required system level packages for Fedora:
 
 ``sudo dnf install -y libvirt-devel python-virtualenv libyaml-devel
-openssl-devel libffi-devel git gcc redhat-rpm-config``
+openssl-devel libffi-devel gcc redhat-rpm-config``
 
 Installation
 ============
