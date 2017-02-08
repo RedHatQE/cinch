@@ -29,3 +29,9 @@ Some notable defaults for Jenkins masters currently enabled are
 Primary supported target operating systems are
 - RHEL 7
 - CentOS 7
+
+IRC Support
+---------------
+
+`#redhatqe-cinch on chat.freenode.net`
+
