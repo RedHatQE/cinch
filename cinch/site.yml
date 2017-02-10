@@ -29,6 +29,7 @@
   hosts: jenkins_master
   roles:
     - jenkins_master
+    - ntp
 
 - name: configure jenkins slaves
   become: true
