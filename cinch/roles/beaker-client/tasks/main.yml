@@ -1,0 +1,6 @@
+- name: install beaker
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - beaker-client
