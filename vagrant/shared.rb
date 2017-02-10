@@ -14,5 +14,13 @@ def vm(config, name, base_box="centos/7")
                     yield ansible
             end
         end
+        if Vagrant.has_plugin?('vagrant-cachier')
+            # Needs to be :machine, because in multi-vm environments, when they both hit a
+            # download point, then things can get hairy when both boxes try to lock
+            config.cache.scope = :machine
+            config.cache.synced_folder_opts = {
+                type: :sshfs
+            }
+        end
     end
 end
