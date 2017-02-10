@@ -1,4 +1,3 @@
-install_beaker: true
 jswarm_version: 2.1
 jenkins_slave_username: ''
 jenkins_slave_password: ''

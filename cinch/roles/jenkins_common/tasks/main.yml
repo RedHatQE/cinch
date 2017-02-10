@@ -1,9 +1,3 @@
-- name: install beaker client
-  yum:
-    name: libxslt-python,beaker-client
-    state: present
-  when: install_beaker
-
 - name: install java
   yum:
     name: "{{ item }}"
