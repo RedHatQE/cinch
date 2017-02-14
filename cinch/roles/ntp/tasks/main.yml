@@ -1,0 +1,12 @@
+- name: install ntp
+  become: true
+  package:
+    name: ntp
+    state: present
+
+- name: start the NTP service
+  become: true
+  service:
+    name: ntpd
+    state: started
+    enabled: true
