@@ -1,6 +1,6 @@
 - include: repositories.yml
   with_items: "{{ repositories }}"
-  register: repositories
+  register: repository_results
 
 - include: repository_download.yml
   with_items: "{{ download_repositories }}"
@@ -15,4 +15,4 @@
 
 - name: clean yum cache
   shell: yum clean all
-  when: repositories.changed or repository_download.changed
+  when: repository_results.changed or repository_download.changed

@@ -1,3 +1,5 @@
+gcc_compat_package: compat-gcc-34
+
 all_repositories:
   latest:
     name: rhel6-latest

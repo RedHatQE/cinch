@@ -1,3 +1,5 @@
+gcc_compat_package: compat-gcc-44
+
 # It is important to import the RPM signing key for the Jenkins repository
 # if you plan to use that repository
 rpm_key_imports:
@@ -11,9 +13,6 @@ all_repositories:
   optional:
     name: rhel7-optional
     baseurl: "{{ rhel_base }}/$basearch/optional/os/"
-  extras:
-    name: rhel7-extras
-    baseurl: "{{ rhel_base }}/$basearch/extras/os/"
   epel:
     name: epel
     mirrorlist: "{{ fedora_mirrors }}repo=epel-7"
@@ -30,16 +29,14 @@ all_download_repositories:
 jenkins_slave_repositories:
   - "{{ all_repositories.latest }}"
   - "{{ all_repositories.optional }}"
-  - "{{ all_repositories.extras }}"
   - "{{ all_repositories.epel }}"
 
 jenkins_slave_download_repositories:
   - "{{ all_download_repositories.beaker }}"
 
 jenkins_master_repositories:
-  - "{{ all_repositories.optional }}"
   - "{{ all_repositories.latest }}"
-  - "{{ all_repositories.extras }}"
+  - "{{ all_repositories.optional }}"
   - "{{ all_repositories.epel }}"
   - "{{ all_repositories.openstack }}"
 

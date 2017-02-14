@@ -24,6 +24,7 @@
     - graphviz
     - lftp
     - gcc
+    - "{{ gcc_compat_package | default(omit) }}"
     - libffi-devel
     - python-devel
     - openssl-devel

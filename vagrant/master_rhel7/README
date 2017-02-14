@@ -1,0 +1,3 @@
+To run this box, you'll want to update the box address and the path to your local RHEL7
+repository base. Do so by editing the lines in the Vagrantfile to point to the appropriate
+box name/URL and the example.com URL to point to your RHEL7 repository.
