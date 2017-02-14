@@ -65,15 +65,14 @@
     state: started
     delay: 15
 
-- name: filter plugin list
-  become: false
-  set_fact:
-    _jenkins_plugins: "{{ _jenkins_plugins | default([]) | union([item.split('=')[0]]) }}"
-  with_items: "{{ jenkins_plugins }}"
-
 - name: install plugins
-  jenkins_plugins:
-    plugins: "{{ _jenkins_plugins }}"
-    validate_certs: false
-    use_ssl: "{{ https_enabled }}"
+  jenkins_plugin:
+    url: http{{ https_enabled | ternary('s', '') }}://localhost:{{ https_enabled | ternary('8443', '8080') }}
+    name: "{{ item.split('=')[0] }}"
+    state: present
+    version: "{{ item.split('=')[2] | default(omit) }}"
   notify: restart Jenkins
+  with_items: "{{ jenkins_plugins }}"
+  retries: 3
+  until: "{{ not result|failed }}"
+  register: result
