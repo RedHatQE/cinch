@@ -2,6 +2,7 @@
 set -ve
 
 ansible-playbook --syntax-check "cinch/site.yml"
+ansible-playbook --syntax-check "cinch/teardown.yml"
 
 find . -name '*.sh' -print0 | xargs -0 shellcheck -e 1090,1091
 
