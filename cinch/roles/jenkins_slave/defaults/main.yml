@@ -13,6 +13,8 @@ jswarm_execs: 10
 jswarm_home: /home/jenkins
 # Whether the swarm should execute as the jenkins user. False means it will exec as root
 run_swarm_as_jenkins: false
+# Path to Java interpreter to use to run the Swarm client
+jenkins_java_cmd: /usr/bin/java
 
 # These are variables which you probably don't want to
 # override, but which you are free to override if you
