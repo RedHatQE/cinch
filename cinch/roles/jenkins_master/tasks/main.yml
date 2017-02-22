@@ -16,6 +16,7 @@
 
 - name: configure firewall for port forwarding
   include: iptables.yml
+  when: ansible_connection != 'docker'
 
 - name: configure Jenkins for HTTPS
   include: https.yml

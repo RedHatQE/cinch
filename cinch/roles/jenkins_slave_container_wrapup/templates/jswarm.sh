@@ -7,5 +7,7 @@ exec java ${SWARM_JAVA_ARGS} \
 	-executors "${SWARM_EXECUTORS}" \
 	-labels "${SWARM_SLAVE_LABEL}" \
 	-fsroot "${SWARM_ROOT}" \
+	${SWARM_USERNAME} \
+	${SWARM_PASSWORD} \
 	${SWARM_EXTRA_ARGS}
 -

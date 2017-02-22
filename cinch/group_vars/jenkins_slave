@@ -1,3 +1,5 @@
 repositories: "{{ jenkins_slave_repositories }}"
 
 download_repositories: "{{ jenkins_slave_download_repositories }}"
+container_bin_files:
+  - jswarm.sh

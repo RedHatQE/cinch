@@ -1,0 +1,10 @@
+master ansible_connection=docker
+
+[cent7]
+master
+
+[jenkins_master]
+master
+
+[repositories]
+master

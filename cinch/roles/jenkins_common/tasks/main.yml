@@ -14,7 +14,7 @@
   - openssh
   retries: 2
   register: install_deps
-  until: "{{ install_deps | success }}"
+  until: install_deps|success
 
 - name: upload common requirements file
   copy:

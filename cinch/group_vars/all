@@ -12,6 +12,10 @@ repository_defaults:
 # This is the default name of this package, but it's not the same on every
 # system
 python_pip_package: python2-pip
+# Default user and directory to place the Jenkins files in
+jenkins_user: jenkins
+jenkins_user_home: /var/lib/jenkins
+jenkins_user_password: changeme
 
 # Override these variables with an array of files to be uploaded as-is to the
 # destination host. Files in pre_upload_files will be uploaded before any other

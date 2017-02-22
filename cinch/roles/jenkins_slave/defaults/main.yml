@@ -2,11 +2,6 @@
 # URL for the Jenkins master this slave should attach to
 jenkins_url: http://example.com:8080/jenkins/
 
-# These are variables which you may wish to override
-# The name of the jenkins user
-jenkins_user: jenkins
-# The home directory for that user
-jenkins_user_home: /var/lib/jenkins
 # The Jenkins name for the slave
 jslave_name: "{{ inventory_hostname }}"
 # The label for this slave

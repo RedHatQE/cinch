@@ -1,0 +1,10 @@
+jmaster ansible_connection=docker
+
+[fedora]
+jmaster
+
+[repositories]
+jmaster
+
+[jenkins_master]
+jmaster

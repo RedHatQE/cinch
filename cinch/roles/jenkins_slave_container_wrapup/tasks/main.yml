@@ -18,8 +18,7 @@
     mode: 0755
     owner: root
     group: root
-  with_items:
-  - jswarm.sh
+  with_items: "{{ container_bin_files }}"
 
 - name: state config file
   stat:
