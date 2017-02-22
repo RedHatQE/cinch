@@ -22,12 +22,12 @@
   hosts: jenkins_master:jenkins_slave
   roles:
     - jenkins_common
-    - beaker-client
 
 - name: configure jenkins masters
   become: true
   hosts: jenkins_master
   roles:
+    - beaker-client
     - jenkins_master
     - ntp
 

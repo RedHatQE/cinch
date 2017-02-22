@@ -1,0 +1,25 @@
+require "../shared.rb"
+
+Vagrant.configure("2") do |config|
+    vm(config, "master")
+    vm(config, "slave", "centos/6") do |ansible|
+        ansible.groups = {
+            "jenkins_master" => ["master"],
+            "jenkins_slave" => ["slave"],
+            "cent7" => ["master"],
+            "cent6" => ["slave"],
+            "repositories" => ["master", "slave"],
+            "jenkins_slave:vars" => {
+                "jenkins_master_url" => "http://192.168.8.2:8080",
+                "jenkins_user_password" => "vagrant",
+                "jenkins_user" => "jenkins",
+                "jenkins_user_home" => "/var/lib/jenkins"
+            },
+            "jenkins_master:vars" => {
+                "jenkins_ssl_cert" => "vagrant/master/jenkins.crt",
+                "jenkins_ssl_key" => "vagrant/master/jenkins.key",
+                "https_enabled" => "False"
+            }
+        }
+    end
+end

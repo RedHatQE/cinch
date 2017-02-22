@@ -15,6 +15,8 @@ jswarm_home: /home/jenkins
 run_swarm_as_jenkins: false
 # Path to Java interpreter to use to run the Swarm client
 jenkins_java_cmd: /usr/bin/java
+# Command line args to the Java executable, such as heap size, etc
+java_args: -Xmx2048m
 
 # These are variables which you probably don't want to
 # override, but which you are free to override if you

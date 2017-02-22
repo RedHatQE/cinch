@@ -1,4 +1,4 @@
-SWARM_JAVA_ARGS="-Xmx2048m"
+SWARM_JAVA_ARGS="{{ java_args }}"
 SWARM_MASTER="{{ jenkins_master_url }}"
 SWARM_SLAVE_NAME="{{ jslave_name }}"
 SWARM_EXECUTORS="{{ jswarm_execs }}"
