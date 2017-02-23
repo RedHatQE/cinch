@@ -1,3 +1,4 @@
+ENV['VAGRANT_NO_PARALLEL'] = 'yes'
 $ip = 2
 
 def vm(config, name, base_box="centos/7")
