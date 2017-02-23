@@ -41,7 +41,8 @@ def call_ansible(inventory, playbook, *args):
     ]
     ansible_args.extend(args)
     ansible = local['ansible-playbook']
-    command_handler(ansible, ansible_args)
+    exit_code = command_handler(ansible, ansible_args)
+    return exit_code
 
 
 def call_linchpin(work_dir, arg):
@@ -70,7 +71,7 @@ def call_linchpin(work_dir, arg):
     # For drop/teardown, we must run our teardown playbook(s) *before*
     # linchpin terminates the instance(s)
     if arg == 'drop':
-        call_ansible(inventory_path, 'teardown.yml')
+        exit_code = call_ansible(inventory_path, 'teardown.yml')
 
     # As of right now the linch-pin working directory is not configurable, so
     # we essentially have a 'pushd' here to switch to the linch-pin working
@@ -97,7 +98,8 @@ def call_linchpin(work_dir, arg):
     # If linchpin is asked to provision resources, we will then run our
     # cinch provisioning playbook
     if arg == 'rise' and exit_code == 0:
-        call_ansible(inventory_path, 'site.yml')
+        exit_code = call_ansible(inventory_path, 'site.yml')
+    return exit_code
 
 
 def cinchpin_init(work_dir):
