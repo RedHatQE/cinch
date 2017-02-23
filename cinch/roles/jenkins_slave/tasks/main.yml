@@ -47,7 +47,7 @@
 - name: upload swarm systemd file
   template:
     src: swarm.service
-    dest: /usr/lib/systemd/system/swarm.service
+    dest: /etc/systemd/system/swarm.service
     owner: root
     mode: 0644
   notify: restart swarm
@@ -67,6 +67,7 @@
     owner: root
     mode: 0644
   notify: restart swarm
+  when: "'{{ ansible_service_mgr }}' == 'upstart'"
 
 - name: flush handlers to avoid start/restart on initial launch
   meta: flush_handlers
