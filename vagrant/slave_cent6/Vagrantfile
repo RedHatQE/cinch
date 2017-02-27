@@ -2,11 +2,12 @@ require "../shared.rb"
 
 Vagrant.configure("2") do |config|
     vm(config, "master")
-    vm(config, "slave") do |ansible|
+    vm(config, "slave", "centos/6") do |ansible|
         ansible.groups = {
             "jenkins_master" => ["master"],
             "jenkins_slave" => ["slave"],
-            "cent7" => ["master", "slave"],
+            "cent7" => ["master"],
+            "cent6" => ["slave"],
             "repositories" => ["master", "slave"],
             "jenkins_slave:vars" => {
                 "jenkins_master_url" => "http://192.168.8.2:8080",

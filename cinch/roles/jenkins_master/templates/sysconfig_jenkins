@@ -16,7 +16,7 @@ JENKINS_HOME="{{ jenkins_home }}"
 # Java executable to run Jenkins
 # When left empty, we'll try to find the suitable Java.
 #
-JENKINS_JAVA_CMD=""
+JENKINS_JAVA_CMD="{{ jenkins_java_cmd }}"
 
 ## Type:        string
 ## Default:     "jenkins"

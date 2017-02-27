@@ -1,19 +1,28 @@
-- name: install java
-  yum:
+- name: install and java other necessary packages
+  package:
     name: "{{ item }}"
     state: present
   with_items:
     - java-1.{{ java_version }}.0-openjdk
     - java-1.{{ java_version }}.0-openjdk-devel
+    - libselinux-python
 
 - name: upload common requirements file
   copy:
     src: requirements-common.txt
     dest: /tmp/requirements-common.txt
 
+- name: create jenkins user
+  user:
+    name: "{{ jenkins_user }}"
+    home: "{{ jenkins_user_home }}"
+    shell: /bin/bash
+
 - name: ensure SSH directory exists
   file:
-    name: "{{ ansible_user_dir }}/.ssh"
+    name: "{{ jenkins_user_home }}/.ssh"
+    owner: "{{ jenkins_user }}"
+    mode: 0700
     state: directory
 
 - name: add private SSH key
@@ -25,6 +34,6 @@
   register: ssh_private
 
 - name: generate public SSH key
-  shell: "ssh-keygen -y -f ~/.ssh/id_rsa > ~/.ssh/id_rsa.pub"
+  shell: "ssh-keygen -y -f \"{{ jenkins_user_home }}/.ssh/id_rsa\" > \"{{ jenkins_user_home }}/.ssh/id_rsa.pub\""
   become_user: "{{ jenkins_user }}"
   when: ssh_private.changed

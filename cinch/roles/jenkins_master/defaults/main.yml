@@ -68,6 +68,8 @@ jenkins_java_options:
   - -Dhudson.model.ParametersAction.keepUndefinedParameters=true
   # Increase max Java heap size
   - -Xmx{{ java_heap_size }}
+# the path to the Java executable
+jenkins_java_cmd: /usr/bin/java
 # These four values change the default ulimits for file and process counts in
 # order to avoid failure of the system when these (typically very low) default
 # values are hit
