@@ -1,0 +1,84 @@
+---
+- job-template:
+    name: 'jslave-{project}-{topology}-1-provision'
+    defaults: cinch-topology-setup
+    node: master
+    parameters:
+      - choice:
+          name: example_parameter
+          choices:
+            - example1
+            - example2
+    builders:
+      - shell: |
+            #!/bin/bash -ex
+
+            # Work-around until this PR is merged
+            # https://github.com/CentOS-PaaS-SIG/linch-pin/pull/121
+            creds_file="${{JENKINS_HOME}}/opt/cinch/lib/python2.7/site-packages/provision/roles/openstack/vars/os_creds.yml"
+            if [[ ! -f "$creds_file" ]]; then
+                cp "{topology_path}/os_creds.yml" "$creds_file"
+            fi
+
+            source "${{JENKINS_HOME}}/opt/cinch/bin/activate"
+            cinchpin rise -w {topology_path}
+    publishers:
+      - archive:
+          artifacts: '{inventory_file}'
+          allow-empty: 'false'
+      - trigger-parameterized-builds:
+          - project: 'jslave-{project}-{topology}-2-runtest'
+            current-parameters: true
+            condition: 'SUCCESS'
+            fail-on-missing: true
+          - project: 'jslave-{project}-{topology}-3-teardown'
+            current-parameters: true
+            condition: 'UNSTABLE_OR_WORSE'
+            fail-on-missing: true
+
+- job-template:
+    name: 'jslave-{project}-{topology}-2-runtest'
+    node: '{jslave_name}'
+    builders:
+      - shell: |
+            #!/bin/bash -ex
+            exit 0
+    publishers:
+      - archive:
+          artifacts: '**/**'
+          allow-empty: 'true'
+      - trigger-parameterized-builds:
+          - project: 'jslave-{project}-{topology}-3-teardown'
+            current-parameters: true
+
+- job-template:
+    name: 'jslave-{project}-{topology}-3-teardown'
+    defaults: cinch-topology-setup
+    node: master
+    builders:
+      - copyartifact:
+          project: 'jslave-{project}-{topology}-1-provision'
+          filter: '{inventory_file}'
+          target: '{inventory_file}'
+      - shell: |
+            #!/bin/bash -ex
+            source "${{JENKINS_HOME}}/opt/cinch/bin/activate"
+            cinchpin drop -w {topology_path}
+
+- job-group:
+    name: jslave-provision-runtest-teardown
+    jobs:
+      - 'jslave-{project}-{topology}-1-provision'
+      - 'jslave-{project}-{topology}-2-runtest'
+      - 'jslave-{project}-{topology}-3-teardown'
+
+- project:
+    name: jslave-cinch-jobs
+    project: cinch
+    topology:
+      - example
+    jobs:
+      - jslave-provision-runtest-teardown
+    jslave_name: cinch-slave
+    topology_path: 'examples/linch-pin-topologies/openstack'
+    inventory_file: '{topology_path}/inventory/cinch.inventory'

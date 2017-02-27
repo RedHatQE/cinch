@@ -1,0 +1,12 @@
+- defaults:
+    name: cinch-topology-setup
+    wrappers:
+      - ansicolor
+      - workspace-cleanup
+      - timestamps
+    scm:
+      - git:
+          # replace this URL with a git repo that contains your topology files
+          url: 'https://example.com/cinch-topology-example.git'
+          branches:
+            - origin/master
