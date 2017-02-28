@@ -10,7 +10,7 @@ jslave_label: ops-jslave
 # Number of executor processes on the slave - modify based on system capacity and load
 jswarm_execs: 10
 # Directory where the swarm will live and execute
-jswarm_home: /home/jenkins
+jswarm_home: "{{ jenkins_user_home }}"
 # Whether the swarm should execute as the jenkins user. False means it will exec as root
 run_swarm_as_jenkins: false
 # Path to Java interpreter to use to run the Swarm client
