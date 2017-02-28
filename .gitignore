@@ -13,3 +13,4 @@ docs/build/
 .idea
 # The destination folder that python setup.py sdist drops results into
 dist
+build
