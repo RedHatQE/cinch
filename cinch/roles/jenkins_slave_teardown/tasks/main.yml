@@ -1,2 +1,4 @@
-- name: kill java process to remove Jenkins slave from Jenkins master
-  command: pkill java
+- name: stop swarm service to remove Jenkins slave from Jenkins master
+  service:
+    name: swarm
+    state: stopped
