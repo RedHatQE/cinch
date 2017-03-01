@@ -66,6 +66,8 @@ jenkins_java_options:
   - -Djenkins.security.ApiTokenProperty.showTokenToAdmins=true
   # Allows all parameters to be passed between jobs in trigger pipelines
   - -Dhudson.model.ParametersAction.keepUndefinedParameters=true
+  # Skip Jenkins 2 initial setup
+  - -Djenkins.install.runSetupWizard=false
   # Increase max Java heap size
   - -Xmx{{ java_heap_size }}
 # the path to the Java executable
