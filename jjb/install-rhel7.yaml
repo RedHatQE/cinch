@@ -1,0 +1,28 @@
+---
+# This JJB template is intended to provide a way to install 'cinch' on RHEL7
+# Jenkins masters without needing shell/SSH access.  Just create the job using
+# the jenkins-jobs command and run it to install 'cinch'.
+- job:
+    name: 'install-cinch-rhel7'
+    node: master
+    parameters:
+      - bool:
+          name: DELETE_VENV
+          description: "Delete pre-existing cinch virtualenv and re-install"
+    wrappers:
+      - ansicolor
+      - workspace-cleanup
+      - timestamps
+    scm:
+      - git:
+          url: 'https://github.com/RedHatQE/cinch.git'
+          branches:
+            - origin/master
+          basedir: cinch
+    builders:
+      - shell: |
+            #!/bin/bash -ex
+            export PYTHONUNBUFFERED=1 # Enable real-time output for Ansible
+            ansible-playbook -i localhost, -c local \
+                "${WORKSPACE}/cinch/cinch/install-rhel7.yml" \
+                -e delete_venv="${DELETE_VENV}"
