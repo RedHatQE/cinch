@@ -59,9 +59,28 @@ Installation
 Once the system level packages are installed, you can install cinch using
 **pip** (virtualenv strongly recommended):
 
+Fedora
+------
+
 ``virtualenv cinch && source cinch/bin/activate``
 
 ``pip install cinch``
+
+RHEL7 and CentOS7
+-----------------
+
+RHEL7 and derivatives offer older versions of Python packaging tools that are
+incompatible with some cinch dependencies.  To work-around this issue, we have
+provided an `Ansible playbook
+<https://github.com/RedHatQE/cinch/blob/master/cinch/install-rhel7.yml>`_ that
+will install a newer version of the necessary Python packaging tools to allow
+for installation on RHEL7.  This playbook is intended for use on Jenkins
+masters and will install cinch into a virtualenv at
+**/var/lib/jenkins/opt/cinch**.  For convenience, an optional `Jenkins Job
+Builder template
+<https://github.com/RedHatQE/cinch/blob/master/jjb/install-rhel7.yaml>`_ is
+provided and will create a Jenkins job that will run the aforementioned
+playbook on your Jenkins master.
 
 Execution
 =========
