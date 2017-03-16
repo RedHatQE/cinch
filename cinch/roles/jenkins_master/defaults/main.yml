@@ -35,6 +35,9 @@ jenkins_plugins: "{{ lookup('file', 'files/jenkins-plugin-lists/default.txt').sp
 # Java max heap size argument. Set this value based on the amount of RAM that
 # your instance needs and your infrastructure is able to support
 java_heap_size: 3g
+# A default session timeout of 8hrs (480 mins) is needed to work
+# comfortably without having to re-login.
+session_timeout: 480
 
 # ############################################################################
 # A list of variables that don't really need to be overridden, but which can be
@@ -60,14 +63,24 @@ jenkins_rpm: jenkins-{{ jenkins_version }}-1.1
 jenkins_java_options:
   # disables SNI extension in case of Java 1.7, which causes problems with SSL
   - -Djsse.enableSNIExtension=false
-  # Alows creation of synthetic users that exist only in Jenkins and not external auth
-  - -Dhudson.model.User.allowNonExistentUserToLogin=true
-  # Allows admin users to see the API tokens of all users
-  - -Djenkins.security.ApiTokenProperty.showTokenToAdmins=true
   # Allows all parameters to be passed between jobs in trigger pipelines
   - -Dhudson.model.ParametersAction.keepUndefinedParameters=true
-  # Skip Jenkins 2 initial setup
+  # Alows creation of synthetic users that exist only in Jenkins and not external auth
+  - -Dhudson.model.User.allowNonExistentUserToLogin=true
+  # allows the creation of a synthetic/virtual user to be created via an Url.
+  - -Dhudson.model.User.allowUserCreationViaUrl=true
+  # Allows admin users to see the API tokens of all users
+  - -Djenkins.security.ApiTokenProperty.showTokenToAdmins=true
+  # adds performance log messages during Jenkins initialization.
+  - -Djenkins.model.Jenkins.logStartupPerformance=true
+  # helps in cases where SSH slave startup can block. See JENKINS-20108
+  - -Djava.security.egd=file:/dev/./urandom
+  # Needed for Jenkins 2.X to bypass SetupWizard.
   - -Djenkins.install.runSetupWizard=false
+  # Needed to disable DNSMulticast
+  - -Dhudson.DNSMultiCast.disabled=true
+  # Set default session timeout.
+  - -DsessionTimeout={{ session_timeout }}
   # Increase max Java heap size
   - -Xmx{{ java_heap_size }}
 # the path to the Java executable
