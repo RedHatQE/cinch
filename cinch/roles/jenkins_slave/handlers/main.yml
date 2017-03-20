@@ -2,3 +2,4 @@
   service:
     name: swarm
     state: restarted
+  when: "'{{ ansible_connection }}' != 'docker'"

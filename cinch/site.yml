@@ -36,3 +36,5 @@
   hosts: jenkins_slave
   roles:
     - jenkins_slave
+    - role: jenkins_slave_container_wrapup
+      when: "'{{ ansible_connection }}' == 'docker'"

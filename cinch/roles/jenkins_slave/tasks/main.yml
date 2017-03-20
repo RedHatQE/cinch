@@ -20,6 +20,7 @@
   lineinfile:
     line: "{{ ansible_ssh_host }} {{ inventory_hostname }}.localdomain"
     dest: /etc/hosts
+  when: "'{{ ansible_connection }}' != 'docker'"
 
 - name: create jenkins user
   user:
@@ -35,6 +36,14 @@
   get_url:
     dest: "{{ jenkins_user_home }}/{{ jswarm_filename }}"
     url: "{{ jswarm_download }}"
+
+- name: set variable for docker container
+  set_fact:
+    jenkins_master_url: "{{ '{% raw %}{{ .Env.JENKINS_MASTER_URL }}{% endraw %}' }}"
+    jslave_name: "{{ '{% raw %}{{ .Env.JSLAVE_NAME }}{% endraw %}' }}"
+    jslave_label: "{{ '{% raw %}{{ .Env.JSLAVE_LABEL }}{% endraw %}' }}"
+    jswarm_extra_args: "{{ '{% raw %}{{ default .Env.JSWARM_EXTRA_ARGS \"\" }}{% endraw %}' }}"
+  when: "'{{ ansible_connection }}' == 'docker'"
 
 - name: upload swarm config file
   template:
@@ -77,3 +86,4 @@
     name: swarm
     state: started
     enabled: true
+  when: "'{{ ansible_connection }}' != 'docker'"

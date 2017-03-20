@@ -1,4 +1,4 @@
-- name: install and java other necessary packages
+- name: install java and other necessary packages
   package:
     name: "{{ item }}"
     state: present
@@ -6,6 +6,10 @@
     - java-1.{{ java_version }}.0-openjdk
     - java-1.{{ java_version }}.0-openjdk-devel
     - libselinux-python
+    - openssh
+  retries: 2
+  register: install_deps
+  until: "{{ install_deps | success }}"
 
 - name: upload common requirements file
   copy:

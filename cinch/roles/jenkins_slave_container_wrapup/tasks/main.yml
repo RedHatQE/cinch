@@ -1,0 +1,12 @@
+- name: clean yum cache
+  command: "{{ ansible_pkg_mgr }} clean all"
+
+- name: copy in shell script
+  template:
+    src: "{{ item }}"
+    dest: /opt
+    mode: 0755
+    owner: root
+    group: root
+  with_items:
+    - jswarm.sh

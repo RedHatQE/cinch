@@ -43,6 +43,9 @@ setup(
     extras_require={
         'lint': [
             'flake8'
+        ],
+        'test': [
+            'docker-py'
         ]
     }
 )

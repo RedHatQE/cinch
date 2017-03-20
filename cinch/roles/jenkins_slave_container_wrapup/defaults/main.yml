@@ -1,0 +1,1 @@
+host: "{{ hostvars[inventory_hostname]['ansible_host'] | default(inventory_hostname) }}"
