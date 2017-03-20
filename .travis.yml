@@ -1,4 +1,7 @@
 # General Travis config
+sudo: required
+services:
+  - docker
 language: python
 python: # Only one version for now
     - "2.7"
@@ -19,3 +22,5 @@ script: tests/${TEST}
 env:
     - TEST=lint.sh
     - TEST=docs.sh
+    - TEST=cent6_slave.sh
+    - TEST=cent7_slave.sh
