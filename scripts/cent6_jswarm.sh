@@ -15,4 +15,4 @@ ansible-playbook -i "${CINCH}/inventory/cent6_jswarm_docker" "${CINCH}/cinch/sit
 echo "Committing container at tag ${CINCH_VERSION}"
 docker commit \
 	--change 'ENTRYPOINT ["/usr/local/bin/dockerize", "-template", "/etc/sysconfig/jenkins_swarm:/etc/sysconfig/jenkins_swarm.templated", "/opt/jswarm.sh"]' \
-	jswarm cinch:cent6-${CINCH_VERSION}
+	jswarm "cinch:cent6-${CINCH_VERSION}"
