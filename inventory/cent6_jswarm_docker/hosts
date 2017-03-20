@@ -1,0 +1,10 @@
+slave ansible_connection=docker ansible_host=jswarm
+
+[jenkins_slave]
+slave
+
+[cent6]
+slave
+
+[repositories]
+slave
