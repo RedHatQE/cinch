@@ -2,4 +2,7 @@
 set -ve
 pip install -U pip
 pip install . .[lint]
-docker pull greghellings/centos_base:{7,6}
+for image in greghellings/centos_base:7 \
+             greghellings/centos_base:6; do
+	docker pull "${image}"
+done
