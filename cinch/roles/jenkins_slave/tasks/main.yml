@@ -37,6 +37,13 @@
     dest: "{{ jenkins_user_home }}/{{ jswarm_filename }}"
     url: "{{ jswarm_download }}"
 
+# Inside of a Docker container, we want to be able to pull values from the container's running
+# environment. In order to do that, we need to drop values into the configurable fields that
+# match the syntax dockerize uses. Unfortunately, that syntax is very similar to Jinja2 syntax,
+# and Ansible does not stop evaluation after only one iteration. Putting Jina2 raw blocks into
+# the string values here allow only the inner string (e.g. '{{ .Env.JENKINS_MASTER_URL }}') to
+# pass through to the output and prevents Ansible from trying to do template substitution on the
+# string value itself.
 - name: set variable for docker container
   set_fact:
     jenkins_master_url: "{{ '{% raw %}{{ .Env.JENKINS_MASTER_URL }}{% endraw %}' }}"
