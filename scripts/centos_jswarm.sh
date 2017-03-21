@@ -16,12 +16,18 @@ echo "Building cinch container for version ${CINCH_VERSION}"
 echo "*****************************************************"
 
 echo "Starting container"
-ansible -i /dev/null localhost -m docker_container -a "image=centos:${CENTOS_VERSION} name=jswarm detach=true tty=true command=/bin/bash"
+ansible -i /dev/null \
+	localhost \
+	-m docker_container \
+	-a "image=centos:${CENTOS_VERSION} name=jswarm detach=true tty=true command=/bin/bash"
 ansible -i "${INVENTORY}" all -m yum -a "name=sudo state=present"
 ansible -i "${INVENTORY}" all -m yum -a "name=* state=latest"
+
 echo "Building container with Ansible"
-ansible-playbook -i "${INVENTORY}" "${CINCH}/cinch/site.yml" \
+ansible-playbook -i "${INVENTORY}" \
+	"${CINCH}/cinch/site.yml" \
 	-e jenkins_user_password=some_dummy_value
+
 echo "Committing container at tag ${CINCH_VERSION}"
 docker commit \
 	--change 'ENTRYPOINT ["/usr/local/bin/dockerize", "-template", "/etc/sysconfig/jenkins_swarm:/etc/sysconfig/jenkins_swarm.templated", "/opt/jswarm.sh"]' \
