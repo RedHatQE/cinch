@@ -1,2 +1,4 @@
 dependencies:
   - role: jenkins_common
+  - role: dockerize
+    when: "'{{ ansible_connection }}' == 'docker'"

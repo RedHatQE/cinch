@@ -1,0 +1,20 @@
+- name: download dockerize
+  get_url:
+    dest: /tmp/dockerize.tar.gz
+    url: https://github.com/jwilder/dockerize/releases/download/{{ dockerize_version }}/dockerize-{{ dockerize_architecture }}-{{ dockerize_version }}.tar.gz
+  register: dockerize_download
+
+- name: unarchive dockerize
+  unarchive:
+    src: /tmp/dockerize.tar.gz
+    remote_src: true
+    dest: /usr/local/bin
+  when: "{{ dockerize_download | changed }}"
+
+- name: make sure dockerize has proper attributes
+  file:
+    dest: /usr/local/bin/dockerize
+    mode: 0755
+    owner: root
+    group: root
+    state: file

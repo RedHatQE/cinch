@@ -9,6 +9,8 @@ jslave_name: "{{ inventory_hostname }}"
 jslave_label: ops-jslave
 # Number of executor processes on the slave - modify based on system capacity and load
 jswarm_execs: 10
+# Extra command line args passed to jswarm
+jswarm_extra_args: ''
 # Directory where the swarm will live and execute
 jswarm_home: "{{ jenkins_user_home }}"
 # Whether the swarm should execute as the jenkins user. False means it will exec as root
