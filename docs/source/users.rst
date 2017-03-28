@@ -193,6 +193,10 @@ Create a topology file by saving the following example template as
         # Name of credentials file to use for the OpenStack API
         assoc_creds: "os_creds"
 
+.. note::  For more topology examples, including various host environments, see
+           the `linch-pin documentation
+           <https://linch-pin.readthedocs.io/en/latest/topologies.html>`_.
+
 Provision and configure your Jenkins slave automatically with the following
 command:
 
