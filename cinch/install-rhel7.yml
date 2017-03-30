@@ -78,6 +78,19 @@
         virtualenv: "{{ venv_dir }}"
         extra_args: -U
 
+    # This pip install should be non-editable, but the pip module in Ansible
+    # 1.8.4. does not support that flag
+    - name: install linch-pin from master branch instead of latest release from pypi
+      command: "{{ python }} {{venv_dir}}/bin/pip install -U git+https://github.com/CentOS-PaaS-SIG/linch-pin.git@master"
+      when: (linchpin_master|bool) == True
+
+    - name: install python-krbV with pip to use kerberos with Beaker
+      pip:
+        name: python-krbV
+        virtualenv: "{{ venv_dir }}"
+        extra_args: -U
+      when: (beaker_kerberos|bool) == True
+
     ## https://dmsimard.com/2016/01/08/selinux-python-virtualenv-chroot-and-ansible-dont-play-nice/
     - name: >-
         set up symlink in virtualenv for selinux module in system site-packages

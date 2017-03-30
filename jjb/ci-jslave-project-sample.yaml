@@ -81,4 +81,4 @@
       - jslave-provision-runtest-teardown
     jslave_name: cinch-slave
     topology_path: 'examples/linch-pin-topologies/openstack'
-    inventory_file: '{topology_path}/inventory/cinch.inventory'
+    inventory_file: '{topology_path}/inventories/cinch-test.inventory'

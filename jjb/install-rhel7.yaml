@@ -8,7 +8,16 @@
     parameters:
       - bool:
           name: DELETE_VENV
+          default: false
           description: "Delete pre-existing cinch virtualenv and re-install"
+      - bool:
+          name: LINCHPIN_MASTER
+          default: false
+          description: "Install linch-pin from master branch instead of latest release from pypi"
+      - bool:
+          name: BEAKER_KERBEROS
+          default: true
+          description: "Install kerberos module for Beaker"
     wrappers:
       - ansicolor
       - workspace-cleanup
@@ -25,4 +34,6 @@
             export PYTHONUNBUFFERED=1 # Enable real-time output for Ansible
             ansible-playbook -i localhost, -c local \
                 "${WORKSPACE}/cinch/cinch/install-rhel7.yml" \
-                -e delete_venv="${DELETE_VENV}"
+                -e delete_venv="${DELETE_VENV}" \
+                -e linchpin_master="${LINCHPIN_MASTER}" \
+                -e beaker_kerberos="${BEAKER_KERBEROS}"
