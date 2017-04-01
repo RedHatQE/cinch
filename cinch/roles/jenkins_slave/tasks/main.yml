@@ -30,12 +30,14 @@
 - name: give jenkins user sudo access
   lineinfile:
     dest: /etc/sudoers
-    line: "jenkins  ALL=(ALL)   NOPASSWD: ALL"
+    line: "{{ jenkins_user }}  ALL=(ALL)   NOPASSWD: ALL"
 
 - name: fetch swarm download
   get_url:
     dest: "{{ jenkins_user_home }}/{{ jswarm_filename }}"
     url: "{{ jswarm_download }}"
+    owner: "{{ jenkins_user }}"
+
 
 # Inside of a Docker container, we want to be able to pull values from the container's running
 # environment. In order to do that, we need to drop values into the configurable fields that

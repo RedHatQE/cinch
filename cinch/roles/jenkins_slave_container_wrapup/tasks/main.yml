@@ -10,3 +10,8 @@
     group: root
   with_items:
     - jswarm.sh
+
+- name: delete weird file
+  file:
+    dest: /var/log/lastlog
+    state: absent
