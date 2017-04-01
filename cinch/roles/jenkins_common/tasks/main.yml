@@ -21,6 +21,7 @@
     name: "{{ jenkins_user }}"
     home: "{{ jenkins_user_home }}"
     shell: /bin/bash
+    uid: "{{ jenkins_user_uid }}"
 
 - name: ensure SSH directory exists
   file:

@@ -1,5 +1,5 @@
 #!/bin/bash -xe
-. /etc/sysconfig/jenkins_swarm.templated
+. /var/lib/jenkins/jenkins_swarm.templated
 exec java ${SWARM_JAVA_ARGS} \
 	-jar "{{ jenkins_user_home }}/{{ jswarm_filename }}" \
 	-master "${SWARM_MASTER}" \
