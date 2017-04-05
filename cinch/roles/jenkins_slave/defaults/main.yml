@@ -25,6 +25,7 @@ java_args: -Xmx2048m
 # feel the need to
 jswarm_filename: swarm-client-{{ jswarm_version }}-jar-with-dependencies.jar
 jswarm_download: http://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/{{ jswarm_version }}/{{ jswarm_filename }}
+jswarm_local_directory: /opt/jswarm
 
 # These are variables that you really should not override
 # unless you really know what you're doing

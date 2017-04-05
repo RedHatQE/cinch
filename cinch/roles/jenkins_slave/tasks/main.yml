@@ -32,9 +32,16 @@
     dest: /etc/sudoers
     line: "{{ jenkins_user }}  ALL=(ALL)   NOPASSWD: ALL"
 
+- name: ensure jswarm destination folder exists
+  file:
+    path: "{{ jswarm_local_directory }}"
+    owner: "{{ jenkins_user }}"
+    mode: 0755
+    state: directory
+
 - name: fetch swarm download
   get_url:
-    dest: "{{ jenkins_user_home }}/{{ jswarm_filename }}"
+    dest: "{{ jswarm_local_directory }}/{{ jswarm_filename }}"
     url: "{{ jswarm_download }}"
     owner: "{{ jenkins_user }}"
 
