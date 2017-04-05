@@ -12,3 +12,5 @@ jenkins_ssh_keyfile: id_rsa
 # supported beyond the EOL support for their packages in the distribution of
 # choice
 java_version: 8
+# Needed for certain OpenShift instances
+jenkins_user_uid: 1000090000

@@ -4,9 +4,27 @@
 - name: copy in shell script
   template:
     src: "{{ item }}"
-    dest: /opt
+    dest: /usr/local/bin
     mode: 0755
     owner: root
     group: root
   with_items:
     - jswarm.sh
+
+- name: state config file
+  stat:
+    path: /etc/sysconfig/jenkins_swarm.templated
+  register: template_file
+
+- name: create config file
+  file:
+    dest: /etc/sysconfig/jenkins_swarm.templated
+    owner: "{{ jenkins_user }}"
+    mode: 0644
+    state: touch
+  when: "{{ not template_file.stat.exists }}"
+
+- name: delete weird file
+  file:
+    dest: /var/log/lastlog
+    state: absent

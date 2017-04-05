@@ -5,7 +5,7 @@ Wants=network-online.target
 EnvironmentFile=/etc/sysconfig/jenkins_swarm
 ExecStart={{ jenkins_java_cmd }} \
           $SWARM_JAVA_ARGS \
-          -jar "{{ jenkins_user_home }}/{{ jswarm_filename }}" \
+          -jar "{{ jswarm_local_directory }}/{{ jswarm_filename }}" \
           -master "$SWARM_MASTER" \
           -name "$SWARM_SLAVE_NAME" \
           -executors "$SWARM_EXECUTORS" \
