@@ -14,8 +14,14 @@ addons:
       - debian-sid
     packages:
       - shellcheck
-install: tests/install.sh
-script: tests/${TEST}
+install:
+  - tests/install.sh
+  - pip install pytest-cov
+script:
+  - tests/${TEST}
+  - py.test --cov=cinch/bin --cov-config .coveragerc --cov-report term --cov-report xml --cov-report html tests
+after_success:
+  - pip install codecov && codecov
 
 # Test matrix will be constructed from here. Listing out each set of tests
 # to execute will permit them to be executed in parallel
