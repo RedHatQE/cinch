@@ -32,4 +32,4 @@ echo "Committing container at tag ${CINCH_VERSION}"
 docker commit \
 	--change 'USER jenkins' \
 	--change 'ENTRYPOINT ["/usr/local/bin/dockerize", "-template", "/etc/sysconfig/jenkins_swarm:/etc/sysconfig/jenkins_swarm.templated", "/usr/local/bin/jswarm.sh"]' \
-	jswarm "cinch:cent${CENTOS_VERSION}-${CINCH_VERSION}"
+	jswarm "redhatqecinch/jenkins_slave:cent${CENTOS_VERSION}-${CINCH_VERSION}"
