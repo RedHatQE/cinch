@@ -1,8 +1,8 @@
 Development
 ===========
 
-ENVIRONMENTS
-============
+Environments
+------------
 
 Development occurs targeting each of the specific host environments that are
 supported. The default development environment and targeted host is the latest
@@ -28,39 +28,35 @@ equivalent packages for your distribution:
 -  vagrant
 
 The only software actually required to run the playbooks is Ansible and its
-dependencies. To install the versions that have been tested as working with
-this system, use the requirements.txt file in the top of the project to install
-all the necessary software into a Python virtualenv. Alternatively, invoke the
-script bin/ensure\_virtualenv.sh to install the Python dependencies into the
-folder .venv/
+dependencies. The other packages listed above are required only to install and
+build Ansible and its dependencies, such as PyYAML. Thus, if you are looking
+to package Cinch for a new distribution, the above packages, less vagrant,
+are a good starting place for build dependencies.
 
 If installing manually, you can activate your Python virtualenv of choice and
-issue the command ``pip install -r requirements.txt``
+issue the command ``pip install .``. As a developer, if you plan to make
+changes to Cinch, then use pip in the local editable mode by issuing the
+command ``pip install -e .`` instead.
 
 Execution
 ---------
 
 Once all of these depenencies are fulfilled, there are a number of folders
-under the top level vagrant/ directory that contain minimally a Vagrantfile and
-a hosts file. The Vagrantfile can be used to issue the command "vagrant up"
-from within that directory to spin up a collection of machines, and the hosts
-file can be used as the inventory input for running the Ansible playbooks
-against the spun up Vagrant VMs.
+under the top level vagrant/ directory that contain minimally a Vagrantfile.
+The Vagrantfile can be used to issue the command "vagrant up"
+from within that directory to spin up a collection of machines, against which
+the cinch playbooks will be automatically executed. Consult the README in each
+directory for more information about which machines will be created out of
+that directory, and for any information that the user might need to supply.
 
-Inside of each of those folders should also be a pair of shell scripts. These
-scripts are named "full\_cycle.sh" and the other "configure.sh".
-full\_cycle.sh will execute a ``vagrant destroy -f && vagrant up`` followed by
-invoking the same commands that configure.sh invokes. configure.sh will ensure
-a virtualenv has been created and the requirements.txt file has been installed
-to that environment. It will then execute ansible-playbook from that virtualenv
-against the hosts inventory file in the folder.
+Some of the Vagrantfile values will need to be supplied by the user,
+specifically any values related to RHEL repository URLs as there is no public
+version of those repositories available. Other values should all be provided
+from within those directories already.
 
-Customization
--------------
-
-Both configure.sh and full\_cycle.sh will pass any arguments they receive,
-unaltered, through to the ansible-playbook invocation at the end of the command
-line. Thus, if any extra arguments need to be appended to the ansible-playbook
-invocation, for instance passing in command-line variable overrides or setting
-verbose flags, they can be added to the end of the invocation for the shell
-script.
+Merely issuing the command ``vagrant up`` should bring up the VMs for each
+environment you configure. For the most part, it should be possible to run
+each environment on your local system, but there is the potential that having
+multiple environments running at the same time on the same host could result
+in collissions between the IP addresses of the hosts. It certainly would lead
+to provided URLs in the README files being incorrect.
