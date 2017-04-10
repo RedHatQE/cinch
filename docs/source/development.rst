@@ -34,9 +34,9 @@ to package Cinch for a new distribution, the above packages, less vagrant,
 are a good starting place for build dependencies.
 
 If installing manually, you can activate your Python virtualenv of choice and
-issue the command ``pip install .``. As a developer, if you plan to make
+issue the command ``pip install /path/to/cinch``. As a developer, if you plan to make
 changes to Cinch, then use pip in the local editable mode by issuing the
-command ``pip install -e .`` instead.
+command ``pip install -e /path/to/cinch`` instead.
 
 Execution
 ---------
