@@ -1,30 +1,79 @@
 Users
 =====
 
+Quick Start
+-----------
+
+If you would rather not be bothered with the boring, gritty details, the
+following quick steps will get you up and going with a Cinch installation,
+after which you can jump down to the section on how to run Cinch, and skip the
+installation paragraphs that immediately follow this one.
+
+Fedora 25+
+``````````
+
+Execute the following commands
+
+``sudo dnf install -y libvirt-devel python-virtualenv libyaml-devel
+openssl-devel libffi-devel gcc redhat-rpm-config``
+
+``virtualenv cinch && source cinch/bin/activate``
+
+``pip install cinch``
+
+RHEL/CentOS
+```````````
+
+See the sample Ansible playbook for steps to install Cinch into a virtualenv
+in RHEL/CentOS, as there are some additional steps required in these systems.
+Running that playbook as-is on your local system will result in a virtualenv
+living at ``/var/lib/jenkins/opt/cinch`` that will contain the latest version
+of Cinch.
+
+Ubuntu
+``````
+
+``apt-get install -y libvirt-dev python-virtualenv libyaml-dev openssl
+libffi-dev gcc python-dev libssl-dev``
+
+``virtualenv cinch && source cinch/bin/activate``
+
+On older versions of Ubuntu (like 14.04) you should update pip (usually these
+older systems come with a version of pip such as 1.5.4 instead of version 9+)
+
+``pip install -U pip``
+
+On all systems, continue on with the installation of Cinch itself
+
+``pip install cinch``
+
+.. note:: After Cinch is installed with the above quick start methods, you can
+          jump down to the section about running Cinch to get a look at basic
+          documentation on how the software should be used.
+
 Getting Started
-===============
+---------------
 
 At its core, this software is nothing more than a collection of Ansible
 playbook scripts for configuring a system. Any knowledge that you have that is
 applicable to the broad spectrum of Ansible usage is applicable here.  You can
 opt to install Ansible from your favorite package manager, or you can use the
-version that is pinned in the **requirements.txt** file and has been tested
-with the software (strongly recommended).
+version that is specified in **setup.py**
 
 Before concluding there is a bug in these playbooks, make sure that the version
-of Ansible you are using is the same as the version in the **requirements.txt**
+of Ansible you are using is the same as the version in the **setup.py**
 file and that you have ensured there are no alterations from that version. It
 is not intended or guaranteed that any changes from the stock version of
 Ansible that has been tested should work.
 
 Requirements
-============
+------------
 
 To setup your environment, you need to install Ansible. Since Ansible is
 primarily distributed as a Python package, it is suggested that you use **pip**
 to install Ansible on your system. You are welcome to try and use the version
 that is installed by your favorite package manager, but be sure that you are
-using a version at least as new as the version pinned in **requirements.txt**.
+using a version at least as new as the version pinned in **setup.py**.
 
 It is recommended that you install Ansible from **pip** using a virtualenv, as
 is the best practices recommendations for most Python packages that are
@@ -50,24 +99,22 @@ already present.
 
 Here is an example of installing required system level packages for Fedora 25:
 
-``sudo dnf install -y libvirt-devel python-virtualenv libyaml-devel
-openssl-devel libffi-devel gcc redhat-rpm-config``
 
 Installation
-============
+------------
 
 Once the system level packages are installed, you can install cinch using
 **pip** (virtualenv strongly recommended):
 
 Fedora
-------
+``````
 
 ``virtualenv cinch && source cinch/bin/activate``
 
 ``pip install cinch``
 
 RHEL7 and CentOS7
------------------
+`````````````````
 
 RHEL7 and derivatives offer older versions of Python packaging tools that are
 incompatible with some cinch dependencies.  To work-around this issue, we have
@@ -83,10 +130,10 @@ provided and will create a Jenkins job that will run the aforementioned
 playbook on your Jenkins master.
 
 Execution
-=========
+---------
 
 With linch-pin
---------------
+``````````````
 
 The ``cinchpin`` command can be used to call `linch-pin
 <http://linch-pin.readthedocs.io/en/latest/>`_ automatically to provision
@@ -213,7 +260,7 @@ Jenkins master, run the following command:
  Pipeline.
 
 Manual
-------
+``````
 
 Execution of this software requires configuring an Ansible inventory that
 points at the **jenkins\_master** and **jenkins\_slave** hosts that you want
@@ -239,7 +286,7 @@ environment as easy as a single command.
 
 
 Support
-=======
+-------
 
 The playbooks should support, minimally, CentOS and RHEL versions 7+.  If you
 encounter difficulties in those environments, please file bugs. There should be

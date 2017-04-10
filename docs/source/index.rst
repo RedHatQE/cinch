@@ -11,6 +11,7 @@ Welcome to cinch's documentation!
 
    users
    development
+   docker_image
 
 
 
