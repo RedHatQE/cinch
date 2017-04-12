@@ -1,4 +1,5 @@
 ![alt text](https://travis-ci.org/RedHatQE/cinch.svg?branch=master "build status")
+[![codecov](https://codecov.io/gh/RedHatQE/cinch/branch/master/graph/badge.svg)](https://codecov.io/gh/RedHatQE/cinch)
 
 # cinch
 
