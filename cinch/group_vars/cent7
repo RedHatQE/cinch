@@ -10,7 +10,6 @@ _repositories:
 
 _download_repositories:
   - http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
-  - https://beaker-project.org/yum/beaker-client-CentOS.repo
 
 rpm_key_imports:
   - key: http://pkg.jenkins-ci.org/redhat-stable/jenkins.io.key
