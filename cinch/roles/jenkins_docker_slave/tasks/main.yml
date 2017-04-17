@@ -1,0 +1,47 @@
+- name: ensure docker is installed
+  package:
+    name: "{{ item }}"
+    state: present
+  become: true
+  with_items:
+    - docker
+    - python-docker-py
+
+- name: make sure docker is started
+  service:
+    name: docker
+    state: started
+    enabled: true
+  become: true
+
+- name: pull docker image
+  docker_image:
+    state: present
+    name: redhatqecinch/jenkins_slave
+    tag: "{{ docker_jenkins_slave_tag | default('latest') }}"
+  become: true
+
+- name: set environment variables
+  set_fact:
+    _env_vars:
+        JSLAVE_NAME: "{{ jslave_name }}"
+        JENKINS_MASTER_URL: "{{ jenkins_master_url | mandatory }}"
+
+- name: set conditional variables - jslave_label
+  set_fact:
+    _env_vars: "{{ _env_vars | combine({ 'JSLAVE_LABEL': jslave_label }) }}"
+  when: jslave_label is defined
+
+- name: set conditional variables - jswarm_extra_args
+  set_fact:
+    _env_vars: "{{ _env_vars | combine({ 'JSWARM_EXTRA_ARGS': jswarm_extra_args }) }}"
+  when: jswarm_extra_args is defined
+
+- name: run docker container
+  docker_container:
+    name: "{{ docker_jenkins_slave_container_name | default(jslave_name) }}"
+    state: started
+    image: redhatqecinch/jenkins_slave:{{ docker_jenkins_slave_tag | default('latest') }}
+    env: "{{ _env_vars }}"
+    restart_policy: always
+  become: true

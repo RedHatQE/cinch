@@ -1,0 +1,17 @@
+require '../shared.rb'
+
+Vagrant.configure("2") do |config|
+	vm(config, "master")
+	vm(config, "docker-slave") do |ansible|
+		ansible.groups = {
+			"jenkins_master" => ["master"],
+			"jenkins_docker_slave" => ["docker-slave"],
+			"cent7" => ["master", "docker-slave"],
+			"repositories" => ["master", "docker-slave"],
+			"jenkins_docker_slave:vars" => {
+				"jenkins_master_url" => "http://{{ hostvars['master']['ansible_eth1']['ipv4']['address'] }}/",
+				"jslave_label" => "my label"
+			}
+		}
+	end
+end

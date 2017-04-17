@@ -1,0 +1,3 @@
+repositories: "{{ jenkins_slave_repositories }}"
+
+download_repositories: "{{ jenkins_slave_download_repositories }}"
