@@ -1,10 +1,11 @@
 #!/usr/bin/env sh
 set -ve
 
-ansible-playbook --syntax-check "cinch/site.yml"
-ansible-playbook --syntax-check "cinch/teardown.yml"
+ansible-playbook --syntax-check "cinch/site.yml" -i inventory/sample/hosts
+ansible-playbook --syntax-check "cinch/teardown.yml" -i inventory/sample/hosts
 
-find . -name '*.sh' -not -name 'jswarm.sh' -print0 | xargs -0 shellcheck -e 1090,1091,2093
+find . -name '*.sh' -not -name 'jswarm.sh' -print0 | \
+	xargs -0 shellcheck -e 1090,1091,2093
 find . -name 'jswarm.sh' -print0 | xargs -0 shellcheck -e 1090,1091,2093,2086
 
 SOURCES=$(find . -name '*.py')
