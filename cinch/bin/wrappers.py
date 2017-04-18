@@ -66,7 +66,7 @@ def call_linchpin(work_dir, arg):
     # for some required configuration items and set up them for later use
     if arg != 'init':
         inventory_file = get_inventory(work_dir)
-        inventory_path = os.path.join(work_dir, 'inventory', inventory_file)
+        inventory_path = os.path.join(work_dir, 'inventories', inventory_file)
 
     # For drop/teardown, we must run our teardown playbook(s) *before*
     # linchpin terminates the instance(s)
