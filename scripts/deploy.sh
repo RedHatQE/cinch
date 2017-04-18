@@ -5,6 +5,11 @@ CINCH="$(readlink -f "$(dirname "$0")/../")"
 # of the line to leave only the expected version
 CINCH_VERSION=$(grep "${CINCH}/setup.py" -e 'version=' \
 	| sed -e "s/.*version='\(.*\)'.*/\1/")
+
+# Build the images before deployment
+"${CINCH}/scripts/centos_jswarm.sh" 6
+"${CINCH}/scripts/centos_jswarm.sh" 7
+
 echo "Deploying version '${CINCH_VERSION}'"
 
 # Tag the CentOS 7 image as the "latest" version, for people wanting the

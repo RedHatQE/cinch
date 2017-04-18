@@ -25,10 +25,6 @@ env:
     - TEST=cent6_slave.sh
     - TEST=cent7_slave.sh
 
-before_deploy:
-  - ./scripts/centos_jswarm.sh 6
-  - ./scripts/centos_jswarm.sh 7
-
 deploy:
   - provider: pypi
     repo: RedHatQE/cinch
