@@ -37,8 +37,10 @@ deploy:
     distributions: "sdist bdist_wheel"
     on:
       tags: true
+      condition: $TEST = lint.sh
   - provider: script
     repo: RedHatQE/cinch
     script: ./scripts/deploy.sh
     on:
       tags: true
+      condition: $TEST = lint.sh
