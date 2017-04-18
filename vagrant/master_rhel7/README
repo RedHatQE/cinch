@@ -1,3 +1,15 @@
+To run this box, you will need to find and add a Vagrant box for RHEL7. Currently the
+version supported is RHEL 7.2. If you have access to provided RHEL7.2 Vagrant box file,
+you can add it to your local system with a command like
+
+```vagrant box add --name rhel7.2 http://somewhere.com/vagrant/box/files/rhel7.2.box```
+
+Since RHEL7 is under license, these images are probably not readily available to public
+infrasturcure, but this Vagrantfile is provided in the interest of testing and for those
+who are in possession of such a box to be able to test. It should provide some basic
+information on what types of variables need to be set to configure a RHEL system to
+serve as a cinch Jenkins master.
+
 To run this box, you'll want to update the box address and the path to your local RHEL7
 repository base. Do so by editing the lines in the Vagrantfile to point to the appropriate
 box name/URL and the example.com URL to point to your RHEL7 repository.
