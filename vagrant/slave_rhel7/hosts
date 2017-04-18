@@ -1,8 +1,0 @@
-[jenkins_slave]
-slave ansible_host=192.168.8.2
-
-[rhel7]
-slave
-
-[vagrant]
-slave
