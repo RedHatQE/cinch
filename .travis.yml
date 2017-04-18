@@ -25,10 +25,6 @@ env:
     - TEST=cent6_slave.sh
     - TEST=cent7_slave.sh
 
-before_deploy:
-  - ./scripts/centos_jswarm.sh 6
-  - ./scripts/centos_jswarm.sh 7
-
 deploy:
   - provider: pypi
     repo: RedHatQE/cinch
@@ -40,7 +36,13 @@ deploy:
       condition: $TEST = lint.sh
   - provider: script
     repo: RedHatQE/cinch
-    script: ./scripts/deploy.sh
+    script: ./scripts/deploy.sh cent6 false
     on:
       tags: true
-      condition: $TEST = lint.sh
+      condition: $TEST = cent6_slave.sh
+  - provider: script
+    repo: RedHatQE/cinch
+    script: ./scripts/deploy.sh cent7 true
+    on:
+      tags: true
+      condition: $TEST = cent7_slave.sh
