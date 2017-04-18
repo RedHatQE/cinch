@@ -1,0 +1,14 @@
+This Vagrantfile spins up a jenkins slave only. There is no master
+that it is attacehd to. The slave will be based on a rhel7.2 box.
+Since these boxes are not available to the general public, you
+will need to either update the Vagrantfile with the name and URL
+of your accessible base box or you will need to import the box.
+Importing can be done with the command
+
+``vagrant box add --name rhel7.2 <url to box>``
+
+You will still need to modify the Vagrantfile to update the value
+of the rhel_base variable to point to the base directory of your
+available RHEL7 repositories. Since those files are also under
+license, you will need to have access to such a repository in order
+for the Ansible playbooks to properly install the software.
