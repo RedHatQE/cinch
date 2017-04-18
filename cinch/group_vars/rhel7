@@ -13,6 +13,9 @@ all_repositories:
   optional:
     name: rhel7-optional
     baseurl: "{{ rhel_base }}/$basearch/optional/os/"
+  debug:
+    name: rhel7-debug
+    baseurl: "{{ rhel_base }}/$basearch/debug/"
   epel:
     name: epel
     mirrorlist: "{{ fedora_mirrors }}repo=epel-7"
@@ -35,6 +38,7 @@ jenkins_slave_download_repositories: []
 jenkins_master_repositories:
   - "{{ all_repositories.latest }}"
   - "{{ all_repositories.optional }}"
+  - "{{ all_repositories.debug }}"
   - "{{ all_repositories.epel }}"
   - "{{ all_repositories.openstack }}"
 
