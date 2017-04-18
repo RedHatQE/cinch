@@ -1,0 +1,6 @@
+- name: wait for Jenkins to start up
+  become: false
+  wait_for:
+    port: "{{ https_enabled | ternary(443, 80) }}"
+    state: started
+    delay: 15
