@@ -22,6 +22,9 @@ all_repositories:
   openstack:
     name: openstack
     baseurl: http://mirror.centos.org/centos/7/cloud/x86_64/openstack-mitaka/
+  certificate:
+    name: certificate-system
+    baseurl: "{{ rhel_base }}/$basearch/certificate-system/9/os/"
 
 # These types of repositories will download the requested URL into the /etc/yum.repos.d
 # folder in order to enable them
@@ -41,6 +44,7 @@ jenkins_master_repositories:
   - "{{ all_repositories.debug }}"
   - "{{ all_repositories.epel }}"
   - "{{ all_repositories.openstack }}"
+  - "{{ all_repositories.certificate }}"
 
 jenkins_master_download_repositories:
   - "{{ all_download_repositories.jenkins }}"
