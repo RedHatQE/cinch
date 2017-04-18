@@ -8,3 +8,20 @@ repository_defaults:
   enabled: true
   skip_if_unavailable: false
   gpgcheck: false
+
+# Override these variables with an array of files to be uploaded as-is to the
+# destination host. Files in pre_upload_files will be uploaded before any other
+# code is run. Files in post_upload_files will be uploaded after all other tasks
+# have been run. Each element in the array must contain an object with the
+# following fields:
+# src (required): the local path to the file to upload
+# dest (required): the remote path to upload the file into
+# owner (optional): the user who will own the file after upload
+# group (optional): the group to set on the file after upload
+# mode (optional): the mode to set on the uploaded file
+# For more information or clarification on these variables, refer to the Ansible
+# module documentation for the "copy" module. Variables in this array match
+# the arguments to that module of the same name.
+# http://docs.ansible.com/ansible/copy_module.html
+pre_upload_files: []
+post_upload_files: []

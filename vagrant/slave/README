@@ -1,0 +1,4 @@
+The three extra files in this directory - "mode", "owner", and "simple" are
+used to test the file upload module in the playbooks. Examples of how to
+structure the data going into the system are visible in the Vagrantfile and
+elsewhere in the Cinch documentation.

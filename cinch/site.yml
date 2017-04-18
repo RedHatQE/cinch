@@ -4,6 +4,13 @@
   roles:
     - check_ssh
 
+- name: upload files before
+  hosts: all
+  roles:
+    - role: upload_files
+      vars:
+        upload_files: "{{ pre_upload_files }}"
+
 - name: configure certificate authority, if necessary
   become: true
   hosts: certificate_authority
@@ -43,3 +50,10 @@
   hosts: jenkins_docker_slave
   roles:
     - jenkins_docker_slave
+
+- name: upload files after
+  hosts: all
+  roles:
+    - role: upload_files
+      vars:
+        upload_files: "{{ post_upload_files }}"
