@@ -36,7 +36,13 @@ deploy:
       condition: $TEST = lint.sh
   - provider: script
     repo: RedHatQE/cinch
-    script: ./scripts/deploy.sh
+    script: ./scripts/deploy.sh cent6 false
     on:
       tags: true
-      condition: $TEST = lint.sh
+      condition: $TEST = cent6_slave.sh
+  - provider: script
+    repo: RedHatQE/cinch
+    script: ./scripts/deploy.sh cent7 true
+    on:
+      tags: true
+      condition: $TEST = cent7_slave.sh
