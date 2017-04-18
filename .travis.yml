@@ -24,3 +24,21 @@ env:
     - TEST=docs.sh
     - TEST=cent6_slave.sh
     - TEST=cent7_slave.sh
+
+before_deploy:
+  - ./scripts/centos_jswarm.sh 6
+  - ./scripts/centos_jswarm.sh 7
+
+deploy:
+  - provider: pypi
+    repo: RedHatQE/cinch
+    user: "${PYPI_USER}"
+    password: "${PYPI_PASSWORD}"
+    distributions: "sdist bdist_wheel"
+    on:
+      tags: true
+  - provider: script
+    repo: RedHatQE/cinch
+    script: ./scripts/deploy.sh
+    on:
+      tags: true
