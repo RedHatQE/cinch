@@ -1,5 +1,5 @@
 This Vagrantfile spins up a jenkins slave only. There is no master
-that it is attacehd to. The slave will be based on a rhel7.2 box.
+that it is attached to. The slave will be based on a rhel7.2 box.
 Since these boxes are not available to the general public, you
 will need to either update the Vagrantfile with the name and URL
 of your accessible base box or you will need to import the box.
