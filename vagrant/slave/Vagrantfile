@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
             "cent7" => ["master", "slave"],
             "repositories" => ["master", "slave"],
             "jenkins_slave:vars" => {
-                "jenkins_master_url" => "http://192.168.8.2:8080",
+                "jenkins_master_url" => "http://{{ hostvars['master']['ansible_default_ipv4']['address'] }}:8080",
                 "jenkins_user_password" => "vagrant",
                 "jenkins_user" => "jenkins",
                 "jenkins_user_home" => "/var/lib/jenkins"
