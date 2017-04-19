@@ -1,4 +1,7 @@
 require "../shared.rb"
+require 'json'
+
+base = File.dirname(__FILE__)
 
 Vagrant.configure("2") do |config|
     vm(config, "master")
@@ -18,6 +21,19 @@ Vagrant.configure("2") do |config|
                 "jenkins_ssl_cert" => "vagrant/master/jenkins.crt",
                 "jenkins_ssl_key" => "vagrant/master/jenkins.key",
                 "https_enabled" => "False"
+            },
+            "cent7:vars" => {
+                # These variables need to be converted to JSON objects, like
+                # all other copmlex value passed into the inventory file for
+                # Ansible. We here utilize standard Ruby modules to
+                # accomplish that
+                "pre_upload_files" => [
+                    {"src" => base + "/simple", "dest" => "/simple"},
+                    {"src" => base + "/mode", "dest" => "/mode", "mode" => "0600"}
+                ].to_json,
+                "post_upload_files" => [
+                    {"src" => base + "/owner", "dest" => "/var/lib/jenkins/owner", "owner" => "jenkins"}
+                ].to_json
             }
         }
     end
