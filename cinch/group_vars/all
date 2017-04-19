@@ -23,5 +23,15 @@ repository_defaults:
 # module documentation for the "copy" module. Variables in this array match
 # the arguments to that module of the same name.
 # http://docs.ansible.com/ansible/copy_module.html
+# Example
+# pre_upload_files:
+#   - src: /home/deployuser/somehost/ssl.key
+#     dest: /etc/apache2/ssl/ssl.key
+#     mode: 0600
+# post_upload_files:
+#   - src: /home/deployuser/somehost/id_rsa
+#     dest: /var/lib/jenkins/.ssh/id_rsa
+#     owner: jenkins
+#     mode: 0600
 pre_upload_files: []
 post_upload_files: []

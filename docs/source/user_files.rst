@@ -38,7 +38,7 @@ have been configured and are up and running. However, at this point, all such
 configurations, users, etc are already present on the system.
 
 Thus, it is important to realize a file cannot be uploaded to be owned by the
-Jenkins user before the Jenkins user is created. IF it is necessary to upload
+Jenkins user before the Jenkins user is created. If it is necessary to upload
 a file as that user before the Jenkins service starts on a configured host,
 then it will be necessary to use external playbooks or other methods to ensure
 proper behavior.
@@ -63,6 +63,20 @@ owner       no
 group       no
 mode        no
 ==========  ===============
+
+Example:
+
+.. code:: yaml
+
+    pre_upload_files:
+      - src: /home/deployuser/somehost/ssl.key
+        dest: /etc/apache2/ssl/ssl.key
+        mode: 0600
+    post_upload_files:
+      - src: /home/deployuser/somehost/ssh
+        dest: /var/lib/jenkins/.ssh
+        owner: jenkins
+        mode: 0600
 
 Each of these values is passed directly into the Ansible module called
 `copy <http://docs.ansible.com/ansible/copy_module.html>`_. Refer to that
