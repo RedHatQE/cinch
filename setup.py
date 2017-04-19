@@ -45,7 +45,9 @@ setup(
             'flake8'
         ],
         'test': [
-            'docker-py'
+            'docker-py',
+            'pytest-cov',
+            'codecov'
         ]
     }
 )
