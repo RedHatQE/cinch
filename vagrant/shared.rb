@@ -2,7 +2,7 @@ ENV['VAGRANT_NO_PARALLEL'] = 'yes'
 $ip = 2
 
 def get_username(base_box)
-	if base_box.start_with?('centos')
+    if base_box.start_with?('centos')
         return 'centos'
     elsif base_box.start_with?('rhel')
         return 'root'
