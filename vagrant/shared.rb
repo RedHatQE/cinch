@@ -47,7 +47,7 @@ def vm(config, name, base_box="centos/7")
         end
         nodeconfig.vm.provider :openstack do |os, override|
             os.image = get_image(base_box)
-            os.server_name = ENV['USER'] + name
+            os.server_name = ENV['USER'] + '-' + name
             override.ssh.username = get_username(base_box)
             override.ssh.pty = true
         end
