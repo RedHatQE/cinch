@@ -13,19 +13,14 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - ansible==1.8.4
-    - nose
+  - ansible==1.8.4
+  - nose
 
 - name: add host to hosts file
   lineinfile:
     line: "{{ ansible_ssh_host }} {{ inventory_hostname }}.localdomain"
     dest: /etc/hosts
   when: "'{{ ansible_connection }}' != 'docker'"
-
-- name: create jenkins user
-  user:
-    name: jenkins
-    password: "{{ jenkins_user_password }}"
 
 - name: give jenkins user sudo access
   lineinfile:
@@ -75,15 +70,10 @@
     dest: /etc/systemd/system/swarm.service
     owner: root
     mode: 0644
-  notify: restart swarm
+  notify:
+  - restart swarm
+  - reload systemd files
   when: "'{{ ansible_service_mgr }}' == 'systemd'"
-  register: systemd_file
-
-- name: reload systemd files
-  systemd:
-    daemon_reload: true
-    name: swarm
-  when: "{{ systemd_file|changed }}"
 
 - name: upload swarm upstart file
   template:

@@ -9,7 +9,7 @@
     owner: root
     group: root
   with_items:
-    - jswarm.sh
+  - jswarm.sh
 
 - name: state config file
   stat:

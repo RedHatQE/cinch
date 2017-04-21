@@ -14,10 +14,10 @@
     group: jenkins
     mode: 0755
   with_items:
-    - in: "{{ jenkins_ssl_cert }}"
-      out: jenkins.crt
-    - in: "{{ jenkins_ssl_key }}"
-      out: jenkins.key
+  - in: "{{ jenkins_ssl_cert }}"
+    out: jenkins.crt
+  - in: "{{ jenkins_ssl_key }}"
+    out: jenkins.key
 
 - name: copy ssl certificate to anchors
   copy:
@@ -25,30 +25,7 @@
     dest: /etc/pki/ca-trust/source/anchors/jenkins.crt
     owner: root
     group: root
-  register: ssl_certificate_upload
-
-- name: update certificate chains
-  shell: update-ca-trust extract
-  when: ssl_certificate_upload.changed
-
-- name: generate pkcs12 version of certificate file
-  become_user: jenkins
-  shell: >
-    openssl pkcs12 -export -in jenkins.crt -inkey jenkins.key -out jenkins.p12
-    -name jenkins-ssl-cert -CAfile jenkins-ca.crt -caname root -password pass:{{ keystore_pass }}
-  args:
-    chdir: "{{ jenkins_home }}/.ssl"
-  when: ssl_certificate_upload.changed
-
-- name: import key tool to Java keystore
-  become_user: jenkins
-  shell: >
-    keytool -importkeystore -deststorepass {{ keystore_pass }} -destkeypass {{ keystore_pass }}
-    -destkeystore {{ jenkins_home }}/.ssl/keystore -srckeystore {{ jenkins_home }}/.ssl/jenkins.p12
-    -srcstoretype PKCS12 -srcstorepass {{ keystore_pass }} -alias jenkins-ssl-cert
-  when: ssl_certificate_upload.changed
-  register: keytool_import
-  changed_when: "'already exists' not in keytool_import.stderr and 'already exists' not in keytool_import.stdout"
+  notify: update certificate chains
 
 - name: configuring httpd to forward port 80 traffic to port 443
   lineinfile:
@@ -56,8 +33,8 @@
     dest: /etc/httpd/conf/httpd.conf
     state: present
   with_items:
-    - RewriteEngine On
-    - RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+  - RewriteEngine On
+  - RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
   notify: restart httpd
 
 - name: enable httpd

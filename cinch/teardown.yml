@@ -2,4 +2,4 @@
   become: true
   hosts: jenkins_slave
   roles:
-    - jenkins_slave_teardown
+  - jenkins_slave_teardown
