@@ -14,14 +14,17 @@ addons:
       - debian-sid
     packages:
       - shellcheck
-install: tests/install.sh
-script: tests/${TEST}
+install:
+  - tests/install.sh
+script:
+  - tests/${TEST}
 
 # Test matrix will be constructed from here. Listing out each set of tests
 # to execute will permit them to be executed in parallel
 env:
     - TEST=lint.sh
     - TEST=docs.sh
+    - TEST=coverage.sh
     - TEST=cent6_slave.sh
     - TEST=cent7_slave.sh
 

@@ -1,0 +1,70 @@
+- job:
+    name: cinch-code-coverage
+    node: master
+    wrappers:
+      - ansicolor
+      - workspace-cleanup
+      - timestamps
+
+    # git repo to follow, skip-tag to not require auth
+    scm:
+      - git:
+          url: https://github.com/RedHatQE/cinch.git
+          branches:
+            - master
+          skip-tag: true
+          basedir: cinch
+
+    # git polling trigger set to once an hour
+    triggers:
+      - pollscm:
+          cron: "H */1 * * *"
+          ignore-post-commit-hooks: True
+
+    builders:
+      # coverage tests initialization script
+      - shell: |
+          #!/bin/bash -ex
+          virtualenv codecov && source codecov/bin/activate
+          # TODO find a better way to install test dependencies
+          # We can't simply 'pip install cinch' here if we're on RHEL7
+          pip install pytest-cov 'ansible>=2.1' 'plumbum>=1.6.0'
+          pushd "${WORKSPACE}/cinch"
+          py.test --cov=cinch/bin --cov-config .coveragerc --cov-report term \
+              --cov-report xml --cov-report html tests
+          popd
+
+      # sonar runner parameters, set sources and baseDir to project home
+      # projectKey (string): SonarQube project identification key (unique)
+      # projectName (string): SonarQube project name (NOT unique)
+      # projectVersion (string): SonarQube project version (unique)
+      # sources (string): source code home directory
+      # projectBaseDir (string): project home directory (same as sources)
+      # language (string): project language(ruby)
+      # inclusions (string): file inclusion pattern
+      # exclusions (string): file exclusion pattern
+      - sonar:
+          sonar-name: sonar
+          properties: |
+            sonar.projectKey=cinch
+            sonar.projectName=cinch
+            sonar.projectVersion=master
+            sonar.sources=${WORKSPACE}/cinch
+            sonar.projectBaseDir=${WORKSPACE}/cinch
+            sonar.python.coverage.reportPath=${WORKSPACE}/cinch/coverage.xml
+            sonar.language=py
+            sonar.inclusions=cinch/bin/*.py
+            sonar.ws.timeout=180
+
+    publishers:
+      - cobertura:
+          report-file: "cinch/coverage.xml"
+          targets:
+            - files:
+                healthy: 10
+                unhealthy: 20
+                failing: 30
+            - method:
+                healthy: 50
+                unhealthy: 40
+                failing: 30

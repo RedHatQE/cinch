@@ -14,3 +14,6 @@ docs/build/
 # The destination folder that python setup.py sdist drops results into
 dist
 build
+.coverage
+coverage.xml
+htmlcov/
