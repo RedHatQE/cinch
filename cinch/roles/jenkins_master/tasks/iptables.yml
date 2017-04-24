@@ -1,3 +1,9 @@
+- name: ensure firewalld is installed
+  package:
+    name: firewalld
+    state: present
+  become: true
+
 - name: ensure firewalld is disabled
   service:
     name: firewalld
