@@ -3,10 +3,10 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - java-1.{{ java_version }}.0-openjdk
-    - java-1.{{ java_version }}.0-openjdk-devel
-    - libselinux-python
-    - openssh
+  - java-1.{{ java_version }}.0-openjdk
+  - java-1.{{ java_version }}.0-openjdk-devel
+  - libselinux-python
+  - openssh
   retries: 2
   register: install_deps
   until: "{{ install_deps | success }}"
@@ -19,6 +19,7 @@
 - name: create jenkins user
   user:
     name: "{{ jenkins_user }}"
+    password: "{{ jenkins_user_password }}"
     home: "{{ jenkins_user_home }}"
     shell: /bin/bash
     uid: "{{ jenkins_user_uid }}"
@@ -36,9 +37,4 @@
     dest: "{{ jenkins_user_home }}/.ssh/id_rsa"
     owner: "{{ jenkins_user }}"
     mode: 0600
-  register: ssh_private
-
-- name: generate public SSH key
-  shell: "ssh-keygen -y -f \"{{ jenkins_user_home }}/.ssh/id_rsa\" > \"{{ jenkins_user_home }}/.ssh/id_rsa.pub\""
-  become_user: "{{ jenkins_user }}"
-  when: ssh_private.changed
+  notify: generate public SSH key

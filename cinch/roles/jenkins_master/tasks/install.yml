@@ -15,35 +15,35 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - git
-    - python-paramiko
-    - nss
-    - iptables
-    - iptables-services
-    - "{{ jenkins_rpm }}"
-    - graphviz
-    - lftp
-    - gcc
-    - "{{ gcc_compat_package | default(omit) }}"
-    - libffi-devel
-    - python-devel
-    - openssl-devel
-    - libxml2-devel
-    - libxslt-devel
-    - krb5-workstation
-    - python-futures
-    - python-six
-    - python-unittest2
-    - python-configobj
-    - python-nose
-    - cloud-utils
-    - python-glanceclient
-    - python-keystoneclient
-    - python-novaclient
-    - python-neutronclient
-    - wget
-    - python2-pip
-    - python-virtualenv
+  - git
+  - python-paramiko
+  - nss
+  - iptables
+  - iptables-services
+  - "{{ jenkins_rpm }}"
+  - graphviz
+  - lftp
+  - gcc
+  - "{{ gcc_compat_package | default(omit) }}"
+  - libffi-devel
+  - python-devel
+  - openssl-devel
+  - libxml2-devel
+  - libxslt-devel
+  - krb5-workstation
+  - python-futures
+  - python-six
+  - python-unittest2
+  - python-configobj
+  - python-nose
+  - cloud-utils
+  - python-glanceclient
+  - python-keystoneclient
+  - python-novaclient
+  - python-neutronclient
+  - wget
+  - python2-pip
+  - python-virtualenv
 
 # This blacklist must be done *after* the package installation defined above,
 # otherwise packages can be blacklisted before they are installed initially.
