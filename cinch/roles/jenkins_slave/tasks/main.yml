@@ -1,7 +1,7 @@
 - name: disable SELinux in Fedora
   selinux:
     state: disabled
-  when: ansible_distribution == 'Fedora'
+  when: ansible_distribution == 'Fedora' and ansible_connection != 'docker'
 
 - name: install rpm packages
   package:
