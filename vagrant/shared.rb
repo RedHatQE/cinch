@@ -53,6 +53,9 @@ def vm(config, name, base_box="centos/7")
         end
         # Setup Ansible configuration, if we're asked
         nodeconfig.vm.provision :shell, inline: "sed -E -i /etc/sudoers -e '/Defaults\\s+requiretty/d'"
+        if base_box.start_with?('fedora')
+            nodeconfig.vm.provision "shell", inline: "sudo dnf install -y python"
+        end
         if block_given?
             nodeconfig.vm.provision "ansible" do |ansible|
                     ansible.playbook = "../../cinch/site.yml"

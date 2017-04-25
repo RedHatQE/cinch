@@ -1,5 +1,10 @@
+- name: disable SELinux in Fedora
+  selinux:
+    state: disabled
+  when: ansible_distribution == 'Fedora'
+
 - name: install rpm packages
-  yum:
+  package:
     name: "{{ jslave_rpm_deps | join(',') }}"
     state: present
 

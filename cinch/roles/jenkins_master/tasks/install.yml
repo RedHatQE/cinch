@@ -1,17 +1,17 @@
 - name: install httpd if needed
-  yum:
+  package:
     name: httpd
     state: present
   when: https_enabled
 
 # TODO: This tends to hang forever and the yum process eventually dies
 #- name: upgrade base system
-#  yum:
+#  package:
 #    name: "*"
 #    state: latest
 
 - name: install necessary RPM files
-  yum:
+  package:
     name: "{{ item }}"
     state: present
   with_items:
@@ -24,7 +24,6 @@
   - graphviz
   - lftp
   - gcc
-  - "{{ gcc_compat_package | default(omit) }}"
   - libffi-devel
   - python-devel
   - openssl-devel
@@ -42,14 +41,20 @@
   - python-novaclient
   - python-neutronclient
   - wget
-  - python2-pip
+  - "{{ python_pip_package }}"
   - python-virtualenv
+
+- name: install gcc_compat where necessary
+  package:
+    name: "{{ gcc_compat_package }}"
+    state: present
+  when: gcc_compat_package is defined
 
 # This blacklist must be done *after* the package installation defined above,
 # otherwise packages can be blacklisted before they are installed initially.
 - name: pin certain packages
   lineinfile:
-    dest: /etc/yum.conf
+    dest: "{{ version_pin_file }}"
     line: "exclude={{ upgrade_blacklist | join(' ') }}"
     state: present
     regexp: "^exclude=.*$"

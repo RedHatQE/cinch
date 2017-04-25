@@ -103,3 +103,8 @@ jenkins_hard_nproc_ulimit: 30654
 # keystore to be re-encrypted, you will need to take that step manually before
 # you use these playbooks
 keystore_pass: changeme
+# This variable points to the file where the RPM version for specific packages
+# (most importantly, the Jenkins RPM) can be pinned. For yum-based distros,
+# like CentOS or RHEL <= 7, this is the yum conf file, but for Fedora and the
+# like, this is the dnf conf file
+version_pin_file: /etc/yum.conf
