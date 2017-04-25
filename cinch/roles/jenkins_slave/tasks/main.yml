@@ -84,6 +84,8 @@
     daemon_reload: true
     name: swarm
   when: systemd_file|changed
+  tags:
+    - skip_ansible_lint
 
 - name: upload swarm upstart file
   template:
