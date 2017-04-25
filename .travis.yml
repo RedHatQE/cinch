@@ -50,3 +50,9 @@ deploy:
     on:
       tags: true
       condition: $TEST = cent7_slave.sh
+  - provider: script
+    repo: RedHatQE/cinch
+    script: ./scripts/deploy.sh fedora25 false
+    on:
+      tags: true
+      condition: $TEST = fedora_slave.sh
