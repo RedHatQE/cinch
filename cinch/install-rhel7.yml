@@ -7,7 +7,7 @@
 # This playbook was tested with Ansible 1.8.4.
 
 - name: install cinch into a virtualenv on RHEL7
-  connection: local
+  hosts: localhost
   vars:
     jenkins_home: /var/lib/jenkins
     venv_dir: "{{ jenkins_home }}/opt/cinch"
@@ -73,6 +73,8 @@
 
   - name: install pip manually by running get-pip.py script
     command: "{{ python }} {{ temp_dir }}/get-pip.py"
+    args:
+      creates: "{{ venv_dir }}/lib/python2.7/site-packages/setuptools"
 
   - name: install cinch using pip
     pip:
@@ -107,6 +109,8 @@
     command: "{{ python }} {{ venv_dir }}/bin/linchpin config --reset"
     args:
       chdir: "{{ temp_dir }}"
+    tags:
+      - skip_ansible_lint
 
   # work-around for https://github.com/CentOS-PaaS-SIG/linch-pin/issues/124
   - name: copy linch-pin config file to search path

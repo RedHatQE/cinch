@@ -42,7 +42,8 @@ setup(
     },
     extras_require={
         'lint': [
-            'flake8'
+            'flake8',
+            'ansible-lint'
         ],
         'test': [
             'docker-py',

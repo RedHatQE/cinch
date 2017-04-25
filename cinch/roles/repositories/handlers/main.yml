@@ -1,2 +1,4 @@
 - name: clean yum cache
   command: yum clean all
+  tags:
+    - skip_ansible_lint
