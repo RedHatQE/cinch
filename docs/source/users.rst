@@ -191,7 +191,7 @@ environments, DO NOT copy the existing hash from this example.** ::
           vars:
             # required variables for all hosts
             ansible_user: root
-            ansible_private_key_file: /path/to/ssh/private_key
+            ansible_private_key_file: /full/path/to/ssh/private_key
             ansible_connection: ssh
         certificate_authority:
           vars:
@@ -213,6 +213,14 @@ environments, DO NOT copy the existing hash from this example.** ::
             # https://docs.ansible.com/ansible/faq.html#how-do-i-generate-crypted-passwords-for-the-user-module
             jenkins_user_password: '$6$rounds=656000$YQKMBktZ/Gaggxf0$KC7xhatWzdDJyvCDo7htomtiSsvd2MWN87RB3TsAbq1Nmwddy/z2Et8kQi1/tZkHjfD2vG1r7W2R9rjpaA1C5/'
             jenkins_master_url: 'http://jenkins.example.com' # URL to Jenkins master for the slave to connect to
+            jslave_name: 'cinch-slave'
+            jslave_label: 'cinch-slave'
+            # If your Jenkins master requires authentication to connect a slave,
+            # add credentials via the two variables below.  If anonymous users can
+            # connect slaves to the master, do not include the following two
+            # variables in this layout file.
+            jenkins_slave_username: 'automation-user'
+            jenkins_slave_password: 'jenkinsAPItoken'
 
 Create a topology file by saving the following example template as
 **/path/to/workdir/topologies/cinch.yml** and edit to taste::
