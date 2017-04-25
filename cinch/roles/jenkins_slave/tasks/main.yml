@@ -75,10 +75,15 @@
     dest: /etc/systemd/system/swarm.service
     owner: root
     mode: 0644
-  notify:
-  - restart swarm
-  - reload systemd files
+  notify: restart swarm
   when: "'{{ ansible_service_mgr }}' == 'systemd'"
+  register: systemd_file
+
+- name: reload systemd files when necessary
+  systemd:
+    daemon_reload: true
+    name: swarm
+  when: systemd_file|changed
 
 - name: upload swarm upstart file
   template:
