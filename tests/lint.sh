@@ -17,6 +17,10 @@ find cinch -maxdepth 1 -name '*.yml' -print0 |
 find . -name '*.sh' -not -name 'jswarm.sh' -print0 |
 	xargs -0 -L 1 shellcheck \
 	             -e 1090,1091,2093
+# jswarm.sh specifically includes variables that need to be word-split based
+# on user input. Error 2086 is the Shell warning to quote variables to avoid
+# space splitting. However, two of the variables in this shell script are
+# intended to be split when they get included as variables into the script.
 find . -name 'jswarm.sh' -print0 |
 	xargs -0 -L 1 shellcheck \
 	             -e 1090,1091,2093,2086
