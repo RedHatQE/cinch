@@ -29,7 +29,7 @@ setup(
     packages=find_packages(exclude=('library', 'bin')),
     include_package_data=True,
     install_requires=[
-        'ansible>=2.1',
+        'ansible>=2.2.1',
         'plumbum>=1.6.0',
         'linchpin>=0.9',
         'sphinx_rtd_theme'
