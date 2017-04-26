@@ -9,6 +9,10 @@ repository_defaults:
   skip_if_unavailable: false
   gpgcheck: false
 
+# This is the default name of this package, but it's not the same on every
+# system
+python_pip_package: python2-pip
+
 # Override these variables with an array of files to be uploaded as-is to the
 # destination host. Files in pre_upload_files will be uploaded before any other
 # code is run. Files in post_upload_files will be uploaded after all other tasks

@@ -51,3 +51,4 @@ jslave_rpm_deps:
 - python-futures
 - python-devel
 - nss
+- redhat-rpm-config

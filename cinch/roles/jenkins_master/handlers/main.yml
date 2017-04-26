@@ -31,6 +31,3 @@
     -srcstoretype PKCS12 -srcstorepass {{ keystore_pass }} -alias jenkins-ssl-cert
   register: keytool_import
   changed_when: "'already exists' not in keytool_import.stderr and 'already exists' not in keytool_import.stdout"
-
-- name: save iptables
-  command: service iptables save

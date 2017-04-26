@@ -20,7 +20,7 @@
     jump: REDIRECT
     to_ports: "{{ https_enabled | ternary(8443, 8080) }}"
     state: present
-  notify: save iptables
+  register: remote_port_forward
 
 - name: set iptables rule forwarding loopback to Jenkins default port
   iptables:
@@ -34,7 +34,7 @@
     to_ports: "{{ https_enabled | ternary(8443, 8080) }}"
     state: present
     # action: insert - avaialble in Ansible 2.2+
-  notify: save iptables
+  register: local_port_forward
 
 - name: set iptables rule forwarding for real address to loopback
   iptables:
@@ -46,7 +46,11 @@
     jump: REDIRECT
     to_ports: "{{ https_enabled | ternary(8443, 8080) }}"
     state: present
-  notify: save iptables
+  register: output_port_forward
+
+- name: save iptables
+  command: service iptables save
+  when: (remote_port_forward|changed) or (local_port_forward|changed) or (output_port_forward|changed)
 
 - name: start iptables
   service:

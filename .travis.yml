@@ -27,6 +27,7 @@ env:
     - TEST=coverage.sh
     - TEST=cent6_slave.sh
     - TEST=cent7_slave.sh
+    - TEST=fedora_slave.sh
 
 deploy:
   - provider: pypi
@@ -39,13 +40,19 @@ deploy:
       condition: $TEST = lint.sh
   - provider: script
     repo: RedHatQE/cinch
-    script: ./scripts/deploy.sh cent6 false
+    script: ./scripts/deploy.sh centos6 false
     on:
       tags: true
       condition: $TEST = cent6_slave.sh
   - provider: script
     repo: RedHatQE/cinch
-    script: ./scripts/deploy.sh cent7 true
+    script: ./scripts/deploy.sh centos7 true
     on:
       tags: true
       condition: $TEST = cent7_slave.sh
+  - provider: script
+    repo: RedHatQE/cinch
+    script: ./scripts/deploy.sh fedora25 false
+    on:
+      tags: true
+      condition: $TEST = fedora_slave.sh
