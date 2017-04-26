@@ -21,4 +21,4 @@
     retries: "{{ ssh_retries }}"
     delay: "{{ ssh_retry_delay }}"
     connection: local
-  when: "'{{ ansible_connection }}' == 'ssh'"
+  when: ansible_connection == 'ssh'
