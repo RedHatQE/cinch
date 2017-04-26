@@ -32,7 +32,7 @@
     owner: "{{ jenkins_user }}"
     mode: 0644
     state: touch
-  when: "{{ not template_file.stat.exists }}"
+  when: not template_file.stat.exists
 
 - name: delete weird file
   file:

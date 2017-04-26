@@ -9,7 +9,8 @@ find cinch -maxdepth 1 -name '*.yml' -print0 |
 	             --syntax-check \
 	             -i inventory/sample/hosts
 find cinch -maxdepth 1 -name '*.yml' -print0 |
-	xargs -0 -L 1 ansible-lint
+	xargs -0 -L 1 ansible-lint \
+	             -R -r tests/ansible_lint_rules/
 ###############################################################################
 # SHELL LINT
 ###############################################################################

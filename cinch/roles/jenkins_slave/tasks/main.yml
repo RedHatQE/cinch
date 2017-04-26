@@ -25,7 +25,7 @@
   lineinfile:
     line: "{{ ansible_ssh_host }} {{ inventory_hostname }}.localdomain"
     dest: /etc/hosts
-  when: "'{{ ansible_connection }}' != 'docker'"
+  when: ansible_connection != 'docker'
 
 - name: give jenkins user sudo access
   lineinfile:
@@ -59,7 +59,7 @@
     jslave_name: "{{ '{% raw %}{{ .Env.JSLAVE_NAME }}{% endraw %}' }}"
     jslave_label: "{{ '{% raw %}{{ .Env.JSLAVE_LABEL }}{% endraw %}' }}"
     jswarm_extra_args: "{{ '{% raw %}{{ default .Env.JSWARM_EXTRA_ARGS \"\" }}{% endraw %}' }}"
-  when: "'{{ ansible_connection }}' == 'docker'"
+  when: ansible_connection == 'docker'
 
 - name: upload swarm config file
   template:
@@ -76,7 +76,7 @@
     owner: root
     mode: 0644
   notify: restart swarm
-  when: "'{{ ansible_service_mgr }}' == 'systemd'"
+  when: ansible_service_mgr == 'systemd'
   register: systemd_file
 
 - name: reload systemd files when necessary
@@ -94,7 +94,7 @@
     owner: root
     mode: 0644
   notify: restart swarm
-  when: "'{{ ansible_service_mgr }}' == 'upstart'"
+  when: ansible_service_mgr == 'upstart'
 
 - name: flush handlers to avoid start/restart on initial launch
   meta: flush_handlers
@@ -104,4 +104,4 @@
     name: swarm
     state: started
     enabled: true
-  when: "'{{ ansible_connection }}' != 'docker'"
+  when: ansible_connection != 'docker'

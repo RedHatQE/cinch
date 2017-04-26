@@ -44,9 +44,9 @@
   roles:
   - jenkins_slave
   - role: dockerize
-    when: "'{{ ansible_connection }}' == 'docker'"
+    when: ansible_connection == 'docker'
   - role: jenkins_slave_container_wrapup
-    when: "'{{ ansible_connection }}' == 'docker'"
+    when: ansible_connection == 'docker'
 
 - name: configure container-based slaves
   hosts: jenkins_docker_slave
