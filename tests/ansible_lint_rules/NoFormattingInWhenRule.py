@@ -1,3 +1,9 @@
+# Documentation on AnsibleLintRules can be found here:
+# https://github.com/willthames/ansible-lint/blob/master/README.md
+# Note that this code is also included in an improved format in a PR against
+# the upstream code that lives here:
+# https://github.com/willthames/ansible-lint/pull/262. This file can be safely
+# deleted once that code is released
 from ansiblelint import AnsibleLintRule
 
 
