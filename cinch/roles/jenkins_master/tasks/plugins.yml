@@ -30,14 +30,17 @@
     use_ssl: "{{ https_enabled }}"
   when: groovy_script.changed
   notify: restart Jenkins
+  tags:
+    - skip_ansible_lint
 
 - name: run update center configure script
-  become_user: jenkins
   jenkins_update_center:
     update_center_id: "{{ item.id }}"
     update_center_url: "{{ item.url }}"
   with_items: "{{ update_centers }}"
   notify: restart Jenkins
+  become_user: jenkins
+  become: true
 
 - name: create cert path
   file:

@@ -2,7 +2,7 @@
   service:
     name: swarm
     state: restarted
-  when: "'{{ ansible_connection }}' != 'docker'"
+  when: ansible_connection != 'docker'
 
 - name: reload systemd files
   systemd:

@@ -9,7 +9,9 @@
     src: /tmp/dockerize.tar.gz
     remote_src: true
     dest: /usr/local/bin
-  when: "{{ dockerize_download | changed }}"
+  when: dockerize_download|changed
+  tags:
+    - skip_ansible_lint
 
 - name: make sure dockerize has proper attributes
   file:

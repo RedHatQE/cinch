@@ -10,6 +10,7 @@
     force: true
     validate_certs: false
   become_user: jenkins
+  become: true
 
 - name: configure CLI users appropriately
   become: false

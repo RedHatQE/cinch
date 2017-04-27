@@ -1,5 +1,15 @@
 - name: clean yum cache
-  command: "{{ ansible_pkg_mgr }} clean all"
+  file:
+    dest: /var/cache/{{ ansible_pkg_mgr }}
+    state: absent
+
+- name: recreate cache dir
+  file:
+    dest: /var/cache/{{ ansible_pkg_mgr }}
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
 
 - name: copy in shell script
   template:
@@ -22,7 +32,7 @@
     owner: "{{ jenkins_user }}"
     mode: 0644
     state: touch
-  when: "{{ not template_file.stat.exists }}"
+  when: not template_file.stat.exists
 
 - name: delete weird file
   file:

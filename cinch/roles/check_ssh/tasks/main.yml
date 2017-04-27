@@ -1,8 +1,8 @@
 - block:
   - name: verify that configured SSH private key is a file and has permissions of 0600
     file:
-      path: "{{ ansible_ssh_private_key_file }}" 
-      state: file 
+      path: "{{ ansible_ssh_private_key_file }}"
+      state: file
       mode: 0600
     connection: local
 
@@ -21,4 +21,4 @@
     retries: "{{ ssh_retries }}"
     delay: "{{ ssh_retry_delay }}"
     connection: local
-  when: "'{{ ansible_connection }}' == 'ssh'"
+  when: ansible_connection == 'ssh'
