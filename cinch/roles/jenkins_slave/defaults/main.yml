@@ -22,8 +22,6 @@ java_args: -Xmx2048m
 # These are variables which you probably don't want to
 # override, but which you are free to override if you
 # feel the need to
-jswarm_version: 2.1
-jswarm_filename: swarm-client-{{ jswarm_version }}-jar-with-dependencies.jar
 jswarm_download: http://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/{{ jswarm_version }}/{{ jswarm_filename }}
 jenkins_slave_username: ''
 jenkins_slave_password: ''
