@@ -16,6 +16,8 @@ python_pip_package: python2-pip
 jenkins_user: jenkins
 jenkins_user_home: /var/lib/jenkins
 jenkins_user_password: changeme
+# Directory where JSwarm files are downloaded into
+jswarm_local_directory: /opt/jswarm
 
 # Override these variables with an array of files to be uploaded as-is to the
 # destination host. Files in pre_upload_files will be uploaded before any other

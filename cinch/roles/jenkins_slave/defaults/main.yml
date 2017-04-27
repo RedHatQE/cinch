@@ -25,7 +25,6 @@ java_args: -Xmx2048m
 jswarm_version: 2.1
 jswarm_filename: swarm-client-{{ jswarm_version }}-jar-with-dependencies.jar
 jswarm_download: http://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/{{ jswarm_version }}/{{ jswarm_filename }}
-jswarm_local_directory: /opt/jswarm
 jenkins_slave_username: ''
 jenkins_slave_password: ''
 
