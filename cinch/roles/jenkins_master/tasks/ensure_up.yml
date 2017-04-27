@@ -19,6 +19,6 @@
     status_code: 200
     timeout: 5
   register: jenkins_status
-  retries: 10
-  delay: 5
+  retries: 30
+  delay: 15
   until: "'status' in jenkins_status and jenkins_status['status'] == 200"
