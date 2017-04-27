@@ -18,7 +18,8 @@ echo "Starting container from image ${container_base}"
 ansible -i /dev/null \
 	localhost \
 	-m docker_container \
-	-a "image=${container_base} name=${container_name} tty=true detach=true command='/usr/lib/systemd/systemd --system'"
+	-a "image=${container_base} name=${container_name} tty=true detach=true command='/usr/lib/systemd/systemd --system' \
+	privileged=true"
 # Fedora is lacking python in base image
 docker exec -it "${container_name}" "${pkg_mgr}" install -y python
 ansible -i "${inventory}" \
