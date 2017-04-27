@@ -6,6 +6,7 @@ container_base="${1}"
 inventory="${2}"
 pkg_mgr="${3}"
 container_name=jmaster
+cinch_version=$(grep "${cinch}/setup.py" -e 'version=' | sed -e "s/.*version='\(.*\)'.*/\1/")
 if [ ! -e "${inventory}" ]; then
 	echo "You must specify a valid inventory folder"
 	exit 1
@@ -13,7 +14,7 @@ fi
 ########################################################
 # Spin up container and get it rolling
 ########################################################
-echo "Starting container"
+echo "Starting container from image ${container_base}"
 ansible -i /dev/null \
 	localhost \
 	-m docker_container \
@@ -31,7 +32,16 @@ ansible -i "${inventory}" \
 ########################################################
 # Run cinch against the playbook
 ########################################################
-echo "Building container into a Jenkins master"
+echo "Building container into a Jenkins master for Cinch ${cinch_version}"
 ansible-playbook -i "${inventory}" \
 	"${cinch}/cinch/site.yml" \
 	-e jenkins_user_password=somedummyvalue
+########################################################
+# Finish and close up the container
+########################################################
+echo "Saving image"
+docker commit \
+	--change 'EXPOSE 8080' \
+	--change 'EXPOSE 8009' \
+	--change 'ENTRYPOINT ["/usr/lib/systemd/systemd", "--system"]' \
+	"${container_name}" "redhatqecinch/jenkins_master:${container_base//:/}-${cinch_version}"

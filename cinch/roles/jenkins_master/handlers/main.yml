@@ -1,10 +1,10 @@
 - name: restart httpd
-  service:
+  systemd:
     name: httpd
     state: restarted
 
 - name: restart Jenkins
-  service:
+  systemd:
     name: jenkins
     state: restarted
 
