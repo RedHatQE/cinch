@@ -83,7 +83,7 @@
     version: "{{ item.split('=')[2] | default(omit) }}"
   register: plugin_install
   retries: 3
-  until: plugin_install|succeeded
+  until: not plugin_install|failed
   with_items: "{{ jenkins_plugins }}"
 
 - name: flush handlers
