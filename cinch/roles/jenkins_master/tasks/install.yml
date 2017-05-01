@@ -43,6 +43,8 @@
   - wget
   - "{{ python_pip_package }}"
   - python-virtualenv
+  - initscripts
+  - cloud-utils
 
 - name: install gcc_compat where necessary
   package:

@@ -1,6 +1,24 @@
+- name: set listening port
+  set_fact:
+    _listening_port: "{{ https_enabled | ternary(443, 80) }}"
+  when: ansible_connection != 'docker'
+
+- name: check for running in a container
+  set_fact:
+    _listening_port: "{{ https_enabled | ternary(8443, 8080) }}"
+  when: ansible_connection == 'docker'
+
+- name: construct Jenkins URL
+  set_fact:
+    _jenkins_url: "http{{ https_enabled | ternary('s', '') }}://localhost:{{ _listening_port }}"
+
 - name: wait for Jenkins to start up
   become: false
-  wait_for:
-    port: "{{ https_enabled | ternary(443, 80) }}"
-    state: started
-    delay: 15
+  uri:
+    url: "{{ _jenkins_url }}"
+    status_code: 200
+    timeout: 5
+  register: jenkins_status
+  retries: 30
+  delay: 15
+  until: "'status' in jenkins_status and jenkins_status['status'] == 200"

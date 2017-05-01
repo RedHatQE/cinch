@@ -1,2 +1,4 @@
 repositories: "{{ jenkins_master_repositories }}"
 download_repositories: "{{ jenkins_master_download_repositories }}"
+container_bin_files:
+  - jmaster.sh

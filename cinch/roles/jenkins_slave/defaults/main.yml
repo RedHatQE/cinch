@@ -2,11 +2,6 @@
 # URL for the Jenkins master this slave should attach to
 jenkins_url: http://example.com:8080/jenkins/
 
-# These are variables which you may wish to override
-# The name of the jenkins user
-jenkins_user: jenkins
-# The home directory for that user
-jenkins_user_home: /var/lib/jenkins
 # The Jenkins name for the slave
 jslave_name: "{{ inventory_hostname }}"
 # The label for this slave
@@ -27,10 +22,7 @@ java_args: -Xmx2048m
 # These are variables which you probably don't want to
 # override, but which you are free to override if you
 # feel the need to
-jswarm_version: 2.1
-jswarm_filename: swarm-client-{{ jswarm_version }}-jar-with-dependencies.jar
 jswarm_download: http://repo.jenkins-ci.org/releases/org/jenkins-ci/plugins/swarm-client/{{ jswarm_version }}/{{ jswarm_filename }}
-jswarm_local_directory: /opt/jswarm
 jenkins_slave_username: ''
 jenkins_slave_password: ''
 

@@ -1,20 +1,5 @@
-- name: wait for Jenkins to start up
-  become: false
-  wait_for:
-    port: "{{ https_enabled | ternary(443, 80) }}"
-    state: started
-    delay: 15
-
-- name: download Jenkins CLI file
-  until: "'response' not in result or result.response.find('Error 503') == -1"
-  register: result
-  retries: 4
-  delay: 15
-  get_url:
-    url: "{{ https_enabled | ternary('https', 'http') }}://localhost/jnlpJars/jenkins-cli.jar"
-    dest: "{{ ansible_user_dir }}"
-    force: true
-    validate_certs: false
+- name: wait for Jenkins
+  include: ensure_up.yml
 
 - name: copy in configure script
   template:
@@ -23,13 +8,18 @@
   register: groovy_script
 
 - name: run Jenkins global config
-  jenkins_cli:
-    command: groovy
-    arguments: "{{ ansible_user_dir }}/groovy_set_jenkins_cfg.java"
+  jenkins_script:
+    url: "{{ _jenkins_url }}"
+    script: "{{ item }}"
     validate_certs: false
-    use_ssl: "{{ https_enabled }}"
   when: groovy_script.changed
   notify: restart Jenkins
+  register: global_config
+  retries: 10
+  until: "'HTTP error 503' not in '{{ global_config.msg | default('') }}'"
+  delay: 10
+  with_file:
+    - "{{ role_path }}/templates/groovy_set_jenkins_cfg.java"
   tags:
     - skip_ansible_lint
 
@@ -64,14 +54,16 @@
 - name: wait for jenkins master
   include: ensure_up.yml
 
-- name: install plugins
+- name: perform plugin install
   jenkins_plugin:
-    url: http{{ https_enabled | ternary('s', '') }}://localhost:{{ https_enabled | ternary('8443', '8080') }}
+    url: "{{ _jenkins_url }}"
     name: "{{ item.split('=')[0] }}"
     state: present
     version: "{{ item.split('=')[2] | default(omit) }}"
-  notify: restart Jenkins
-  with_items: "{{ jenkins_plugins }}"
+  register: plugin_install
   retries: 3
-  until: "{{ not result|failed }}"
-  register: result
+  until: plugin_install|succeeded
+  with_items: "{{ jenkins_plugins }}"
+
+- name: flush handlers
+  meta: flush_handlers

@@ -28,6 +28,8 @@ env:
     - TEST=cent6_slave.sh
     - TEST=cent7_slave.sh
     - TEST=fedora_slave.sh
+    - TEST=cent7_master.sh
+    - TEST=fedora_master.sh
 
 deploy:
   - provider: pypi
