@@ -6,6 +6,8 @@ container_base="${1}"
 inventory="${2}"
 pkg_mgr="${3}"
 container_name=jmaster
+# Extracts the version line from the setup.py script, and trims off the rest of the line to leave
+# only the expected version
 cinch_version=$(grep "${cinch}/setup.py" -e 'version=' | sed -e "s/.*version='\(.*\)'.*/\1/")
 if [ ! -e "${inventory}" ]; then
 	echo "You must specify a valid inventory folder"
@@ -18,8 +20,13 @@ echo "Starting container from image ${container_base}"
 ansible -i /dev/null \
 	localhost \
 	-m docker_container \
-	-a "image=${container_base} name=${container_name} tty=true detach=true command='/usr/lib/systemd/systemd --system' \
-	privileged=true"
+	-a "image=${container_base} \
+		name=${container_name} \
+		tty=true \
+		detach=true \
+		command='/usr/lib/systemd/systemd \
+		--system' \
+		privileged=true"
 # Fedora is lacking python in base image
 docker exec -it "${container_name}" "${pkg_mgr}" install -y python
 ansible -i "${inventory}" \
