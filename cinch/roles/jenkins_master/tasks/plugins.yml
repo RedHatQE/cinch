@@ -1,5 +1,26 @@
+<<<<<<< 90df4c86e7db3830090d67f5558e5489e409f969
 - name: wait for Jenkins
   include: ensure_up.yml
+=======
+- name: wait for Jenkins to start up
+  become: false
+  wait_for:
+    port: "{{ https_enabled | ternary(443, 80) }}"
+    state: started
+    delay: 15
+
+- name: download Jenkins CLI file
+  until: "'response' not in result or result.response.find('Error 503') == -1"
+  register: result
+  retries: 4
+  delay: 15
+  get_url:
+    url: "{{ https_enabled | ternary('https', 'http') }}:\
+      //localhost/jnlpJars/jenkins-cli.jar"
+    dest: "{{ ansible_user_dir }}"
+    force: true
+    validate_certs: false
+>>>>>>> Add YAMLLint to checks
 
 - name: copy in configure script
   template:

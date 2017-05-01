@@ -14,12 +14,12 @@ docker_jenkins_slave_container_name: "{{ jslave_name }}"
 
 # Set this value to provide the slave a particular
 # label in the Swarm plugin
-#jswarm_label: some_label_value
+# jswarm_label: some_label_value
 
 # Set this value to the value of the Jenkins master
 # the slave should connect to
-#jenkins_master_url: http://some.hostname.local:8443
+# jenkins_master_url: http://some.hostname.local:8443
 
 # Set this value to pass in extra command line arguments
 # to the jswarm executable
-#jswarm_extra_args: -var value -othervar otherval
+# jswarm_extra_args: -var value -othervar otherval

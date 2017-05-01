@@ -50,7 +50,10 @@
 
 - name: save iptables
   command: service iptables save
-  when: (remote_port_forward|changed) or (local_port_forward|changed) or (output_port_forward|changed)
+  when: >-
+    (remote_port_forward|changed) or
+    (local_port_forward|changed) or
+    (output_port_forward|changed)
   tags:
     - skip_ansible_lint
 

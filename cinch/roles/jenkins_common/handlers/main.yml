@@ -1,4 +1,6 @@
 - name: generate public SSH key
-  shell: "ssh-keygen -y -f \"{{ jenkins_user_home }}/.ssh/id_rsa\" > \"{{ jenkins_user_home }}/.ssh/id_rsa.pub\""
-  become: True
+  shell: >-
+    ssh-keygen -y -f "{{ jenkins_user_home }}/.ssh/id_rsa" >
+    "{{ jenkins_user_home }}/.ssh/id_rsa.pub"
+  become: true
   become_user: "{{ jenkins_user }}"

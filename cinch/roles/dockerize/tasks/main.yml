@@ -1,7 +1,9 @@
 - name: download dockerize
   get_url:
     dest: /tmp/dockerize.tar.gz
-    url: https://github.com/jwilder/dockerize/releases/download/{{ dockerize_version }}/dockerize-{{ dockerize_architecture }}-{{ dockerize_version }}.tar.gz
+    url: "https://github.com/jwilder/dockerize/releases/download/\
+      {{ dockerize_version }}/dockerize-{{ dockerize_architecture }}\
+      -{{ dockerize_version }}.tar.gz"
   register: dockerize_download
 
 - name: unarchive dockerize

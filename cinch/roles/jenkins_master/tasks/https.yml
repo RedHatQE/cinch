@@ -14,10 +14,10 @@
     group: jenkins
     mode: 0755
   with_items:
-  - in: "{{ jenkins_ssl_cert }}"
-    out: jenkins.crt
-  - in: "{{ jenkins_ssl_key }}"
-    out: jenkins.key
+    - in: "{{ jenkins_ssl_cert }}"
+      out: jenkins.crt
+    - in: "{{ jenkins_ssl_key }}"
+      out: jenkins.key
 
 - name: copy ssl certificate to anchors
   copy:
@@ -33,8 +33,8 @@
     dest: /etc/httpd/conf/httpd.conf
     state: present
   with_items:
-  - RewriteEngine On
-  - RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+    - RewriteEngine On
+    - RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
   notify: restart httpd
 
 - name: enable httpd

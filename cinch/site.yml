@@ -2,66 +2,66 @@
   hosts: all
   gather_facts: false
   roles:
-  - check_ssh
+    - check_ssh
 
 - name: upload files before
   hosts: all
   roles:
-  - role: upload_files
-    vars:
-      upload_files: "{{ pre_upload_files }}"
+    - role: upload_files
+      vars:
+        upload_files: "{{ pre_upload_files }}"
 
 - name: configure certificate authority, if necessary
   become: true
   hosts: certificate_authority
   gather_facts: false
   roles:
-  - certificate_authority
+    - certificate_authority
 
 - name: configure repositories
   become: true
   hosts: repositories
   roles:
-  - repositories
+    - repositories
 
 - name: pre-configure jenkins
   become: true
   hosts: jenkins_master:jenkins_slave
   roles:
-  - jenkins_common
+    - jenkins_common
 
 - name: configure jenkins masters
   become: true
   hosts: jenkins_master
   roles:
-  - beaker-client
-  - jenkins_master
-  - role: ntp
-    when: ansible_connection != 'docker'
+    - beaker-client
+    - jenkins_master
+    - ntp
+      when: ansible_connection != 'docker'
 
 - name: configure jenkins slaves
   become: true
   hosts: jenkins_slave
   roles:
-  - jenkins_slave
+    - jenkins_slave
 
 - name: configure docker containers
   become: true
   hosts: jenkins_master:jenkins_slave
   roles:
-  - role: dockerize
-    when: ansible_connection == 'docker'
-  - role: jenkins_slave_container_wrapup
-    when: ansible_connection == 'docker'
+    - role: dockerize
+      when: ansible_connection == 'docker'
+    - role: jenkins_slave_container_wrapup
+      when: ansible_connection == 'docker'
 
 - name: configure container-based slaves
   hosts: jenkins_docker_slave
   roles:
-  - jenkins_docker_slave
+    - jenkins_docker_slave
 
 - name: upload files after
   hosts: all
   roles:
-  - role: upload_files
-    vars:
-      upload_files: "{{ post_upload_files }}"
+    - role: upload_files
+      vars:
+        upload_files: "{{ post_upload_files }}"

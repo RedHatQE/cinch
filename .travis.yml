@@ -3,8 +3,8 @@ sudo: required
 services:
   - docker
 language: python
-python: # Only one version for now
-    - "2.7"
+python:  # Only one version for now
+  - "2.7"
 cache: pip
 
 # Installation of the system
@@ -22,14 +22,14 @@ script:
 # Test matrix will be constructed from here. Listing out each set of tests
 # to execute will permit them to be executed in parallel
 env:
-    - TEST=lint.sh
-    - TEST=docs.sh
-    - TEST=coverage.sh
-    - TEST=cent6_slave.sh
-    - TEST=cent7_slave.sh
-    - TEST=fedora_slave.sh
-    - TEST=cent7_master.sh
-    - TEST=fedora_master.sh
+  - TEST=lint.sh
+  - TEST=docs.sh
+  - TEST=coverage.sh
+  - TEST=cent6_slave.sh
+  - TEST=cent7_slave.sh
+  - TEST=fedora_slave.sh
+  - TEST=cent7_master.sh
+  - TEST=fedora_master.sh
 
 deploy:
   - provider: pypi

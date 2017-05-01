@@ -11,8 +11,8 @@
 # mirror for custom plugins or just for mirroring purposes, then override this
 # variable with those values.
 update_centers:
-- id: default
-  url: "https://updates.jenkins-ci.org/{{ jenkins_version }}/update-center.json"
+  - id: default
+    url: "https://updates.jenkins-ci.org/{{ jenkins_version }}/update-center.json"
 # If set to true, Jenkins will be run over HTTPS (Jenkins on port 8443 with a
 # firewall forward from port 443). If you set this value to true, you MUST
 # override jenkins_ssl_cert and jenkins_ssl_key in a production system or you
@@ -50,7 +50,7 @@ session_timeout: 480
 # be maintained at the currently installed versions in order to avoid updating
 # them by means of a "yum update" run
 upgrade_blacklist:
-- jenkins
+  - jenkins
 # The home directory for the Jenkins user, and the base directory for Jenkins
 # files and jobs
 jenkins_home: /var/lib/jenkins
