@@ -36,7 +36,7 @@
   roles:
     - beaker-client
     - jenkins_master
-    - ntp
+    - role: ntp
       when: ansible_connection != 'docker'
 
 - name: configure jenkins slaves
