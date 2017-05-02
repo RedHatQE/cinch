@@ -89,8 +89,8 @@ jenkins_java_cmd: /usr/bin/java
 # order to avoid failure of the system when these (typically very low) default
 # values are hit
 jenkins_soft_nofile_ulimit: 4096
-jenkins_hard_nofile_ulimit: 8192
-jenkins_soft_nproc_ulimit: 30654
+jenkins_hard_nofile_ulimit: 4096
+jenkins_soft_nproc_ulimit: 4096
 jenkins_hard_nproc_ulimit: 30654
 # This is the password for the Java certificate authority root keystore
 # database file. This would be the password passed into the "keytool" util
