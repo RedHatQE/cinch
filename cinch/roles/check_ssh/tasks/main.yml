@@ -1,10 +1,8 @@
 - block:
   - name: verify that configured SSH private key is a file and has permissions of 0600
-    file:
-      path: "{{ ansible_ssh_private_key_file }}"
-      state: file
-      mode: 0600
-    connection: local
+    local_action: file path="{{ ansible_ssh_private_key_file }}" state=file mode=0600
+    tags:
+      - skip_ansible_lint
 
   - name: construct command line for SSH check
     set_fact:
@@ -14,11 +12,12 @@
         {{ host }} -m ping
 
   - name: check for SSH connectivity and authentication
-    command: "{{ check_ssh_cmd }}"
+    local_action: shell {{ check_ssh_cmd }}
     register: result
     changed_when: "result.rc != 0"
     until: result.rc == 0
     retries: "{{ ssh_retries }}"
     delay: "{{ ssh_retry_delay }}"
-    connection: local
+    tags:
+      - skip_ansible_lint
   when: ansible_connection == 'ssh'
