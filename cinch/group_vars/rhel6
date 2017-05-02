@@ -24,11 +24,11 @@ all_download_repositories:
   jenkins: http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
 
 jenkins_slave_repositories:
-- "{{ all_repositories.latest }}"
-- "{{ all_repositories.optional }}"
-- "{{ all_repositories.extras }}"
-- "{{ all_repositories.epel }}"
-- "{{ all_repositories.rhscl_python27 }}"
+  - "{{ all_repositories.latest }}"
+  - "{{ all_repositories.optional }}"
+  - "{{ all_repositories.extras }}"
+  - "{{ all_repositories.epel }}"
+  - "{{ all_repositories.rhscl_python27 }}"
 
 jenkins_slave_download_repositories:
-- "{{ all_download_repositories.beaker }}"
+  - "{{ all_download_repositories.beaker }}"

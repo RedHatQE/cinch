@@ -3,8 +3,8 @@ gcc_compat_package: compat-gcc-44
 # It is important to import the RPM signing key for the Jenkins repository
 # if you plan to use that repository
 rpm_key_imports:
-- key: http://pkg.jenkins-ci.org/redhat-stable/jenkins.io.key
-  validate_certs: true
+  - key: http://pkg.jenkins-ci.org/redhat-stable/jenkins.io.key
+    validate_certs: true
 
 all_repositories:
   latest:
@@ -32,19 +32,19 @@ all_download_repositories:
   jenkins: http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
 
 jenkins_slave_repositories:
-- "{{ all_repositories.latest }}"
-- "{{ all_repositories.optional }}"
-- "{{ all_repositories.epel }}"
+  - "{{ all_repositories.latest }}"
+  - "{{ all_repositories.optional }}"
+  - "{{ all_repositories.epel }}"
 
 jenkins_slave_download_repositories: []
 
 jenkins_master_repositories:
-- "{{ all_repositories.latest }}"
-- "{{ all_repositories.optional }}"
-- "{{ all_repositories.debug }}"
-- "{{ all_repositories.epel }}"
-- "{{ all_repositories.openstack }}"
-- "{{ all_repositories.certificate }}"
+  - "{{ all_repositories.latest }}"
+  - "{{ all_repositories.optional }}"
+  - "{{ all_repositories.debug }}"
+  - "{{ all_repositories.epel }}"
+  - "{{ all_repositories.openstack }}"
+  - "{{ all_repositories.certificate }}"
 
 jenkins_master_download_repositories:
-- "{{ all_download_repositories.jenkins }}"
+  - "{{ all_download_repositories.jenkins }}"
