@@ -14,7 +14,7 @@
 - name: install necessary packages
   include: install.yml
 
-- name: configure firewall for port forwarding
+- name: configure iptables
   include: iptables.yml
   when: ansible_connection != 'docker'
 

@@ -10,6 +10,42 @@
     state: stopped
     enabled: false
 
+- name: set iptables to allow established and related connections
+  iptables:
+    chain: INPUT
+    ctstate: ESTABLISHED,RELATED
+    jump: ACCEPT
+    comment: "000 accept related established rules"
+
+- name: set iptables to accept all icmp
+  iptables:
+    chain: INPUT
+    protocol: icmp
+    jump: ACCEPT
+    comment: "001 accept all icmp"
+
+- name: set iptables to accept all communication from lo interface
+  iptables:
+    chain: INPUT
+    in_interface: lo
+    jump: ACCEPT
+    comment: "002 accept all to lo interface"
+
+- name: set iptables to reject other communication to localhost
+  iptables:
+    chain: INPUT
+    destination: 127.0.0.1/8
+    reject_with: icmp-port-unreachable
+    comment: "003 reject local traffic not on loopback interface"
+
+- name: set iptables to allow Jenkins-related TCP ports
+  iptables:
+    chain: INPUT
+    destination_port: "{{ item }}"
+    protocol: tcp
+    jump: ACCEPT
+  with_items: "{{ firewall_tcp_ports }}"
+
 - name: set iptables rules forwarding port to Jenkins default port
   iptables:
     chain: PREROUTING
@@ -20,6 +56,7 @@
     jump: REDIRECT
     to_ports: "{{ https_enabled | ternary(8443, 8080) }}"
     state: present
+    comment: "901 forward 80/443 to Jenkins default port"
   register: remote_port_forward
 
 - name: set iptables rule forwarding loopback to Jenkins default port
@@ -33,6 +70,7 @@
     jump: REDIRECT
     to_ports: "{{ https_enabled | ternary(8443, 8080) }}"
     state: present
+    comment: "902 forward 80/443 to Jenkins default port on loopback"
     # action: insert - avaialble in Ansible 2.2+
   register: local_port_forward
 
@@ -47,6 +85,13 @@
     to_ports: "{{ https_enabled | ternary(8443, 8080) }}"
     state: present
   register: output_port_forward
+
+- name: set iptables to reject all other connections
+  iptables:
+    chain: INPUT
+    protocol: all
+    reject_with: icmp-admin-prohibited
+    comment: "999 Reject all other communication"
 
 - name: save iptables
   command: service iptables save

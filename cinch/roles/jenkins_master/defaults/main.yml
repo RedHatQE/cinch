@@ -108,3 +108,12 @@ keystore_pass: changeme
 # like CentOS or RHEL <= 7, this is the yum conf file, but for Fedora and the
 # like, this is the dnf conf file
 version_pin_file: /etc/yum.conf
+# This is the port Jenkins will listen on for slaves.
+jenkins_slave_agent_port: 50000
+# This is a list of ports to allow in firewall.
+firewall_tcp_ports:
+- "{{ jenkins_slave_agent_port }}"
+- "8888"
+- "22"
+- "{{ https_enabled | ternary('443', '80') }}"
+- "{{ https_enabled | ternary('8443', '8080') }}"
