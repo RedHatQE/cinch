@@ -137,6 +137,10 @@ jenkins_enable_access_log: "no"
 jenkins_handler_max: 100
 # The maximum number of idle HTTP worker threads
 jenkins_handler_idle: 20
+# The keystore to use, if Jenkins is terminating its own SSL, along with the
+# password for it
+jenkins_https_keystore: ''
+jenkins_https_keystore_password: ''
 # This is a list of ports to allow in firewall.
 firewall_tcp_ports:
   - "{{ jenkins_slave_agent_port }}"

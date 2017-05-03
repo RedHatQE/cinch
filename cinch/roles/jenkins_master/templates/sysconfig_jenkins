@@ -79,7 +79,7 @@ JENKINS_HTTPS_PORT="{{ https_enabled | ternary(8443, '') }}"
 # Path to the keystore in JKS format (as created by the JDK 'keytool').
 # Default is disabled.
 #
-JENKINS_HTTPS_KEYSTORE=""
+JENKINS_HTTPS_KEYSTORE="{{ jenkins_https_keystore }}"
 
 ## Type:        string
 ## Default:     ""
@@ -88,7 +88,7 @@ JENKINS_HTTPS_KEYSTORE=""
 # Password to access the keystore defined in JENKINS_HTTPS_KEYSTORE.
 # Default is disabled.
 #
-JENKINS_HTTPS_KEYSTORE_PASSWORD=""
+JENKINS_HTTPS_KEYSTORE_PASSWORD="{{ jenkins_https_keystore_password }}"
 
 ## Type:        string
 ## Default:     ""
