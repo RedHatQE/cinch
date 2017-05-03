@@ -112,8 +112,8 @@ version_pin_file: /etc/yum.conf
 jenkins_slave_agent_port: 50000
 # This is a list of ports to allow in firewall.
 firewall_tcp_ports:
-- "{{ jenkins_slave_agent_port }}"
-- "8888"
-- "22"
-- "{{ https_enabled | ternary('443', '80') }}"
-- "{{ https_enabled | ternary('8443', '8080') }}"
+  - "{{ jenkins_slave_agent_port }}"
+  - "8888"
+  - "22"
+  - "{{ https_enabled | ternary('443', '80') }}"
+  - "{{ https_enabled | ternary('8443', '8080') }}"
