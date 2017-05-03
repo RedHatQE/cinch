@@ -4,6 +4,11 @@ set -ve
 ###############################################################################
 # ANSIBLE LINT
 ###############################################################################
+find . \( \( -path './build*' -o -path ./.git \) -prune -o -name '*.yml' \) \
+	-type f -print0 |
+	xargs -0 -L 1 yamllint \
+	                  -c tests/yamllint.yml
+yamllint -c tests/yamllint.yml cinch/group_vars/*
 find cinch -maxdepth 1 -name '*.yml' -print0 |
 	xargs -0 -L 1 ansible-playbook \
 	             --syntax-check \

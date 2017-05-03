@@ -1,20 +1,19 @@
-# Documentation on AnsibleLintRules can be found here:
-# https://github.com/willthames/ansible-lint/blob/master/README.md
-# Note that this code is also included in an improved format in a PR against
-# the upstream code that lives here:
-# https://github.com/willthames/ansible-lint/pull/262. This file can be safely
-# deleted once that code is released
 from ansiblelint import AnsibleLintRule
+try:
+    from types import StringTypes
+except ImportError:
+    # Python3 removed types.StringTypes
+    StringTypes = str,
 
 
 class NoFormattingInWhenRule(AnsibleLintRule):
-    id = 'CINCH0001'
-    shortdesc = 'No Jinja2 in when'
-    description = '"when" lines should not include Jinja2 variables'
+    id = 'ANSIBLE0019'
+    shortdesc = 'No Jinja2 in when/until'
+    description = '"when" or "until" lines should not include Jinja2 variables'
     tags = ['deprecated']
 
     def _is_valid(self, when):
-        if not isinstance(when, (str, unicode)):
+        if not isinstance(when, StringTypes):
             return True
         return when.find('{{') == -1 and when.find('}}') == -1
 
@@ -35,4 +34,5 @@ class NoFormattingInWhenRule(AnsibleLintRule):
         return errors
 
     def matchtask(self, file, task):
-        return 'when' in task and not self._is_valid(task['when'])
+        return ('when' in task and not self._is_valid(task['when'])) or \
+               ('until' in task and not self._is_valid(task['until']))

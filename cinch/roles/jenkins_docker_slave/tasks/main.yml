@@ -4,8 +4,8 @@
     state: present
   become: true
   with_items:
-  - docker
-  - python-docker-py
+    - docker
+    - python-docker-py
 
 - name: make sure docker is started
   service:

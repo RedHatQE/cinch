@@ -8,10 +8,10 @@
     name: "{{ item }}"
     state: present
   with_items:
-  - java-1.{{ java_version }}.0-openjdk
-  - java-1.{{ java_version }}.0-openjdk-devel
-  - libselinux-python
-  - openssh
+    - java-1.{{ java_version }}.0-openjdk
+    - java-1.{{ java_version }}.0-openjdk-devel
+    - libselinux-python
+    - openssh
   retries: 2
   register: install_deps
   until: install_deps|success

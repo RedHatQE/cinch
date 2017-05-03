@@ -3,11 +3,6 @@
     name: httpd
     state: restarted
 
-- name: restart Jenkins
-  systemd:
-    name: jenkins
-    state: restarted
-
 - name: update certificate chains
   command: /usr/bin/update-ca-trust extract
   notify: generate pkcs12 version of certificate file
@@ -28,6 +23,12 @@
   command: >
     keytool -importkeystore -deststorepass {{ keystore_pass }} -destkeypass {{ keystore_pass }}
     -destkeystore {{ jenkins_home }}/.ssl/keystore -srckeystore {{ jenkins_home }}/.ssl/jenkins.p12
-    -srcstoretype PKCS12 -srcstorepass {{ keystore_pass }} -alias jenkins-ssl-cert
+    -srcstoretype PKCS12 -srcstorepass {{ keystore_pass }} -alias jenkins-ssl-cert -noprompt
   register: keytool_import
-  changed_when: "'already exists' not in keytool_import.stderr and 'already exists' not in keytool_import.stdout"
+  changed_when: "'already exists' not in keytool_import.stderr and 'already exists' not in
+    keytool_import.stdout"
+
+- name: restart Jenkins
+  service:
+    name: jenkins
+    state: restarted

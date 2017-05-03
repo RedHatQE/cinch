@@ -1,6 +1,6 @@
 repositories:
-- name: rawhide
-  mirrorlist: "{{ fedora_mirrors }}repo=rawhide"
+  - name: rawhide
+    mirrorlist: "{{ fedora_mirrors }}repo=rawhide"
 
 _download_repositories:
   - http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo

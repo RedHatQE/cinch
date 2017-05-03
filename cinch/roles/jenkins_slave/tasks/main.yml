@@ -18,8 +18,8 @@
     name: "{{ item }}"
     state: present
   with_items:
-  - ansible==1.8.4
-  - nose
+    - ansible==1.8.4
+    - nose
 
 - name: add host to hosts file
   lineinfile:
