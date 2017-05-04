@@ -52,7 +52,7 @@ def main():
     root = tree.getroot()
     roles = root.getiterator("role")
     changed = False
-    if roles:
+    if roles is not None:
         for role in roles:
             name = role.attrib.get("name")
             if name == "admin":
