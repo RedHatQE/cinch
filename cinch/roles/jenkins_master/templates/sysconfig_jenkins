@@ -26,7 +26,7 @@ JENKINS_JAVA_CMD="{{ jenkins_java_cmd }}"
 # Be careful when you change this, as you need to update
 # permissions of $JENKINS_HOME and /var/log/jenkins.
 #
-JENKINS_USER="jenkins"
+JENKINS_USER="{{ jenkins_user }}"
 
 ## Type:        string
 ## Default: "false"
@@ -44,7 +44,7 @@ JENKINS_USER="jenkins"
 #
 # Options to pass to java when running Jenkins.
 #
-JENKINS_JAVA_OPTIONS="-Djava.awt.headless=true {{ jenkins_java_options | join(' ') }}"
+JENKINS_JAVA_OPTIONS="{{ jenkins_java_options | join(' ') }}"
 ## Type:        integer(0:65535)
 ## Default:     8080
 ## ServiceRestart: jenkins
@@ -61,7 +61,7 @@ JENKINS_PORT="{{ https_enabled | ternary(-1, 8080) }}"
 # IP address Jenkins listens on for HTTP requests.
 # Default is all interfaces (0.0.0.0).
 #
-JENKINS_LISTEN_ADDRESS=""
+JENKINS_LISTEN_ADDRESS="{{ jenkins_http_listen_address }}"
 
 ## Type:        integer(0:65535)
 ## Default:     ""
@@ -79,7 +79,7 @@ JENKINS_HTTPS_PORT="{{ https_enabled | ternary(8443, '') }}"
 # Path to the keystore in JKS format (as created by the JDK 'keytool').
 # Default is disabled.
 #
-JENKINS_HTTPS_KEYSTORE=""
+JENKINS_HTTPS_KEYSTORE="{{ jenkins_https_keystore }}"
 
 ## Type:        string
 ## Default:     ""
@@ -88,7 +88,7 @@ JENKINS_HTTPS_KEYSTORE=""
 # Password to access the keystore defined in JENKINS_HTTPS_KEYSTORE.
 # Default is disabled.
 #
-JENKINS_HTTPS_KEYSTORE_PASSWORD=""
+JENKINS_HTTPS_KEYSTORE_PASSWORD="{{ jenkins_https_keystore_password }}"
 
 ## Type:        string
 ## Default:     ""
@@ -97,7 +97,7 @@ JENKINS_HTTPS_KEYSTORE_PASSWORD=""
 # IP address Jenkins listens on for HTTPS requests.
 # Default is disabled.
 #
-JENKINS_HTTPS_LISTEN_ADDRESS=""
+JENKINS_HTTPS_LISTEN_ADDRESS="{{ jenkins_https_listen_address }}"
 
 ## Type:        integer(0:65535)
 ## Default:     8009
@@ -106,7 +106,7 @@ JENKINS_HTTPS_LISTEN_ADDRESS=""
 # Ajp13 Port Jenkins is listening on.
 # Set to -1 to disable
 #
-JENKINS_AJP_PORT="8009"
+JENKINS_AJP_PORT="{{ jenkins_ajp_port }}"
 
 ## Type:        string
 ## Default:     ""
@@ -115,7 +115,7 @@ JENKINS_AJP_PORT="8009"
 # IP address Jenkins listens on for Ajp13 requests.
 # Default is all interfaces (0.0.0.0).
 #
-JENKINS_AJP_LISTEN_ADDRESS=""
+JENKINS_AJP_LISTEN_ADDRESS="{{ jenkins_ajp_listen_address }}"
 
 ## Type:        integer(1:9)
 ## Default:     5
@@ -124,7 +124,7 @@ JENKINS_AJP_LISTEN_ADDRESS=""
 # Debug level for logs -- the higher the value, the more verbose.
 # 5 is INFO.
 #
-JENKINS_DEBUG_LEVEL="5"
+JENKINS_DEBUG_LEVEL="{{ jenkins_debug_level }}"
 
 ## Type:        yesno
 ## Default:     no
@@ -132,7 +132,7 @@ JENKINS_DEBUG_LEVEL="5"
 #
 # Whether to enable access logging or not.
 #
-JENKINS_ENABLE_ACCESS_LOG="no"
+JENKINS_ENABLE_ACCESS_LOG="{{ jenkins_enable_access_log }}"
 
 ## Type:        integer
 ## Default:     100
@@ -140,7 +140,7 @@ JENKINS_ENABLE_ACCESS_LOG="no"
 #
 # Maximum number of HTTP worker threads.
 #
-JENKINS_HANDLER_MAX="100"
+JENKINS_HANDLER_MAX="{{ jenkins_handler_max }}"
 
 ## Type:        integer
 ## Default:     20
@@ -148,7 +148,7 @@ JENKINS_HANDLER_MAX="100"
 #
 # Maximum number of idle HTTP worker threads.
 #
-JENKINS_HANDLER_IDLE="20"
+JENKINS_HANDLER_IDLE="{{ jenkins_handler_idle }}"
 
 ## Type:        string
 ## Default:     ""
@@ -157,4 +157,4 @@ JENKINS_HANDLER_IDLE="20"
 # Pass arbitrary arguments to Jenkins.
 # Full option list: java -jar jenkins.war --help
 #
-JENKINS_ARGS="{{ https_enabled | ternary('--httpsKeyStore=' + jenkins_home + '/.ssl/keystore --httpsKeyStorePassword=' + keystore_pass, '') }}"
+JENKINS_ARGS="{{ jenkins_args }}"
