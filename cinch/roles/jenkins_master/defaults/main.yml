@@ -32,6 +32,10 @@ jenkins_version: "1.651.3"
 # The list of Jenkins plugins that should be installed by default from the
 # configured Update Centers.
 jenkins_plugins: "{{ lookup('file', 'files/jenkins-plugin-lists/default.txt').split('\n') }}"
+# A list of Jenkins plugins that should not be upgraded, but should, instead, be
+# pinned to the currently available versions. Make this an array of the names of
+# the plugins that should be pinned. NOTE: This only works for Jenkins 1.X
+jenkins_pinned_plugins: []
 # Java max heap size argument. Set this value based on the amount of RAM that
 # your instance needs and your infrastructure is able to support
 java_heap_size: 3g

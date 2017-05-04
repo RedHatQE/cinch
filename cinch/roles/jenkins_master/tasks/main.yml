@@ -36,6 +36,9 @@
   include: cli-users.yml
   when: jenkins_security_enabled
 
+- name: pin plugins to avoid upgrades
+  include: pin_plugin.yml
+
 - name: plugins and Jenkins config
   include: plugins.yml
 

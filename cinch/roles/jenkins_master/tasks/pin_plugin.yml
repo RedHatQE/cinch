@@ -1,0 +1,15 @@
+- name: ensure plugins directory exists
+  file:
+    dest: "{{ jenkins_home }}/plugins/"
+    state: directory
+    owner: "{{ jenkins_user }}"
+    mode: 0755
+  when: (jenkins_pinned_plugins|length) > 0
+
+- name: pin plugin
+  template:
+    src: jenkins_pinned
+    dest: "{{ jenkins_home }}/plugins/{{ item }}.jpi.pinned"
+    owner: "{{ jenkins_user }}"
+    mode: 0644
+  with_items: "{{ jenkins_pinned_plugins }}"
