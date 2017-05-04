@@ -31,8 +31,12 @@ def append(tree, site_id, url):
         return True
     else:
         # Update URL if necessary
-        if check_existing.text != url:
-            check_existing.text = url
+        url_node = check_existing.find('url')
+        if url_node is not None and url_node.text != url:
+            url_node.text = url
+            return True
+        if url_node is None:
+            ET.SubElement(check_existing, 'url').text = url
             return True
         return False
 
@@ -54,7 +58,8 @@ def main():
         changed = append(tree,
                          module.params['update_center_id'],
                          module.params['update_center_url'])
-    tree.write(update_ctr_config, encoding='UTF-8')
+    if changed:
+        tree.write(update_ctr_config, encoding='UTF-8')
     module.exit_json(changed=changed)
 
 
