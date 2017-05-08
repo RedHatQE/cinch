@@ -1,0 +1,12 @@
+# Reporting errors in a readable, pretty-print format must be done in two steps
+# here since the 'fail' module cannot split newlines.
+
+# The service_swarm_err_output var is set by the check_swarm_systemd.yml or
+# check_swarm_upstart.yml playbooks, depending on which init system is in use.
+- name: report errors for swarm service
+  debug: var=service_swarm_err_output.stdout.split('\n')
+
+- name: exit with failure if swarm service could not connect to the master
+  fail:
+    msg:
+      Swarm failed to connect to the master. See prior debug output for details.

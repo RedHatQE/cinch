@@ -105,3 +105,21 @@
     state: started
     enabled: true
   when: ansible_connection != 'docker'
+
+# This timeout is longer than the default swarm client timeout of 10 seconds.
+# There is an unavoidable race condition when running the swarm client within
+# an init system. The value of 15 is used to help ensure that errors are not
+# caught during a subsequent, and unrelated service restart. Essentially, we
+# are checking the status directly in-between service restarts.
+- name: wait for the swarm connection timeout
+  pause:
+    seconds: 15
+  when: ansible_connection != 'docker'
+
+- name: check swarm service status when using systemd
+  include: check_swarm_systemd.yml
+  when: ansible_connection != 'docker' and ansible_service_mgr == 'systemd'
+
+- name: check swarm service status when using upstart
+  include: check_swarm_upstart.yml
+  when: ansible_connection != 'docker' and ansible_service_mgr == 'upstart'
