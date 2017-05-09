@@ -7,3 +7,8 @@ jenkins_ssh_keyfile: id_rsa
 java_version: 8
 # Needed for certain OpenShift instances
 jenkins_user_uid: 1000090000
+# Set the default (empty) set of authorized SSH public keys for jenkins user.
+# To add authorized keys, override this value by adding a list of paths
+# (relative or full) to files containing separate public keys.
+# e.g.: ['mykey.pub', 'otherkey.pub']
+jenkins_authorized_keys: []

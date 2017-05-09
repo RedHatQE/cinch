@@ -43,3 +43,10 @@
     owner: "{{ jenkins_user }}"
     mode: 0600
   notify: generate public SSH key
+
+- name: add ssh keys to authorized_keys for the jenkins user
+  authorized_key:
+    user: "{{ jenkins_user }}"
+    state: present
+    key: "{{ item }}"
+  with_file: "{{ jenkins_authorized_keys }}"
