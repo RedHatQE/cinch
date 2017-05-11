@@ -61,6 +61,15 @@
     jswarm_extra_args: "{{ '{% raw %}{{ default .Env.JSWARM_EXTRA_ARGS \"\" }}{% endraw %}' }}"
   when: ansible_connection == 'docker'
 
+# The default swarm client timeout is 10 seconds.  This value should never be
+# set to less than 10 seconds, and increasing it should not be necessary.
+# It is not recommended to change this value, but it is set here in order to
+# define this value in a single location for the systemd and upstart service
+# templates.
+- name: set variable for swarm service retry timer
+  set_fact:
+    swarm_retry_timer: 10
+
 - name: upload swarm config file
   template:
     src: sysconfig_jenkins_swarm
@@ -106,14 +115,14 @@
     enabled: true
   when: ansible_connection != 'docker'
 
-# This timeout is longer than the default swarm client timeout of 10 seconds.
 # There is an unavoidable race condition when running the swarm client within
-# an init system. The value of 15 is used to help ensure that errors are not
-# caught during a subsequent, and unrelated service restart. Essentially, we
-# are checking the status directly in-between service restarts.
+# an init system. The value of swarm_retry_timer * 1.5 is used to help ensure
+# that errors are not caught during a subsequent, and unrelated service
+# restart.  Essentially, we are checking the status directly in-between service
+# restarts.
 - name: wait for the swarm connection timeout
   pause:
-    seconds: 15
+    seconds: "{{ (swarm_retry_timer * 1.5)|int }}"
   when: ansible_connection != 'docker'
 
 - name: check swarm service status when using systemd

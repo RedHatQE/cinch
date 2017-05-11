@@ -6,13 +6,11 @@ User={{ jenkins_user }}
 EnvironmentFile=/etc/sysconfig/jenkins_swarm
 Restart=on-failure
 
-# Wait 10 seconds (swarm client default) for the service to fail; code in
-# roles/jenkins_slave/tasks/main.yml depends on this value.
-TimeoutStartSec=10s
+# Wait for the service to fail
+TimeoutStartSec={{ swarm_retry_timer }}s
 
-# Restart failed service after 10 seconds; code in
-# roles/jenkins_slave/tasks/main.yml depends on this value.
-RestartSec=10s
+# Restart failed service after timer expires
+RestartSec={{ swarm_retry_timer }}s
 
 # -retry 0 in this script disables the built-in retry functionality in swarm so
 # the init system can manage it
