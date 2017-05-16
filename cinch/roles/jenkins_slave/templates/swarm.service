@@ -2,7 +2,18 @@
 After=network-online.target
 Wants=network-online.target
 [Service]
+User={{ jenkins_user }}
 EnvironmentFile=/etc/sysconfig/jenkins_swarm
+Restart=on-failure
+
+# Wait for the service to fail
+TimeoutStartSec={{ swarm_retry_timer }}s
+
+# Restart failed service after timer expires
+RestartSec={{ swarm_retry_timer }}s
+
+# -retry 0 in this script disables the built-in retry functionality in swarm so
+# the init system can manage it
 ExecStart={{ jenkins_java_cmd }} \
           $SWARM_JAVA_ARGS \
           -jar "{{ jswarm_local_directory }}/{{ jswarm_filename }}" \
@@ -11,10 +22,10 @@ ExecStart={{ jenkins_java_cmd }} \
           -executors "$SWARM_EXECUTORS" \
           -labels "$SWARM_SLAVE_LABEL" \
           -fsroot "$SWARM_ROOT" \
+          -retry 0 \
           $SWARM_USERNAME \
           $SWARM_PASSWORD \
           $SWARM_EXTRA_ARGS
-Restart=on-failure
-User={{ jenkins_user }}
+
 [Install]
 WantedBy=multi-user.target

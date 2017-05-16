@@ -1,0 +1,14 @@
+- name: check if swarm connected to the master with upstart
+  command: "grep 'INFO: Connected' /var/log/jenkins-swarm.log"
+  ignore_errors: true
+  changed_when: false
+  register: service_swarm_status
+
+- name: grab errors for the last run of the upstart swarm service
+  command: cat /var/log/jenkins-swarm.log
+  register: service_swarm_err_output
+  when: service_swarm_status|failed
+
+- name: report errors for upstart swarm service
+  include: check_swarm_errors.yml
+  when: service_swarm_status|failed

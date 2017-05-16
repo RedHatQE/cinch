@@ -1,0 +1,22 @@
+- name: check if swarm connected to the master with systemd
+  command: systemctl status swarm
+  ignore_errors: true
+  changed_when: false
+  register: service_swarm_status
+
+# Some shell magic is required here to grab the log output from *only* the last
+# run of the swarm service in systemd.  To do this, we find the last PID that
+# was used to start the service using systemctl, and we extract just the PID
+# via 'cut'.  Then we pass that PID to journalctl to give us only the log data
+# we want.
+- name: grab errors for the last run of the systemd swarm service
+  shell: >
+    journalctl --no-pager -u swarm -o cat
+    _PID=$(systemctl show swarm --property=ExecMainPID
+    | cut -d '=' -f 2)
+  register: service_swarm_err_output
+  when: service_swarm_status|failed
+
+- name: report errors for systemd swarm service
+  include: check_swarm_errors.yml
+  when: service_swarm_status|failed
