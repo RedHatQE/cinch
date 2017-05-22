@@ -31,15 +31,10 @@
     state: started
     enabled: true
 
-- name: configure CLI users
-  become: false
-  include: cli-users.yml
-  when: jenkins_security_enabled
-
 - name: pin plugins to avoid upgrades
   include: pin_plugin.yml
 
-- name: plugins and Jenkins config
+- name: plugins
   include: plugins.yml
 
 - name: make sure handlers are flushed
@@ -47,3 +42,7 @@
 
 - name: wait for the master to be ready to go
   include: ensure_up.yml
+
+- name: application-level post configuration tasks
+  become: false
+  include: post_configure.yml
