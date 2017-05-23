@@ -45,6 +45,9 @@ java_heap_size: 3g
 session_timeout: 480
 # Command line arguments for Jenkins
 jenkins_args:
+# A list of additional packages you wish to install using the default package
+# manager.
+additional_packages: []
 
 # ############################################################################
 # A list of variables that don't really need to be overridden, but which can be

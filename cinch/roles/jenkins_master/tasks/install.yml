@@ -34,6 +34,12 @@
     - initscripts
     - cloud-utils
 
+- name: install additional packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ additional_packages }}"
+
 - name: install gcc_compat where necessary
   package:
     name: "{{ gcc_compat_package }}"
