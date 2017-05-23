@@ -1,5 +1,6 @@
 - name: reload systemd
-  command: systemctl daemon-reload
+  systemd:
+    daemon_reload: true
   when: ansible_service_mgr == 'systemd'
 
 - name: restart nginx service

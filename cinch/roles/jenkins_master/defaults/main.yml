@@ -17,16 +17,6 @@ update_centers:
 # you can override jenkins_ssl_cert and jenkins_ssl_key if you want to use custom
 # SSL certificate, otherwise a self signed certificate will be used.
 https_enabled: false
-# Local path to the SSL certificate to use in configuring HTTPS. This can be
-# overridden if you want secure access to Jenkins using your own SSL certificate.
-# By default, a self signed certificate created by the nginx role will be used.
-#jenkins_ssl_cert:
-# Local path to the SSL encryption key to use in configuring HTTPS. See the
-# comment on jenkins_ssl_cert for more information.
-#jenkins_ssl_key:
-# The version of Jenkins to install from the repository. The only use for
-# this value is constructing the name of the RPM below, so there is no need
-# to override this just outside of changing RPM name
 jenkins_version: "1.651.3"
 # The list of Jenkins plugins that should be installed by default from the
 # configured Update Centers.

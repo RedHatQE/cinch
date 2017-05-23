@@ -32,15 +32,6 @@
     mode: 0644
   notify: restart nginx service
 
-- name: install /etc/nginx/conf.d/default.conf
-  copy:
-    src: etc/nginx/conf.d/default.conf
-    dest: /etc/nginx/conf.d/default.conf
-    owner: root
-    group: root
-    mode: 0644
-  notify: restart nginx service
-
 - name: install /etc/nginx/conf.d/monitor.conf.snippet
   template:
     src: etc/nginx/conf.d/monitor.conf.snippet
