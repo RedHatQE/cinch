@@ -154,3 +154,8 @@ firewall_tcp_ports:
   - "22"
   - "{{ https_enabled | ternary('443', '80') }}"
   - "{{ https_enabled | ternary('8443', '8080') }}"
+# The number of build executors available on the Jenkins master
+jenkins_executors: 10
+# This setting affects how the update center downloads plugin metadata
+# http://javadoc.jenkins-ci.org/jenkins/model/DownloadSettings.html
+jenkins_usebrowser: false

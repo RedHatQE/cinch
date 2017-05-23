@@ -1,0 +1,24 @@
+- name: configure CLI users appropriately
+  become: false
+  jenkins_cli_user:
+    jenkins_home: "{{ jenkins_home }}"
+    key_file: "{{ ansible_user_dir }}/.ssh/id_rsa.pub"
+  when: jenkins_security_enabled
+
+- name: run Jenkins global config
+  jenkins_script:
+    url: "{{ _jenkins_url }}"
+    script: "{{ item }}"
+    validate_certs: false
+  register: script_output
+  changed_when: "script_output.output.find('CHANGED') != -1"
+  # We cannot use 'with_file' here because the templates won't be rendered
+  # correctly.
+  # These scripts are run in the order listed below, so please edit this list
+  # using the desired execution order.
+  with_items:
+    - "{{ lookup('template', role_path + '/templates/set_executors.groovy') }}"
+    - "{{ lookup('template', role_path + '/templates/set_usebrowser.groovy') }}"
+    - "{{ lookup('template', role_path + '/templates/set_slaveport.groovy') }}"
+  tags:
+    - skip_ansible_lint

@@ -1,28 +1,6 @@
 - name: wait for Jenkins
   include: ensure_up.yml
 
-- name: copy in configure script
-  template:
-    src: groovy_set_jenkins_cfg.java
-    dest: "{{ ansible_user_dir }}"
-  register: groovy_script
-
-- name: run Jenkins global config
-  jenkins_script:
-    url: "{{ _jenkins_url }}"
-    script: "{{ item }}"
-    validate_certs: false
-  when: groovy_script.changed
-  notify: restart Jenkins
-  register: global_config
-  retries: 10
-  until: "'HTTP error 503' not in '{{ global_config.msg | default('') }}'"
-  delay: 10
-  with_file:
-    - "{{ role_path }}/templates/groovy_set_jenkins_cfg.java"
-  tags:
-    - skip_ansible_lint
-
 - name: run update center configure script
   jenkins_update_center:
     update_center_id: "{{ item.id }}"
