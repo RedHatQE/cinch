@@ -1,0 +1,9 @@
+- name: copy over keytab
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/nginx/conf.d/httpd.keytab"
+  with_first_found:
+    - files:
+        - "{{ httpd_keytab_file }}"
+      skip: True
+  no_log: True

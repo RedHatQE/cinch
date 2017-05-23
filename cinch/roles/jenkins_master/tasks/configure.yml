@@ -23,5 +23,14 @@
     group: jenkins
     state: directory
 
+- name: install nginx configuration file for jenkins
+  template:
+    src: etc/nginx/conf.d/jenkins_http{{ https_enabled | ternary('s', '') }}.conf
+    dest: /etc/nginx/conf.d/jenkins.conf
+    owner: root
+    group: root
+  when: ansible_connection != 'docker'
+  notify: restart nginx
+
 - name: flush handlers
   meta: flush_handlers

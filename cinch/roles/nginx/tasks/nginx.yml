@@ -1,0 +1,61 @@
+- name: install nginx
+  package:
+    name: nginx
+    state: installed
+  when: "repos_add is not defined or 'epel' not in repos_add"
+  notify:
+    - reload systemd
+    - restart nginx service
+
+- name: install nginx
+  package:
+    name: nginx
+    state: installed
+    disablerepo: epel
+  when: "repos_add is defined and 'epel' in repos_add"
+  notify: restart nginx service
+
+- name: install nginx logrotation file
+  copy:
+    src: etc/logrotate.d/nginx
+    dest: /etc/logrotate.d/nginx
+    owner: root
+    group: root
+    mode: 0644
+
+- name: install /etc/nginx/nginx.conf
+  template:
+    src: etc/nginx/nginx.conf
+    dest: /etc/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx service
+
+- name: install /etc/nginx/conf.d/default.conf
+  copy:
+    src: etc/nginx/conf.d/default.conf
+    dest: /etc/nginx/conf.d/default.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart nginx service
+
+- name: install /etc/nginx/conf.d/monitor.conf.snippet
+  template:
+    src: etc/nginx/conf.d/monitor.conf.snippet
+    dest: /etc/nginx/conf.d/monitor.conf.snippet
+    owner: nginx
+    group: nginx
+    mode: 0640
+  notify: restart nginx service
+
+- name: install /etc/nginx/conf.d/errors.conf.snippet
+  template:
+    src: etc/nginx/conf.d/errors.conf.snippet
+    dest: /etc/nginx/conf.d/errors.conf.snippet
+    owner: nginx
+    group: nginx
+    mode: 0640
+  notify: restart nginx service
+  when: httpd_no_error_pages is not defined

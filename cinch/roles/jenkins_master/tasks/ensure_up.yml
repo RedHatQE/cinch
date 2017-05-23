@@ -18,6 +18,7 @@
     url: "{{ _jenkins_url }}"
     status_code: 200
     timeout: 5
+    validate_certs: false
   register: jenkins_status
   retries: 30
   delay: 15

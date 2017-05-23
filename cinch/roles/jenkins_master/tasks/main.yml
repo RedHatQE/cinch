@@ -3,14 +3,6 @@
   jenkins_security_enabled:
     jenkins_home: "{{ jenkins_home }}"
 
-- name: check for https pre-configure
-  include: https_check.yml
-
-- name: remember that HTTPS is already enabled, even if not set to enable
-  set_fact:
-    https_enabled: true
-  when: https_cfg_exists
-
 - name: install necessary packages
   include: install.yml
 

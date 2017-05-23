@@ -35,6 +35,8 @@
   hosts: jenkins_master
   roles:
     - beaker-client
+    - role: nginx
+      when: ansible_connection != 'docker'
     - jenkins_master
     - role: ntp
       when: ansible_connection != 'docker'

@@ -5,9 +5,7 @@ Vagrant.configure("2") do |config|
         ansible.groups = {
             "jenkins_master" => ["master"],
             "cent7" => ["master"],
-            "repositories" => ["master"],
-            "jenkins_master:vars" => {"jenkins_ssl_cert" => "vagrant/master/jenkins.crt",
-                           "jenkins_ssl_key" => "vagrant/master/jenkins.key"}
+            "repositories" => ["master"]
         }
     end
 end

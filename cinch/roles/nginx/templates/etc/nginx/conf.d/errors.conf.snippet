@@ -1,0 +1,11 @@
+# redirect server error pages to the static pages from ESO_error_pages RPM
+
+location /errors {root /var/www;}
+	error_page   401 /errors/401.html;
+        error_page   403 /errors/403.html;
+        error_page   404 /errors/404.html;
+        error_page   500 /errors/500.html;
+        error_page   501 /errors/501.html;
+        error_page   502 /errors/502.html;
+        error_page   503 /errors/503.html;
+        error_page   504 /errors/504.html;

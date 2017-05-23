@@ -1,34 +1,17 @@
-- name: restart httpd
+- name: restart nginx
   systemd:
-    name: httpd
+    name: nginx
     state: restarted
 
 - name: update certificate chains
   command: /usr/bin/update-ca-trust extract
-  notify: generate pkcs12 version of certificate file
-
-- name: generate pkcs12 version of certificate file
-  become: true
-  become_user: jenkins
-  command: >
-    openssl pkcs12 -export -in jenkins.crt -inkey jenkins.key -out jenkins.p12
-    -name jenkins-ssl-cert -CAfile jenkins-ca.crt -caname root -password pass:{{ keystore_pass }}
-  args:
-    chdir: "{{ jenkins_home }}/.ssl"
-  notify: import key tool to Java keystore
-
-- name: import key tool to Java keystore
-  become: true
-  become_user: jenkins
-  command: >
-    keytool -importkeystore -deststorepass {{ keystore_pass }} -destkeypass {{ keystore_pass }}
-    -destkeystore {{ jenkins_home }}/.ssl/keystore -srckeystore {{ jenkins_home }}/.ssl/jenkins.p12
-    -srcstoretype PKCS12 -srcstorepass {{ keystore_pass }} -alias jenkins-ssl-cert -noprompt
-  register: keytool_import
-  changed_when: "'already exists' not in keytool_import.stderr and 'already exists' not in
-    keytool_import.stdout"
 
 - name: restart Jenkins
   service:
     name: jenkins
     state: restarted
+
+- name: save iptables
+  command: service iptables save
+  tags:
+    - skip_ansible_lint

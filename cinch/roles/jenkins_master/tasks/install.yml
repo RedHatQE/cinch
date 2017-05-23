@@ -1,9 +1,3 @@
-- name: install httpd if needed
-  package:
-    name: httpd
-    state: present
-  when: https_enabled
-
 - name: install necessary RPM files
   package:
     name: "{{ item }}"

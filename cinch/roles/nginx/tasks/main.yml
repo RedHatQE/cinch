@@ -1,0 +1,17 @@
+- include: nginx.yml
+
+- include: ssl-setup.yml
+  when: https_enabled
+
+- name: setup kerberos
+  include: kerberos-setup.yml
+  when: kerberos_capable is defined and kerberos_capable
+
+- name: setup selinux
+  include: selinux.yml
+  when: "'enabled' in ansible_selinux.status"
+
+- name: enable nginx
+  service:
+    name: nginx
+    enabled: true

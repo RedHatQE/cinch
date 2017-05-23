@@ -1,0 +1,19 @@
+# Standards: 1.7
+galaxy_info:
+  author: Jakub Paulovic
+  description: nginx setup
+  company: Red Hat
+
+  license: BSD
+
+  min_ansible_version: 2.1
+
+  platforms:
+    - name: EL
+      versions:
+        - 6
+        - 7
+
+  galaxy_tags: []
+
+dependencies: []

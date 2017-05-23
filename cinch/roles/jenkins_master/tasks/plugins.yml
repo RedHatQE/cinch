@@ -38,6 +38,7 @@
     name: "{{ item.split('=')[0] }}"
     state: present
     version: "{{ item.split('=')[2] | default(omit) }}"
+    validate_certs: false
   register: plugin_install
   retries: 3
   until: not plugin_install|failed

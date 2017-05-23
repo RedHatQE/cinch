@@ -52,7 +52,7 @@ JENKINS_JAVA_OPTIONS="{{ jenkins_java_options | join(' ') }}"
 # Port Jenkins is listening on.
 # Set to -1 to disable
 #
-JENKINS_PORT="{{ https_enabled | ternary(-1, 8080) }}"
+JENKINS_PORT="8080"
 
 ## Type:        string
 ## Default:     ""
@@ -70,7 +70,7 @@ JENKINS_LISTEN_ADDRESS="{{ jenkins_http_listen_address }}"
 # HTTPS port Jenkins is listening on.
 # Default is disabled.
 #
-JENKINS_HTTPS_PORT="{{ https_enabled | ternary(8443, '') }}"
+JENKINS_HTTPS_PORT="-1"
 
 ## Type:        string
 ## Default:     ""
@@ -79,7 +79,7 @@ JENKINS_HTTPS_PORT="{{ https_enabled | ternary(8443, '') }}"
 # Path to the keystore in JKS format (as created by the JDK 'keytool').
 # Default is disabled.
 #
-JENKINS_HTTPS_KEYSTORE="{{ jenkins_https_keystore }}"
+JENKINS_HTTPS_KEYSTORE=""
 
 ## Type:        string
 ## Default:     ""
@@ -88,7 +88,7 @@ JENKINS_HTTPS_KEYSTORE="{{ jenkins_https_keystore }}"
 # Password to access the keystore defined in JENKINS_HTTPS_KEYSTORE.
 # Default is disabled.
 #
-JENKINS_HTTPS_KEYSTORE_PASSWORD="{{ jenkins_https_keystore_password }}"
+JENKINS_HTTPS_KEYSTORE_PASSWORD=""
 
 ## Type:        string
 ## Default:     ""

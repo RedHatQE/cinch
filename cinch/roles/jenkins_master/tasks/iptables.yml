@@ -16,6 +16,7 @@
     ctstate: ESTABLISHED,RELATED
     jump: ACCEPT
     comment: "000 accept related established rules"
+  notify: save iptables
 
 - name: set iptables to accept all icmp
   iptables:
@@ -23,6 +24,7 @@
     protocol: icmp
     jump: ACCEPT
     comment: "001 accept all icmp"
+  notify: save iptables
 
 - name: set iptables to accept all communication from lo interface
   iptables:
@@ -30,6 +32,7 @@
     in_interface: lo
     jump: ACCEPT
     comment: "002 accept all to lo interface"
+  notify: save iptables
 
 - name: set iptables to reject other communication to localhost
   iptables:
@@ -37,6 +40,7 @@
     destination: 127.0.0.1/8
     reject_with: icmp-port-unreachable
     comment: "003 reject local traffic not on loopback interface"
+  notify: save iptables
 
 - name: set iptables to allow Jenkins-related TCP ports
   iptables:
@@ -45,46 +49,8 @@
     protocol: tcp
     jump: ACCEPT
   with_items: "{{ firewall_tcp_ports }}"
-
-- name: set iptables rules forwarding port to Jenkins default port
-  iptables:
-    chain: PREROUTING
-    destination_port: "{{ https_enabled | ternary(443, 80) }}"
-    protocol: tcp
-    table: nat
-    match: tcp
-    jump: REDIRECT
-    to_ports: "{{ https_enabled | ternary(8443, 8080) }}"
-    state: present
-    comment: "901 forward 80/443 to Jenkins default port"
-  register: remote_port_forward
-
-- name: set iptables rule forwarding loopback to Jenkins default port
-  iptables:
-    chain: OUTPUT
-    table: nat
-    source: 0/0
-    destination: 127.0.0.1
-    protocol: tcp
-    destination_port: "{{ https_enabled | ternary(443, 80) }}"
-    jump: REDIRECT
-    to_ports: "{{ https_enabled | ternary(8443, 8080) }}"
-    state: present
-    comment: "902 forward 80/443 to Jenkins default port on loopback"
-    # action: insert - avaialble in Ansible 2.2+
-  register: local_port_forward
-
-- name: set iptables rule forwarding for real address to loopback
-  iptables:
-    chain: OUTPUT
-    table: nat
-    protocol: tcp
-    destination: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
-    destination_port: "{{ https_enabled | ternary(443, 80) }}"
-    jump: REDIRECT
-    to_ports: "{{ https_enabled | ternary(8443, 8080) }}"
-    state: present
-  register: output_port_forward
+  when: item is defined
+  notify: save iptables
 
 - name: set iptables to reject all other connections
   iptables:
@@ -92,15 +58,10 @@
     protocol: all
     reject_with: icmp-admin-prohibited
     comment: "999 Reject all other communication"
+  notify: save iptables
 
-- name: save iptables
-  command: service iptables save
-  when: >-
-    (remote_port_forward|changed) or
-    (local_port_forward|changed) or
-    (output_port_forward|changed)
-  tags:
-    - skip_ansible_lint
+- name: flush handlers
+  meta: flush_handlers
 
 - name: start iptables
   service:
