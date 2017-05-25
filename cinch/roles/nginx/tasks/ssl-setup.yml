@@ -2,6 +2,9 @@
   copy:
     src: "{{ item }}"
     dest: "/etc/nginx/conf.d/ssl.key"
+    owner: nginx
+    group: nginx
+    mode: 0600
   with_first_found:
     - files:
         - "{{ httpd_ssl_key_file }}"
@@ -16,6 +19,9 @@
   copy:
     src: "{{ item }}"
     dest: "/etc/nginx/conf.d/ssl.pem"
+    owner: nginx
+    group: nginx
+    mode: 0644
   with_first_found:
     - files:
         - "{{ httpd_ssl_pem_file }}"
