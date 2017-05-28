@@ -1,6 +1,6 @@
+# systemd: daemon_reload=yes can be used in Ansible 2.4
 - name: reload systemd
-  systemd:
-    daemon_reload: true
+  command: systemctl daemon-reload
   when: ansible_service_mgr == 'systemd'
 
 - name: restart nginx service
