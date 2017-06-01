@@ -1,7 +1,20 @@
-- name: install certificate authority
+- name: install certificate authority from URL
   get_url:
     url: "{{ item }}"
     dest: /etc/pki/ca-trust/source/anchors/
+    owner: root
+    group: root
+    mode: 0644
     validate_certs: "{{ certificate_authority_validate_certs }}"
   with_items: "{{ certificate_authority_urls }}"
+  notify: install certificate authority
+
+- name: install CA certs from files
+  copy:
+    src: "{{ item }}"
+    dest: /etc/pki/ca-trust/source/anchors/
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ certificate_authority_files }}"
   notify: install certificate authority

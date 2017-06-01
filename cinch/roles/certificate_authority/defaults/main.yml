@@ -1,2 +1,3 @@
 certificate_authority_urls: []
+certificate_authority_files: []
 certificate_authority_validate_certs: false

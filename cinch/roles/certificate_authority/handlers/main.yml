@@ -1,2 +1,2 @@
 - name: install certificate authority
-  command: update-ca-trust
+  command: update-ca-trust force-enable
