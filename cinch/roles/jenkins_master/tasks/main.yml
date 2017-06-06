@@ -6,8 +6,8 @@
 - name: install necessary packages
   include: install.yml
 
-- name: configure iptables
-  include: iptables.yml
+- name: configure firewalld
+  include: firewalld.yml
   when: ansible_connection != 'docker'
 
 - name: configure Jenkins

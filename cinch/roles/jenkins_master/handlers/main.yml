@@ -11,7 +11,7 @@
     name: jenkins
     state: restarted
 
-- name: save iptables
-  command: service iptables save
+- name: reload firewalld
+  command: firewall-cmd --reload
   tags:
     - skip_ansible_lint
