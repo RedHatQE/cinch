@@ -31,8 +31,7 @@ setup(
     install_requires=[
         'ansible>=2.2.1',
         'plumbum>=1.6.0',
-        'linchpin>=0.9',
-        'sphinx_rtd_theme'
+        'linchpin>=0.9'
     ],
     entry_points={
         'console_scripts': [
@@ -50,6 +49,10 @@ setup(
             'docker-py',
             'pytest-cov',
             'codecov'
+        ],
+        'docs': [
+            'sphinx_rtd_theme',
+            'sphinx'
         ]
     }
 )
