@@ -16,10 +16,23 @@
   become: false
   uri:
     url: "{{ _jenkins_url }}"
-    status_code: 200
+    status_code: 200,401
     timeout: 5
     validate_certs: false
   register: jenkins_status
   retries: 30
   delay: 15
-  until: "'status' in jenkins_status and jenkins_status['status'] == 200"
+  until: >-
+    'status' in jenkins_status and
+    (jenkins_status['status'] == 200 or jenkins_status['status'] == 401)
+
+- name: get user api key
+  jenkins_user_api:
+    user: "{{ jenkins_admin.nickname }}"
+  register: jenkins_admin_api_key
+  become: true
+  become_user: "{{ jenkins_user }}"
+
+- name: save API key
+  set_fact:
+    admin_api_key: "{{ jenkins_admin_api_key.api_key }}"

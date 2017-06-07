@@ -1,0 +1,30 @@
+require "../shared.rb"
+require 'json'
+
+base = File.dirname(__FILE__)
+
+Vagrant.configure("2") do |config|
+	vm(config, "master")
+	vm(config, "slave") do |ansible|
+		ansible.groups = {
+			"jenkins_master" => ["master"],
+			"jenkins_slave" => ["slave"],
+			"cent7" => ["master", "slave"],
+			"repositories" => ["master", "slave"],
+			"jenkins_slave:vars" => {
+				"jenkins_master_url" => "http://{{ hostvars['master']['ansible_default_ipv4']['address'] }}:8080",
+				"jenkins_user_password" => "vagrant",
+				"jenkins_user" => "jenkins",
+				"jenkins_user_home" => "/var/lib/jenkins",
+				"jenkins_slave_username" => "jenkins-admin",
+				"jenkins_slave_password" => "{{ hostvars['master']['admin_api_key'] }}"
+			},
+			"jenkins_master:vars" => {
+				"https_enabled" => "False",
+				"jenkins_security_enabled" => "True"
+			}
+		}
+		#ansible.tags = "totest"
+	end
+end
+

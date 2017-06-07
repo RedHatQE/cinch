@@ -16,6 +16,9 @@ python_pip_package: python2-pip
 jenkins_user: jenkins
 jenkins_user_home: /var/lib/jenkins
 jenkins_user_password: changeme
+# The home directory for the Jenkins user, and the base directory for Jenkins
+# files and jobs
+jenkins_home: /var/lib/jenkins
 # Directives on jswarm file and destination
 jswarm_version: 2.1
 jswarm_local_directory: /opt/jswarm

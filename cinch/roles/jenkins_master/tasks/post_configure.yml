@@ -1,15 +1,10 @@
-- name: configure CLI users appropriately
-  become: false
-  jenkins_cli_user:
-    jenkins_home: "{{ jenkins_home }}"
-    key_file: "{{ ansible_user_dir }}/.ssh/id_rsa.pub"
-  when: jenkins_security_enabled
-
 - name: run Jenkins global config
   jenkins_script:
     url: "{{ _jenkins_url }}"
-    script: "{{ item }}"
+    script: "{{ item.script }}"
     validate_certs: false
+    user: "{{ jenkins_admin.nickname }}"
+    password: "{{ admin_api_key | default('') }}"
   register: script_output
   changed_when: "script_output.output.find('CHANGED') != -1"
   # We cannot use 'with_file' here because the templates won't be rendered
@@ -17,8 +12,23 @@
   # These scripts are run in the order listed below, so please edit this list
   # using the desired execution order.
   with_items:
-    - "{{ lookup('template', role_path + '/templates/set_executors.groovy') }}"
-    - "{{ lookup('template', role_path + '/templates/set_usebrowser.groovy') }}"
-    - "{{ lookup('template', role_path + '/templates/set_slaveport.groovy') }}"
+    - script: "{{ lookup('template', role_path + '/templates/set_executors.groovy') }}"
+    - script: "{{ lookup('template', role_path + '/templates/set_usebrowser.groovy') }}"
+    - script: "{{ lookup('template', role_path + '/templates/set_slaveport.groovy') }}"
+    - script: "{{ lookup('template', role_path + '/templates/user.groovy') }}"
+      when: "{{ jenkins_security_enabled }}"
+    - script: "{{ lookup('template', role_path + '/templates/roles_and_ldap_auth.groovy') }}"
+      when: "{{ jenkins_security_enabled }}"
+  become: true
+  become_user: "{{ jenkins_user }}"
+  when: (item.when is not defined or item.when) | bool
   tags:
     - skip_ansible_lint
+
+- name: configure user as CLI user
+  jenkins_cli_user:
+    jenkins_home: "{{ jenkins_home }}"
+    key_file: "{{ jenkins_user_home }}/.ssh/id_rsa.pub"
+    state: present
+  become: true
+  notify: restart Jenkins

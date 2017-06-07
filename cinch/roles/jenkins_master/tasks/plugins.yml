@@ -39,6 +39,8 @@
     state: present
     version: "{{ item.split('=')[2] | default(omit) }}"
     validate_certs: false
+    url_username: "{{ jenkins_admin.nickname }}"
+    url_password: "{{ admin_api_key | default('') }}"
   register: plugin_install
   retries: 3
   until: not plugin_install|failed
