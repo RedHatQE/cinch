@@ -1,0 +1,14 @@
+# Base URL of the Beaker server (without trailing slash!)
+beaker_hub_url: "https://beaker.example.com"
+# Kerberos principal. If commented, default principal obtained by kinit is used.
+beaker_krb_principal: ""
+# Kerberos service prefix. Example: host, HTTP
+beaker_krb_service: "HTTP"
+# Kerberos realm. If commented, last two parts of domain name are used.
+beaker_krb_realm: "EXAMPLE.COM"
+# Kerberos keytab file location on Jenkins Master.
+beaker_keytab_filepath: "/etc/jenkins.keytab"
+# Relative local path to CA cert file used by Beaker to upload.
+#beaker_cacert_file: ""
+# SSL CA certificate to verify the Beaker server's SSL certificate.
+beaker_ca_cert_path: "/etc/pki/tls/certs/ca-bundle.crt"

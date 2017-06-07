@@ -4,3 +4,25 @@
     state: present
   with_items:
     - beaker-client
+
+- name: install beaker client config file
+  become: true
+  template:
+    src: etc/beaker/client.conf
+    dest: /etc/beaker/client.conf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: copy CA cert if necessary
+  become: true
+  copy:
+    src: "{{ item }}"
+    dest: "{{ beaker_ca_cert_path }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_first_found:
+    - files:
+        - "{{ beaker_cacert_file }}"
+      skip: True
