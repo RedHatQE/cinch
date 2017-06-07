@@ -118,14 +118,14 @@ LDAPSecurityRealm ldap;
 // Arguments
 String server = "{{ jenkins_ldap.server }}";
 String rootDN = "{{ jenkins_ldap.root_dn }}";
-String userSearchBase = "{{ jenkins_ldap.user_search_base }}";
+String userSearchBase = "{{ jenkins_ldap.user_search_base | default('') }}";
 String userSearch = "{{ jenkins_ldap.user_search }}";
+String groupSearchBase = "{{ jenkins_ldap.group_search_base }}";
 String groupSearchFilter = "{{ jenkins_ldap.group_search_filter }}";
 LDAPGroupMembershipStrategy groupMembership =
     new FromGroupSearchLDAPGroupMembershipStrategy("{{ jenkins_ldap.group_membership }}");
-String groupSearchBase = "{{ jenkins_ldap.group_search_base }}";
-String managerDN = "{{ jenkins_ldap.manager_dn }}";
-Secret managerPassword = Secret.fromString("{{ jenkins_ldap.manager_password }}");
+String managerDN = "{{ jenkins_ldap.manager_dn | default('') }}";
+Secret managerPassword = Secret.fromString("{{ jenkins_ldap.manager_password | default('') }}");
 String displayNameAttr = "{{ jenkins_ldap.display_name_attr }}";
 String emailAddrAttr = "{{ jenkins_ldap.email_addr_attr }}";
 // Check that LDAP is even configured
