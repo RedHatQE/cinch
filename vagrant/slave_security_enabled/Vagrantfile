@@ -24,7 +24,7 @@ Vagrant.configure("2") do |config|
 				"jenkins_security_enabled" => "True",
 				"jenkins_ldap" => {
 					"server" => "ldaps://ldap.corp.example.com",
-					"root_dn" => "dc=example,ou=com",
+					"root_dn" => "dc=example,dc=com",
 					"user_search" => "uid={0}",
 					"group_search_base" => "ou=groups",
 					"group_search_filter" => "(& (cn={0}) (objectclass=posixGroup))",
