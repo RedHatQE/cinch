@@ -18,9 +18,20 @@
     permanent: true
   notify: reload firewalld
 
-- name: reject other communication to localhost
+- name: reject other communication to localhost (IPv4)
   firewalld:
-    rich_rule: 'rule family="ipv4" source address="127.0.0.0/8" invert="True" destination address="127.0.0.0/8" reject type="icmp-port-unreachable"'
+    rich_rule: >
+      rule family="ipv4" source address="127.0.0.0/8" invert="True"
+      destination address="127.0.0.0/8" reject type="icmp-port-unreachable"
+    state: enabled
+    permanent: true
+  notify: reload firewalld
+
+- name: reject other communication to localhost (IPv6)
+  firewalld:
+    rich_rule: >
+      rule family="ipv6" source address="::1/64" invert="True"
+      destination address="::1/64" reject type="icmp6-port-unreachable"
     state: enabled
     permanent: true
   notify: reload firewalld
