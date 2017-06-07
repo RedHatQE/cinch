@@ -199,6 +199,9 @@ environments, DO NOT copy the existing hash from this example.** ::
             certificate_authority_urls:
               - https://example.com/ca1.crt
               - https://example.com/ca2.crt
+            # Add paths to locally stored CA certificates / cert chains
+            certificate_authority_files:
+              - "/etc/pki/tls/certs/ca-bundle.crt"
         repositories:
           vars:
             # Base URL for repository mirror
