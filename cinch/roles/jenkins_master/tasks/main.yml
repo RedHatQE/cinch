@@ -5,10 +5,6 @@
   include: iptables.yml
   when: ansible_connection != 'docker'
 
-- name: configure Jenkins for HTTPS
-  include: https.yml
-  when: https_enabled
-
 - name: configure Jenkins
   include: configure.yml
 

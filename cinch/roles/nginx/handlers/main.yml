@@ -1,3 +1,4 @@
+# systemd: daemon_reload=yes can be used in Ansible 2.4
 - name: reload systemd
   command: systemctl daemon-reload
   when: ansible_service_mgr == 'systemd'

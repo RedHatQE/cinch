@@ -7,6 +7,9 @@
     password: "{{ admin_api_key | default('') }}"
   register: script_output
   changed_when: "script_output.output.find('CHANGED') != -1"
+  # Since the jenkins_script module doesn't support check_mode, we disable it
+  # here so that we can handle check mode inside of the Groovy scripts.
+  check_mode: false
   # We cannot use 'with_file' here because the templates won't be rendered
   # correctly.
   # These scripts are run in the order listed below, so please edit this list
@@ -24,6 +27,7 @@
   when: (item.when is not defined or item.when) | bool
   tags:
     - skip_ansible_lint
+    - jenkins_check_mode
 
 - name: configure user as CLI user
   jenkins_cli_user:
