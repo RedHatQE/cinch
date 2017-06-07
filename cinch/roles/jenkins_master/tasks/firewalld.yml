@@ -36,7 +36,7 @@
     permanent: true
   notify: reload firewalld
 
-- name: set iptables to allow Jenkins-related TCP ports
+- name: set firewalld to allow Jenkins-related TCP ports
   firewalld:
     port: "{{ item }}"
     state: enabled
