@@ -11,6 +11,8 @@
     name: jenkins
     state: restarted
 
+# Reload firewalld by running command, since the firewalld module doesn't
+# support the functionality to reload rules.
 - name: reload firewalld
   command: firewall-cmd --reload
   tags:
