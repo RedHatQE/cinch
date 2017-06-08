@@ -18,7 +18,7 @@
   # yet be configured with roles, etc if this is executed on first run. However,
   # it becomes important to have this running during subsequent executions
 
-- name: retsart Jenkins
+- name: restart Jenkins
   service:
     name: jenkins
     state: restarted

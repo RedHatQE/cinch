@@ -16,9 +16,13 @@ Constructor[] constructors = Role.class.getConstructors();
 for ( Constructor<?> c : constructors ) {
 	c.setAccessible(true);
 }
-Method assignRoleMethod = RoleBasedAuthorizationStrategy.class.getDeclaredMethod("assignRole", String.class, Role.class, String.class);
+Method assignRoleMethod = RoleBasedAuthorizationStrategy.class.getDeclaredMethod("assignRole",
+                                                                                 String.class,
+                                                                                 Role.class,
+                                                                                 String.class);
 assignRoleMethod.setAccessible(true);
-Method getRoleMapMethod = RoleBasedAuthorizationStrategy.class.getDeclaredMethod("getRoleMap", String.class);
+Method getRoleMapMethod = RoleBasedAuthorizationStrategy.class.getDeclaredMethod("getRoleMap",
+                                                                                 String.class);
 getRoleMapMethod.setAccessible(true);
 
 // *************************************************************************
@@ -37,8 +41,8 @@ boolean changed = false;
  * "changed" variable to "true" when it changes something.
  */
 def Role createRole(String roleName,
-                       Set<Permission> permissions,
-                       RoleBasedAuthorizationStrategy strategy) {
+                    Set<Permission> permissions,
+                    RoleBasedAuthorizationStrategy strategy) {
 	// First, check if role exists
 	RoleMap map = strategy.getRoleMap(RoleBasedAuthorizationStrategy.GLOBAL);
 	Role role = map.getRole(roleName);

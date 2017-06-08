@@ -59,7 +59,7 @@ jenkins_security_enabled: false
 jenkins_admin:
   nickname: jenkins-admin
   email: root@localhost
-  password: adminpassword
+  password: changeme
 # An array of users to create in the local Jenkins database, regardless of the
 # authentication methods actually in place. Elements in this array should match
 # the form of the jenkins_admin variable immediately above this

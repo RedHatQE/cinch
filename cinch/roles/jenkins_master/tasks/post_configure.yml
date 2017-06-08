@@ -24,6 +24,12 @@
       when: "{{ jenkins_security_enabled }}"
   become: true
   become_user: "{{ jenkins_user }}"
+  # The "when" clause on a task gets evaluated separately for each element in
+  # an item list. Some of the elements in our list should not always be run
+  # while others should. So this logic will run any elements that are in the
+  # with_items without any attached conditionasl, but will evaluate the separate
+  # "when" clause attached to each item if one is given. This allows individual
+  # scripts to have their own script logic for when they should be executed
   when: (item.when is not defined or item.when) | bool
   tags:
     - skip_ansible_lint
