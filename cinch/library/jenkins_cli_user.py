@@ -47,6 +47,8 @@ def main():
     )
     params = type('Params', (object,), module.params)
     jenkins_config = os.path.join(params.jenkins_home, "config.xml")
+    if not os.path.exists(jenkins_config):
+        module.exit_json(changed=False, msg='No config.xml found')
     user_config_path = os.path.join(params.jenkins_home, "users")
     tree = ET.parse(jenkins_config)
     root = tree.getroot()
@@ -56,7 +58,8 @@ def main():
         for role in roles:
             name = role.attrib.get("name")
             if name == "admin":
-                pub_key = os.popen("cat {0}".format(params.key_file)).read()
+                with open(params.key_file) as key:
+                    pub_key = key.read()
                 for sid in role.getiterator("sid"):
                     user_cfg_file = os.path.join(user_config_path,
                                                  sid.text, "config.xml")

@@ -43,6 +43,54 @@ jenkins_args:
 additional_packages: []
 
 # ############################################################################
+# Security settings - users, passwords, etc.
+# These values should REALLY be changed if you're going to use this in a
+# production environment as otherwise you would be securing with passwords or
+# SSH keys that the whole world can see freely in this repository.
+# ############################################################################
+# If this is set to true, then LDAP will be configured, along with the admin
+# user, security roles, etc. Leaving this false will mean anyone will have the
+# ability to control the Jenkins master instance without authentication
+jenkins_security_enabled: false
+# An admin user who is configured to permit automated connections to the system
+# for things like running the Groovy scripts, connecting Swarm clients, etc.
+# This user is automatically assigned to the security role "admin" that gets
+# created
+jenkins_admin:
+  nickname: jenkins-admin
+  email: root@localhost
+  password: changeme
+# An array of users to create in the local Jenkins database, regardless of the
+# authentication methods actually in place. Elements in this array should match
+# the form of the jenkins_admin variable immediately above this
+jenkins_local_users: []
+# An array of roles and their permissions to add to Jenkins. A role called
+# "admin" will always be created that has access to every permission. You can
+# override this by creating a role in this array named "admin" that has a
+# different set of permisisons, if you would rather. The "sids" array is a list
+# of the roles/users/groups that should be assigned to that role.
+jenkins_security_roles:
+  - name: anonymous
+    permissions:
+      - com.synopsys.arc.jenkins.plugins.ownership.OwnershipPlugin.Jobs
+      - hudson.model.Hudson.Read
+      - hudson.model.View.Read
+    sids:
+      - anonymous
+jenkins_ldap:
+  server: ldaps://ldap.example.com
+  root_dn: dc=example,dc=com
+  user_search_base: ''
+  user_search: uid={0}
+  group_search_base: ou=groups
+  group_search_filter: "(& (cn={0}) (objectclass=posixGroup))"
+  group_membership: memberUid={1}
+  display_name_attr: displayname
+  email_addr_attr: mail
+  manager_dn: ''
+  manager_password: ''
+
+# ############################################################################
 # A list of variables that don't really need to be overridden, but which can be
 # parameterized if you need to tweak the Jenkins system. These represent mostly
 # advanced values.
@@ -54,9 +102,6 @@ additional_packages: []
 # them by means of a "yum update" run
 upgrade_blacklist:
   - jenkins
-# The home directory for the Jenkins user, and the base directory for Jenkins
-# files and jobs
-jenkins_home: /var/lib/jenkins
 # The name of the Jenkins package to install. This can be either an RPM name
 # such as one would pass to yum or dnf or a full path to the RPM file
 # (including a full URL). See note above on the variable "jenkins_version"

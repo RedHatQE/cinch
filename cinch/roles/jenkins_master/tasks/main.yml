@@ -1,8 +1,3 @@
-- name: check Jenkins global security
-  become: false
-  jenkins_security_enabled:
-    jenkins_home: "{{ jenkins_home }}"
-
 - name: install necessary packages
   include: install.yml
 
