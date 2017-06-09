@@ -13,6 +13,7 @@ Welcome to cinch's documentation!
    development
    docker_image
    user_files
+   config
 
 
 
