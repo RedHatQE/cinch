@@ -11,7 +11,9 @@
     name: jenkins
     state: restarted
 
-- name: save iptables
-  command: service iptables save
+# Reload firewalld by running command, since the firewalld module doesn't
+# support the functionality to reload rules.
+- name: reload firewalld
+  command: firewall-cmd --reload
   tags:
     - skip_ansible_lint

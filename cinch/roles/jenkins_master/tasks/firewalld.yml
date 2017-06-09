@@ -1,0 +1,49 @@
+- name: ensure firewalld is installed
+  package:
+    name: firewalld
+    state: present
+  become: true
+
+- name: ensure firewalld is enabled and started
+  service:
+    name: firewalld
+    state: started
+    enabled: true
+
+- name: accept all communication from lo interface
+  firewalld:
+    zone: trusted
+    interface: lo
+    state: enabled
+    permanent: true
+  notify: reload firewalld
+
+- name: reject other communication to localhost (IPv4)
+  firewalld:
+    rich_rule: >
+      rule family="ipv4" source address="127.0.0.0/8" invert="True"
+      destination address="127.0.0.0/8" reject type="icmp-port-unreachable"
+    state: enabled
+    permanent: true
+  notify: reload firewalld
+
+- name: reject other communication to localhost (IPv6)
+  firewalld:
+    rich_rule: >
+      rule family="ipv6" source address="::1/64" invert="True"
+      destination address="::1/64" reject type="icmp6-port-unreachable"
+    state: enabled
+    permanent: true
+  notify: reload firewalld
+
+- name: set firewalld to allow Jenkins-related TCP ports
+  firewalld:
+    port: "{{ item }}"
+    state: enabled
+    permanent: true
+  with_items: "{{ firewall_tcp_ports }}"
+  when: item is defined
+  notify: reload firewalld
+
+- name: flush handlers
+  meta: flush_handlers

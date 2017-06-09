@@ -172,16 +172,13 @@ jenkins_handler_max: 100
 jenkins_handler_idle: 20
 # The cannonical name to use as server_name in nginx configuration file.
 service_name: "{{ hostvars[inventory_hostname]['ansible_host'] | default(inventory_hostname) }}"
-# This is a list of ports to allow in firewall. You should not change this
-# list when running Ansible on already deployed system, since the newly
-# added ports would not be added properly to iptables.
-# TODO: switch to firewalld to eliminate this problem.
+# This is a list of ports with protocol to allow in firewalld.
 firewall_tcp_ports:
-  - "{{ jenkins_slave_agent_port }}"
-  - "8888"
-  - "22"
-  - "80"
-  - "{{ https_enabled | ternary('443', omit) }}"
+  - "{{ jenkins_slave_agent_port }}/tcp"
+  - "8888/tcp"
+  - "22/tcp"
+  - "80/tcp"
+  - "{{ https_enabled | ternary('443/tcp', omit) }}"
 # The number of build executors available on the Jenkins master
 jenkins_executors: 10
 # This setting affects how the update center downloads plugin metadata
