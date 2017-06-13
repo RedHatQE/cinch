@@ -1,7 +1,7 @@
 - name: ensure libsemanage-python is installed
   package:
     name: libsemanage-python
-    state: installed
+    state: present
 
 - name: enable selinux overrides
   seboolean:
