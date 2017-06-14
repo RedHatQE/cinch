@@ -11,11 +11,11 @@ find "${cinch}" \( \( -path "${cinch}/build" -o -path "${cinch}/.git" \) \
 	xargs -0 -L 1 yamllint \
 	                  -c "${cinch}/tests/yamllint.yml"
 yamllint -c "${cinch}/tests/yamllint.yml" "${cinch}"/cinch/group_vars/*
-find "${cinch}/cinch" -maxdepth 1 -name '*.yml' -print0 |
+find "${cinch}/cinch" -maxdepth 2 -name '*.yml' -print0 |
 	xargs -0 -L 1 ansible-playbook \
 	             --syntax-check \
 	             -i "${cinch}/inventory/sample/hosts"
-find "${cinch}/cinch" -maxdepth 1 -name '*.yml' -print0 |
+find "${cinch}/cinch" -maxdepth 2 -name '*.yml' -print0 |
 	xargs -0 -L 1 ansible-lint \
 	             -R -r "${cinch}/tests/ansible_lint_rules/"
 ###############################################################################
