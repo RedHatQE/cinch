@@ -1,6 +1,5 @@
 from __future__ import print_function
 
-from contextlib import contextmanager
 from plumbum import local
 from plumbum.commands.processes import ProcessExecutionError
 from traceback import print_exc
@@ -12,7 +11,7 @@ import yaml
 
 BASE = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 # Link to our docs with configuration examples
-DOCS = 'http://redhatqe-cinch.rtfd.io'
+DOCS = 'https://redhatqe-cinch.readthedocs.io/en/latest/users.html'
 # Skeleton text to insert in YAML config files
 SKEL_TEXT = '''---
 # Add your cinch {0} configuration here
@@ -57,10 +56,10 @@ def call_linchpin(work_dir, arg):
     elsewhere
     """
     # cinch will only support a subset of linchpin subcommands
-    supported_cmds = ['rise', 'drop', 'init']
+    supported_cmds = ['up', 'destroy', 'init']
     if arg not in supported_cmds:
-        raise Exception('linchpin command "{0}" not '
-                        'supported by cinch'.format(arg))
+        sys.exit('linchpin command "{0}" not '
+                 'supported by cinch'.format(arg))
 
     # If we are to ask linch-pin to interact with infrastructure we will check
     # for some required configuration items and set up them for later use
@@ -68,27 +67,22 @@ def call_linchpin(work_dir, arg):
         inventory_file = get_inventory(work_dir)
         inventory_path = os.path.join(work_dir, 'inventories', inventory_file)
 
-    # For drop/teardown, we must run our teardown playbook(s) *before*
+    # For destroy/teardown, we must run our teardown playbook(s) *before*
     # linchpin terminates the instance(s)
-    if arg == 'drop':
+    if arg == 'destroy':
         exit_code = call_ansible(inventory_path, 'teardown.yml')
 
-    # As of right now the linch-pin working directory is not configurable, so
-    # we essentially have a 'pushd' here to switch to the linch-pin working
-    # directory as needed. This code can be removed if the following issue is
-    # resolved:
-    # https://github.com/CentOS-PaaS-SIG/linch-pin/issues/119
-    @contextmanager
-    def pushd(new_dir):
-        previous_dir = os.getcwd()
-        os.chdir(new_dir)
-        yield
-        os.chdir(previous_dir)
-
+    # Construct the arguments to pass to linch-pin by munging the arguments
+    # provided to this method
+    linchpin_args = [
+        '-v',
+        '-w', work_dir,
+        '--creds-path', os.path.join(work_dir, 'credentials')
+    ]
+    linchpin_args.append(arg)
     # Execute the 'linchpin' command
-    with pushd(work_dir):
-        linchpin = local['linchpin']
-        exit_code = command_handler(linchpin, arg)
+    linchpin = local['linchpin']
+    exit_code = command_handler(linchpin, linchpin_args)
 
     # Set up a linch-pin+cinch configuration skeleton for later use if the
     # 'init' subcommand was executed previously
@@ -97,7 +91,7 @@ def call_linchpin(work_dir, arg):
 
     # If linchpin is asked to provision resources, we will then run our
     # cinch provisioning playbook
-    if arg == 'rise' and exit_code == 0:
+    if arg == 'up' and exit_code == 0:
         exit_code = call_ansible(inventory_path, 'site.yml')
     return exit_code
 
@@ -119,20 +113,32 @@ def cinchpin_init(work_dir):
             'layout': config_file
         }
     }
-    # These are the first-level config paths that linch-pin creates for us
-    # in the working directory
-    local_paths = ['layouts', 'topologies']
+
+    # Ansible group_vars directory that will be created for later use
+    group_vars = os.path.join('inventories', 'group_vars')
+
+    # Dictionary of workspace directories and target filenames where we will
+    # put our skeletons
+    local_paths = {
+        'layouts': config_file,
+        'topologies': config_file,
+        'credentials': config_file,
+        group_vars: 'all'
+    }
 
     # Overwrite the PinFile that linch-pin created with our configuration
     pin_file = os.path.join(work_dir, 'PinFile')
     with open(pin_file, 'w') as f:
         yaml.dump(config_setup, f, default_flow_style=False)
 
+    # Create Ansible group_vars directory since linch-pin doesn't provide this
+    os.mkdir(os.path.join(work_dir, group_vars))
+
     # Write out the skeletons and inform the user that they exist
-    for local_path in local_paths:
-        path = os.path.join(work_dir, local_path, config_file)
+    for directory, filename in local_paths.items():
+        path = os.path.join(work_dir, directory, filename)
         with open(path, 'w') as f:
-            f.write(SKEL_TEXT.format(local_path, DOCS))
+            f.write(SKEL_TEXT.format(directory, DOCS))
         print('Please configure this file to use cinch: ' + path)
     print('Example configurations: ' + DOCS)
 
@@ -151,17 +157,15 @@ def get_inventory(work_dir):
         with open(os.path.join(work_dir, 'PinFile'), 'r') as f:
             pin_file_yaml = yaml.safe_load(f)
     except IOError:
-        print('linch-pin PinFile not found in ' + work_dir)
-        sys.exit(1)
+        sys.exit('linch-pin PinFile not found in ' + work_dir)
     # We must find a topology section named 'cinch' to determine where our
     # inventory file will live
     try:
         cinch_topology = 'cinch'
         topology = pin_file_yaml[cinch_topology]['topology']
     except KeyError:
-        print('linch-pin PinFile must contain a topology '
-              'section named "{0}"'.format(cinch_topology))
-        sys.exit(1)
+        sys.exit('linch-pin PinFile must contain a topology '
+                 'section named "{0}"'.format(cinch_topology))
     #  The inventory file generated by linchpin that will be used by cinch for
     #  configuration
     try:
@@ -170,9 +174,8 @@ def get_inventory(work_dir):
             topology_yaml = yaml.safe_load(topology_file)
         inventory_file = topology_yaml['topology_name'] + '.inventory'
     except (IOError, TypeError):
-        print('linch-pin topology file not found or malformed: ' +
-              topology_path)
-        sys.exit(1)
+        sys.exit('linch-pin topology file not found or malformed: ' +
+                 topology_path)
     return inventory_file
 
 

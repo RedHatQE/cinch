@@ -14,6 +14,8 @@
     temp_dir: "{{ venv_dir }}/tmp"
     python: "{{ venv_dir }}/bin/python"
     delete_venv: false
+    latest_tip: false
+    beaker_kerberos: true
 
   tasks:
     - name: fail if we are not running this playbook on RHEL7
@@ -76,25 +78,30 @@
       args:
         creates: "{{ venv_dir }}/lib/python2.7/site-packages/setuptools"
 
-    - name: install cinch using pip
+    - name: install released versions of cinch+linch-pin using pip
       pip:
         name: cinch
         virtualenv: "{{ venv_dir }}"
         extra_args: -U
+      when: not (latest_tip|bool)
 
     # This pip install should be non-editable, but the pip module in Ansible
     # 1.8.4. does not support that flag
-    - name: install linch-pin from master branch instead of latest release from pypi
+    - name: install latest tip of cinch+linch-pin instead of latest release from pypi
       command: >-
-        "{{ python }}" "{{ venv_dir }}/bin/pip install" -U
-        git+https://github.com/CentOS-PaaS-SIG/linch-pin.git@master
-      when: (linchpin_master|bool)
+        "{{ venv_dir }}/bin/pip" install -U
+        https://github.com/CentOS-PaaS-SIG/linchpin/archive/develop.tar.gz
+        https://github.com/RedHatQE/cinch/archive/master.tar.gz
+      when: (latest_tip|bool)
 
-    - name: install python-krbV with pip to use kerberos with Beaker
+    - name: install beaker-client and python-krbV with pip to use kerberos with Beaker
       pip:
-        name: python-krbV
+        name: "{{ item }}"
         virtualenv: "{{ venv_dir }}"
         extra_args: -U
+      with_items:
+        - beaker-client
+        - python-krbV
       when: (beaker_kerberos|bool)
 
     ## https://dmsimard.com/2016/01/08/selinux-python-virtualenv-chroot-and-ansible-dont-play-nice/
@@ -105,17 +112,3 @@
         src: /usr/lib64/python2.7/site-packages/selinux
         dest: "{{ venv_dir }}/lib/python2.7/site-packages/selinux"
         state: link
-
-    # work-around for https://github.com/CentOS-PaaS-SIG/linch-pin/issues/124
-    - name: generate linch-pin config file
-      command: "{{ python }} {{ venv_dir }}/bin/linchpin config --reset"
-      args:
-        chdir: "{{ temp_dir }}"
-      tags:
-        - skip_ansible_lint
-
-    # work-around for https://github.com/CentOS-PaaS-SIG/linch-pin/issues/124
-    - name: copy linch-pin config file to search path
-      copy:
-        src: "{{ temp_dir }}/linchpin_config.yml"
-        dest: "{{ venv_dir }}/lib/python2.7/site-packages/linchpin_config.yml"
