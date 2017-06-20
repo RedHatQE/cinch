@@ -1,0 +1,148 @@
+# This playbook aims to gather diagnostics data in the event of
+# trouble with Jenkins, and then restarts Jenkins to keep operations running.
+# By default, only the diagnostics data is collected, but the Jenkins service
+# restart can be enabled by setting the 'restart_jenkins' variable to true:
+
+# Example:
+# ansible-playbook -u root --private-key /path/to/key
+# -i '10.0.183.169', jenkins_restart_utility.yml -e "restart_jenkins=true"
+
+- hosts: all
+  vars:
+    jenkins_pid_path: '/run/jenkins.pid'
+    diag_path_prefix: '/var/lib/jenkins/cinch_diagnostics'
+    jenkins_log_dir: '/var/log/jenkins'
+    log_history_days: '-7d'
+    jstack_path: '/usr/bin/jstack'
+    jmap_path: '/usr/bin/jmap'
+    jstat_path: '/usr/bin/jstat'
+    java_path: '/usr/bin/java'
+    jenkins_cli_path: '/var/cache/jenkins/war/WEB-INF/jenkins-cli.jar'
+    jenkins_cli_user: 'root'
+    restart_jenkins: false
+  tasks:
+    # This block ignores all errors to ensure that Jenkins is restarted on
+    # demand even if we can't gather diagnostics data.
+    - name: gather diagnostics data
+      block:
+        - name: check if {{ jenkins_pid_path }} exists
+          stat:
+            path: "{{ jenkins_pid_path }}"
+          register: jenkins_last_pid
+
+        - name: set diagnostics path for this run (date format ex. 20170612T115323)
+          set_fact:
+            diag_path:
+              "{{ (diag_path_prefix
+              + '/' + ansible_date_time.iso8601_basic_short) }}"
+
+        - name: create diagnostics directory
+          file:
+            path: "{{ diag_path }}"
+            state: directory
+            owner: jenkins
+            group: jenkins
+            mode: 0755
+          register: diag_path_creation
+
+        - name: find last {{ log_history_days }} days of Jenkins logs
+          find:
+            paths: "{{ jenkins_log_dir }}"
+            patterns: "jenkins.log*"
+            age: "{{ log_history_days }}"
+          register: jenkins_logs
+
+        - name: copy Jenkins logs to diagnostics directory
+          copy:
+            src: "{{ item.path }}"
+            dest: "{{ diag_path }}"
+            remote_src: true
+          with_items: "{{ jenkins_logs.files }}"
+          when: diag_path_creation|success
+
+        - name: grab extended diagnostics data from last Jenkins PID
+          block:
+            - name: find last recorded Jenkins PID
+              slurp:
+                src: "{{ jenkins_pid_path }}"
+              register: slurped_jenkins_pid
+
+              # By default, strings from slurp are base64 encoded with newlines,
+              # and that must be removed
+            - name: set Jenkins PID for later use
+              set_fact:
+                jenkins_pid:
+                  "{{ slurped_jenkins_pid['content'] | b64decode | regex_replace('\n', '') }}"
+
+            - name: generate thread dump (jstack)
+              command: >
+                timeout 60 {{ jstack_path }} -l {{ jenkins_pid }}
+              register: thread_dump
+
+            - name: copy thread dump (jstack) to diagnostics directory
+              copy:
+                content: "{{ thread_dump.stdout }}"
+                dest: "{{ diag_path }}/jstack.txt"
+              when: diag_path_creation|success
+
+            # TODO: add the following package so that this task can work properly:
+            # java-1.8.0-openjdk-debuginfo
+            - name: generate JVM memory report (jmap)
+              command: >
+                timeout 60 {{ jmap_path }} -heap {{ jenkins_pid }}
+              register: jvm_memory_jmap
+
+            - name: copy JVM memory report (jmap) to diagnostics directory
+              copy:
+                content: "{{ jvm_memory_jmap.stdout }}"
+                dest: "{{ diag_path }}/jvm-jmap.txt"
+              when: diag_path_creation|success
+
+            - name: generate JVM memory report (jstat)
+              command: >
+                timeout 60 {{ jstat_path }} -gcutil {{ jenkins_pid }}
+              register: jvm_memory_jstat
+
+            - name: copy JVM memory report (jstat) to diagnostics directory
+              copy:
+                content: "{{ jvm_memory_jstat.stdout }}"
+                dest: "{{ diag_path }}/jvm-jstat.txt"
+              when: diag_path_creation|success
+
+            # By default, the 'root' Unix user account is assumed to have the
+            # necessary SSH key to authenticate to Jenkins as an admin user who has
+            # the authorization to generate the support bundle.
+            - name: generate support bundle
+              command: >
+                timeout 120 {{ java_path }} -jar {{ jenkins_cli_path }}
+                -s http://localhost:8080 support
+              register: support_bundle
+              become: true
+              become_user: "{{ jenkins_cli_user }}"
+
+            # Strangely, the Jenkins CLI reports the necessary output for a
+            # successful run of the support bundle on stderr
+            - name: find support bundle file
+              set_fact:
+                support_bundle_file:
+                  "{{ support_bundle.stderr | regex_replace('^Creating: ', '') }}"
+              when: support_bundle.rc == 0
+
+            - name: copy support bundle file to diagnostics directory
+              copy:
+                src: "{{ support_bundle_file }}"
+                dest: "{{ diag_path }}"
+                remote_src: true
+              when: diag_path_creation|success and support_bundle_file is defined
+          when: jenkins_last_pid.stat.isreg is defined
+      ignore_errors: true
+      become: true
+      become_user: jenkins
+
+    # always restart Jenkins if restart_jenkins is true
+    - name: restart Jenkins
+      service:
+        name: jenkins
+        state: restarted
+      when: restart_jenkins and ansible_connection != 'docker'
+      become: true
