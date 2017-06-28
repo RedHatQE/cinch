@@ -24,6 +24,16 @@ jswarm_version: 2.1
 jswarm_local_directory: /opt/jswarm
 jswarm_filename: swarm-client-{{ jswarm_version }}-jar-with-dependencies.jar
 
+# Override default distro NTP server configuration
+# Define the var ntp_servers as below to optionally override default NTP
+# server lines, including options such as iburst.
+# Left undefined, the distro defaults will be used.
+#ntp_servers:
+#    - "server 0.time.example.com iburst"
+#    - "server 1.time.example.com iburst"
+#    - "server 2.time.example.com iburst"
+#    - "server 3.time.example.com iburst"
+
 # Override these variables with an array of files to be uploaded as-is to the
 # destination host. Files in pre_upload_files will be uploaded before any other
 # code is run. Files in post_upload_files will be uploaded after all other tasks
