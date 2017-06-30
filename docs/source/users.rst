@@ -24,11 +24,12 @@ openssl-devel libffi-devel gcc redhat-rpm-config``
 RHEL/CentOS
 ```````````
 
-See the sample Ansible playbook for steps to install Cinch into a virtualenv
-in RHEL/CentOS, as there are some additional steps required in these systems.
-Running that playbook as-is on your local system will result in a virtualenv
-living at ``/var/lib/jenkins/opt/cinch`` that will contain the latest version
-of Cinch.
+See the sample  `Ansible playbook
+<https://github.com/RedHatQE/cinch/blob/master/cinch/playbooks/install-rhel7.yml>`_
+for steps to install Cinch into a virtualenv in RHEL/CentOS, as there are some
+additional steps required in these systems.  Running that playbook as-is on
+your local system will result in a virtualenv living at
+``/var/lib/jenkins/opt/cinch`` that will contain the latest version of Cinch.
 
 Ubuntu
 ``````
@@ -119,9 +120,9 @@ RHEL7 and CentOS7
 RHEL7 and derivatives offer older versions of Python packaging tools that are
 incompatible with some cinch dependencies.  To work-around this issue, we have
 provided an `Ansible playbook
-<https://github.com/RedHatQE/cinch/blob/master/cinch/install-rhel7.yml>`_ that
-will install a newer version of the necessary Python packaging tools to allow
-for installation on RHEL7.  This playbook is intended for use on Jenkins
+<https://github.com/RedHatQE/cinch/blob/master/cinch/playbooks/install-rhel7.yml>`_
+that will install a newer version of the necessary Python packaging tools to
+allow for installation on RHEL7.  This playbook is intended for use on Jenkins
 masters and will install cinch into a virtualenv at
 **/var/lib/jenkins/opt/cinch**.  For convenience, an optional `Jenkins Job
 Builder template
@@ -136,120 +137,98 @@ With linch-pin
 ``````````````
 
 The ``cinchpin`` command can be used to call `linch-pin
-<http://linch-pin.readthedocs.io/en/latest/>`_ automatically to provision
+<https://linch-pin.readthedocs.io/en/latest/>`_ automatically to provision
 instances and then configure the instances.  ``cinchpin`` supports a subset of
-linch-pin commands, such as **rise**, **drop**, and **init**.
+linch-pin commands, such as **up**, **destroy**, and **init**.
 
 In the following example we will provision a RHEL7 instance in OpenStack as a
 Jenkins slave.
 
-First, create necessary credentials for linch-pin provisioning for your target
-infrastructure in
-*<venv-path>* **/lib/python2.7/site-packages/provision/roles/openstack/vars/os_creds.yml**: ::
-
-    ---
-    # openstack API endpoint
-    endpoint: http://openstack-api-endpoint.example.com:5000/v2.0
-
-    # project/tenant name
-    project: myproject
-
-    # project/tenant username and password
-    username: myuser
-    password: mypass
-
-.. note::  The upcoming auth driver feature for linch-pin will make this step
- easier in the future.
-
-Next, generate a linch-pin working directory for use with cinch by running the
+First, generate a linch-pin working directory for use with cinch by running the
 following commands:
 
 ``mkdir /path/to/workdir``
 
 ``cinchpin init -w /path/to/workdir``
 
+Next, create necessary credentials for linch-pin provisioning for your target
+infrastructure in
+**/path/to/workdir/credentials/cinch.yml**: ::
+
+    ---
+    clouds:
+      openstack:
+        auth:
+          auth_url: 'http://openstack-api-endpoint.example.com:5000/v2.0'
+          project_name: 'myproject'
+          username: 'myuser'
+          password: 'mypass'
+
 Create a layout file by saving the following example template as
-**/path/to/workdir/layouts/cinch.yml** and edit to taste.  For the
+**/path/to/workdir/layouts/cinch.yml** and edit to taste.::
+
+    ---
+    inventory_layout:
+      hosts:
+        cinch-group:
+          count: 1
+          host_groups:
+            - rhel7
+            - certificate_authority
+            - repositories
+            - jenkins_slave
+
+Create an Ansible group_vars file by saving the following example template as
+**/path/to/workdir/inventories/group_vars/all** and edit to taste.  For the
 **jenkins_user_password** variable, please use the `Ansible documentation
 <https://docs.ansible.com/ansible/faq.html#how-do-i-generate-crypted-passwords-for-the-user-module>`_
 to generate a suitable password hash.  **For security in production
 environments, DO NOT copy the existing hash from this example.** ::
 
     ---
-    inventory_layout:
-      hosts:
-        cinch:
-          count: 1
-          # List all necessary 'cinch' roles here
-          host_groups:
-            - rhel7 # specify the appropriate Ansible role for your distribution
-            - certificate_authority # optional role to install CA certificates
-            - repositories # the 'repositories' role is required for a Jenkins master or slave
-            - jenkins_slave
-      host_groups:
-        all:
-          vars:
-            # required variables for all hosts
-            ansible_user: root
-            ansible_private_key_file: /full/path/to/ssh/private_key
-            ansible_connection: ssh
-        certificate_authority:
-          vars:
-            # Add URLs from which to download CA certificates for installation
-            certificate_authority_urls:
-              - https://example.com/ca1.crt
-              - https://example.com/ca2.crt
-            # Add paths to locally stored CA certificates / cert chains
-            certificate_authority_files:
-              - "/etc/pki/tls/certs/ca-bundle.crt"
-        repositories:
-          vars:
-            # Base URL for repository mirror
-            rhel_base: http://example.com/content/dist/rhel/server/7/7Server
-        jenkins_slave:
-          vars:
-            # Required variables for a Jenkins slave
-
-            # The password for the Jenkins user account that will be created on the slave.
-            # For security in production environments, DO NOT copy the
-            # existing hash from this example.
-            # https://docs.ansible.com/ansible/faq.html#how-do-i-generate-crypted-passwords-for-the-user-module
-            jenkins_user_password: '$6$rounds=656000$YQKMBktZ/Gaggxf0$KC7xhatWzdDJyvCDo7htomtiSsvd2MWN87RB3TsAbq1Nmwddy/z2Et8kQi1/tZkHjfD2vG1r7W2R9rjpaA1C5/'
-            jenkins_master_url: 'http://jenkins.example.com' # URL to Jenkins master for the slave to connect to
-            jslave_name: 'cinch-slave'
-            jslave_label: 'cinch-slave'
-            # If your Jenkins master requires authentication to connect a slave,
-            # add credentials via the two variables below.  If anonymous users can
-            # connect slaves to the master, do not include the following two
-            # variables in this layout file.
-            jenkins_slave_username: 'automation-user'
-            jenkins_slave_password: 'jenkinsAPItoken'
+    ansible_user: root
+    ansible_private_key_file: "{{ inventory_dir }}/../keystore/ssh-key"
+    ansible_connection: ssh
+    # Add URLs from which to download CA certificates for installation
+    certificate_authority_urls:
+      - https://example.com/ca1.crt
+      - https://example.com/ca2.crt
+    # Base URL for repository mirror
+    rhel_base: http://example.com/content/dist/rhel/server/7/7Server
+    jenkins_user_password: '$6$rounds=656000$YQKMBktZ/Gaggxf0$KC7xhatWzdDJyvCDo7htomtiSsvd2MWN87RB3TsAbq1Nmwddy/z2Et8kQi1/tZkHjfD2vG1r7W2R9rjpaA1C5/'
+    jenkins_master_url: 'http://jenkins.example.com' # URL to Jenkins master for the slave to connect to
+    jslave_name: 'cinch-slave'
+    jslave_label: 'cinch-slave'
+    # If your Jenkins master requires authentication to connect a slave,
+    # add credentials via the two variables below.  If anonymous users can
+    # connect slaves to the master, do not include the following two
+    # variables in this layout file.
+    jenkins_slave_username: 'automation-user'
+    jenkins_slave_password: 'jenkinsAPItoken'
 
 Create a topology file by saving the following example template as
 **/path/to/workdir/topologies/cinch.yml** and edit to taste::
 
     ---
-    topology_name: "cinch_topology"
-
-    # OpenStack project/tenant name
-    site: "my-openstack-project-name"
-
+    topology_name: "cinch-test"
     resource_groups:
       -
-        resource_group_name: "cinch"
-        res_group_type: "openstack"
-        res_defs:
-          - res_name: "resource"
-            flavor: "m1.large"
-            res_type: "os_server"
+        resource_group_name: "cinch-group"
+        resource_group_type: "openstack"
+        resource_definitions:
+          -
+            name: "jslave"
+            flavor: "m1.small"
+            type: "os_server"
             image: "rhel-7.2-server-x86_64-released"
             count: 1 # Number of instances to create
             keypair: "openstack-keypair-name" # Name of SSH keypair configured for OpenStack account
             networks:
               - "openstack-network-name" # OpenStack network name
-
         # Name of credentials file to use for the OpenStack API
-        assoc_creds: "os_creds"
+        credentials:
+          filename: "cinch.yml"
+          profile: "openstack"
 
 .. note::  For more topology examples, including various host environments, see
            the `linch-pin documentation
@@ -258,12 +237,12 @@ Create a topology file by saving the following example template as
 Provision and configure your Jenkins slave automatically with the following
 command:
 
-``cinchpin rise -w /path/to/workdir``
+``cinchpin up -w /path/to/workdir``
 
 To terminate the OpenStack instance and remove the Jenkins slave from the
 Jenkins master, run the following command:
 
-``cinchpin drop -w /path/to/workdir``
+``cinchpin destroy -w /path/to/workdir``
 
 .. note::  Once the working directory is configured successfully, a common next
  step would be to check this directory into source control where it can be

@@ -11,9 +11,9 @@
           default: false
           description: "Delete pre-existing cinch virtualenv and re-install"
       - bool:
-          name: LINCHPIN_MASTER
+          name: LATEST_TIP
           default: false
-          description: "Install linch-pin from master branch instead of latest release from pypi"
+          description: "Install latest tip of cinch+linch-pin instead of latest release from pypi"
       - bool:
           name: BEAKER_KERBEROS
           default: true
@@ -33,7 +33,7 @@
             #!/bin/bash -ex
             export PYTHONUNBUFFERED=1 # Enable real-time output for Ansible
             ansible-playbook -i localhost, -c local \
-                "${WORKSPACE}/cinch/cinch/install-rhel7.yml" \
+                "${WORKSPACE}/cinch/cinch/playbooks/install-rhel7.yml" \
                 -e delete_venv="${DELETE_VENV}" \
-                -e linchpin_master="${LINCHPIN_MASTER}" \
+                -e latest_tip="${LATEST_TIP}" \
                 -e beaker_kerberos="${BEAKER_KERBEROS}"

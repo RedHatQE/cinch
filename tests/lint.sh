@@ -34,5 +34,8 @@ find "${cinch}" -name 'jswarm.sh' -print0 |
 ###############################################################################
 # PYTHON LINT
 ###############################################################################
-find "${cinch}" -name '*.py' -print0 |
+# jenkins_script.py was vendored from upstream Ansible.
+# It can be removed once linchpin depends on ansible>=2.3
+# https://docs.ansible.com/ansible/jenkins_script_module.html
+find "${cinch}" -name '*.py' -not -name 'jenkins_script.py' -print0 |
 	xargs -0 -L 1 flake8
