@@ -5,27 +5,22 @@
     node: master
     parameters:
       - choice:
-          name: example_parameter
+          name: PROVIDER
           choices:
-            - example1
-            - example2
+            - openstack-slave
+            - beaker-slave
     builders:
       - shell: |
             #!/bin/bash -ex
-
-            # Work-around until this PR is merged
-            # https://github.com/CentOS-PaaS-SIG/linch-pin/pull/121
-            creds_file="${{JENKINS_HOME}}/opt/cinch/lib/python2.7/site-packages/provision/roles/openstack/vars/os_creds.yml"
-            if [[ ! -f "$creds_file" ]]; then
-                cp "{topology_path}/os_creds.yml" "$creds_file"
-            fi
-
             source "${{JENKINS_HOME}}/opt/cinch/bin/activate"
-            cinchpin rise -w {topology_path}
+            cinchpin up -w {topology_path}/${{PROVIDER}}
     publishers:
       - archive:
-          artifacts: '{inventory_file}'
+          artifacts: '{topology_path}/${{PROVIDER}}/inventories/cinch-test.inventory'
           allow-empty: 'false'
+      - archive:
+          artifacts: '{topology_path}/${{PROVIDER}}/resources/cinch-test.output'
+          allow-empty: 'true'
       - trigger-parameterized-builds:
           - project: 'jslave-{project}-{topology}-2-runtest'
             current-parameters: true
@@ -42,11 +37,11 @@
     builders:
       - shell: |
             #!/bin/bash -ex
-            exit 0
+            echo "$JOB_NAME $BUILD_DISPLAY_NAME" > test_artifact.txt
     publishers:
       - archive:
-          artifacts: '**/**'
-          allow-empty: 'true'
+          artifacts: 'test_artifact.txt'
+          allow-empty: 'false'
       - trigger-parameterized-builds:
           - project: 'jslave-{project}-{topology}-3-teardown'
             current-parameters: true
@@ -58,12 +53,22 @@
     builders:
       - copyartifact:
           project: 'jslave-{project}-{topology}-1-provision'
-          filter: '{inventory_file}'
-          target: '{inventory_file}'
+          filter: '{topology_path}/${{PROVIDER}}/inventories/cinch-test.inventory'
+          target: '{topology_path}/${{PROVIDER}}/inventories'
+          flatten: true
+      - copyartifact:
+          project: 'jslave-{project}-{topology}-1-provision'
+          filter: '{topology_path}/${{PROVIDER}}/resources/cinch-test.output'
+          target: '{topology_path}/${{PROVIDER}}/resources'
+          flatten: true
       - shell: |
             #!/bin/bash -ex
+            # work-around for output file naming issue with linchpin:
+            # https://github.com/CentOS-PaaS-SIG/linchpin/issues/294
+            ln -s ${{WORKSPACE}}/{topology_path}/${{PROVIDER}}/resources/cinch-test.output
+                ${{WORKSPACE}}/{topology_path}/${{PROVIDER}}/resources/cinch-test.output.yaml
             source "${{JENKINS_HOME}}/opt/cinch/bin/activate"
-            cinchpin drop -w {topology_path}
+            cinchpin destroy -w {topology_path}/${{PROVIDER}}
 
 - job-group:
     name: jslave-provision-runtest-teardown
@@ -80,5 +85,4 @@
     jobs:
       - jslave-provision-runtest-teardown
     jslave_name: cinch-slave
-    topology_path: 'examples/linch-pin-topologies/openstack'
-    inventory_file: '{topology_path}/inventories/cinch-test.inventory'
+    topology_path: 'cinch-example/examples/linch-pin-topologies'

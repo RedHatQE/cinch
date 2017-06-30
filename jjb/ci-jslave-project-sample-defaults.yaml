@@ -10,3 +10,4 @@
           url: 'https://example.com/cinch-topology-example.git'
           branches:
             - origin/master
+          basedir: cinch-example
