@@ -9,7 +9,7 @@ _repositories:
     baseurl: "{{ centos_mirrors }}/$releasever/cloud/$basearch/openstack-liberty/"
 
 _download_repositories:
-  - http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
+  - https://fedorapeople.org/~semyers/jenkins-rpm/jenkins1651.repo
 
 rpm_key_imports:
   - key: http://pkg.jenkins-ci.org/redhat-stable/jenkins.io.key

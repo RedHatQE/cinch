@@ -5,7 +5,7 @@
 
 - name: install rpm packages
   package:
-    name: "{{ jslave_rpm_deps | join(',') }}"
+    name: "{{ ( jslave_rpm_deps + jslave_extra_rpms ) | join(',') }}"
     state: present
 
 - name: install pip packages

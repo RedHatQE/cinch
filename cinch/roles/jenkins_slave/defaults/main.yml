@@ -46,3 +46,5 @@ jslave_rpm_deps:
   - python-devel
   - nss
   - redhat-rpm-config
+
+jslave_extra_rpms: []
