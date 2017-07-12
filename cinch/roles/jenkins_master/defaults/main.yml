@@ -12,15 +12,19 @@
 # variable with those values.
 update_centers:
   - id: default
-    url: "https://updates.jenkins-ci.org/{{ jenkins_version }}/update-center.json"
+    url: "https://updates.jenkins-ci.org/{{ jenkins_uc_version }}/update-center.json"
 # If set to true, Jenkins will be run over HTTPS. If you set this value to true,
 # you can override jenkins_ssl_cert and jenkins_ssl_key if you want to use custom
 # SSL certificate, otherwise a self signed certificate will be used.
 https_enabled: false
-# The version of Jenkins to install from the repository. The only use for
-# this value is constructing the name of the RPM below, so there is no need
-# to override this just outside of changing RPM name
+# The version of Jenkins to install from the repository. This value is used
+# to construct the name of the RPM below as well as update center URLS, so this
+# must include the complete "x.y.z" version, e.g. 1.651.3.
 jenkins_version: "1.651.3"
+# Update center version based on jenkins_version, update center does not use
+# "z" bit of the version, for example 1.651.3 becomes 1.651. This split
+# incantation strips the '.z' version off of jenkins_version.
+jenkins_uc_version: "{{ jenkins_version.rsplit('.', 1)[0] }}"
 # The list of Jenkins plugins that should be installed by default from the
 # configured Update Centers.
 jenkins_plugins: "{{ lookup('file', 'files/jenkins-plugin-lists/default.txt').split('\n') }}"
