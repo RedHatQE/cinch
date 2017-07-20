@@ -41,6 +41,34 @@ jenkins_args:
 # A list of additional packages you wish to install using the default package
 # manager.
 additional_packages: []
+# A list of items to set as environment variables for all jbos configured to run
+# on this master, regardless of their host system. Each entry in the array should
+# be a hash with a "key" and "value" property, as such:
+# jenkins_envvars:
+#   - key: SOME_SERVICE_ENDPOINT
+#     value: http://somehost.somedomain:12345/some/path
+jenkins_envvars:
+  - key: JENKINS_MASTER_URL
+    value: "{{ _jenkins_url }}"
+# A collection of settings to configure the Thin Backup plugin in Jenkins. See each
+# line in the hash for information on the particular setting. You can override only
+# some of the components of this hash, you do not need to provide all the defaults
+# in order to override only a single value. The applicable field values, and their
+# defaults, are listed below this object
+jenkins_backup: {}
+#  directory: /jenkins_backups/.backups
+#  full_schedule: H 0 * * 0
+#  diff_schedule: H 0 * * *
+#  max_sets: 4
+#  exclude: ''
+#  wait_for_idle: false
+#  quiet_mode_timeout: 120
+#  build_results: false
+#  user_contents: false
+#  cleanup_diffs: false
+#  next_build_number: false
+#  move_to_zip: false
+
 
 # ############################################################################
 # Security settings - users, passwords, etc.
