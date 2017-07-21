@@ -27,7 +27,8 @@
       when: "{{ jenkins_security_enabled }}"
     - script: "{{ lookup('template', role_path + '/templates/enable-kerberos-sso.groovy') }}"
       when: "{{ jenkins_security_enabled }}"
-    # This option will disable security, rather than avoid touching it when jenkins_security_enabled is false
+    # This option will disable security, rather than avoid touching it when
+    # jenkins_security_enabled is false
     - script: "{{ lookup('template', role_path + '/templates/basic_security.groovy') }}"
       when: "{{ not jenkins_security_enabled }}"
   become: true

@@ -41,7 +41,7 @@ jenkins_args:
 # A list of additional packages you wish to install using the default package
 # manager.
 additional_packages: []
-# A list of items to set as environment variables for all jbos configured to run
+# A list of items to set as environment variables for all jobs configured to run
 # on this master, regardless of their host system. Each entry in the array should
 # be a hash with a "key" and "value" property, as such:
 # jenkins_envvars:
