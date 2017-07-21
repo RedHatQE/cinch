@@ -10,6 +10,7 @@
   with_items:
     - java-1.{{ java_version }}.0-openjdk
     - java-1.{{ java_version }}.0-openjdk-devel
+    - java-1.{{ java_version }}.0-openjdk-debuginfo
     - libselinux-python
     - openssh
   retries: 2
