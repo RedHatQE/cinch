@@ -188,3 +188,8 @@ jenkins_executors: 10
 # This setting affects how the update center downloads plugin metadata
 # http://javadoc.jenkins-ci.org/jenkins/model/DownloadSettings.html
 jenkins_usebrowser: false
+# Enable or disable plugin installation and subsequent configuration of plugin
+# settings.  Disabling this will be useful for cases where Ansible will be used
+# to manage production Jenkins masters and changes to the Jenkins application
+# are not desired to lessen customer impact.
+jenkins_plugin_install_configure: true
