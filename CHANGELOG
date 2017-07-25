@@ -1,4 +1,9 @@
-v 0.7.1 (next release)
+v 0.8.0
+- Added significnat updates to Jenkins configuration for
+  Kerberos, LDAP/basic auth, backup configurations, and
+  more
+
+v 0.7.1 (next)
 - Updated Jenkins repo URL
 - Added ability to exclude changes to Jenkins plugins+configuration
 - Added configurable NTP server support
