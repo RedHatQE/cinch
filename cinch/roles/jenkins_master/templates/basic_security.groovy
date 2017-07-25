@@ -18,5 +18,5 @@ if ( ! (jenkins.getSecurityRealm() instanceof HudsonPrivateSecurityRealm) ) {
 
 def check_mode = {{ ansible_check_mode|to_json }};
 
-if ( check_mode && changed )
+if ( !check_mode && changed )
 	jenkins.save();
