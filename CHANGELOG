@@ -1,3 +1,8 @@
+v 0.8.0
+- Added significnat updates to Jenkins configuration for
+  Kerberos, LDAP/basic auth, backup configurations, and
+  more
+
 v 0.7.1 (30 June 2017)
 - Updated Jenkins repo URL
 
