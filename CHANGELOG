@@ -1,5 +1,6 @@
 v 0.7.1 (30 June 2017)
 - Updated Jenkins repo URL
+- Added ability to exclude changes to Jenkins plugins+configuration
 
 v 0.7.0 (30 June 2017)
 - Baseline

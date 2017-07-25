@@ -16,9 +16,11 @@
 
 - name: pin plugins to avoid upgrades
   include: pin_plugin.yml
+  when: jenkins_plugin_install_configure
 
 - name: plugins
   include: plugins.yml
+  when: jenkins_plugin_install_configure
 
 - name: make sure handlers are flushed
   meta: flush_handlers
@@ -29,3 +31,4 @@
 - name: application-level post configuration tasks
   become: false
   include: post_configure.yml
+  when: jenkins_plugin_install_configure
