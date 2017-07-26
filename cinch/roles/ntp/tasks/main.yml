@@ -4,6 +4,23 @@
     name: ntp
     state: present
 
+- name: override ntp servers when ntp_servers is defined
+  block:
+    - name: remove existing ntp server values
+      lineinfile:
+        backup: yes
+        dest: /etc/ntp.conf
+        state: absent
+        regexp: "^server"
+
+    - name: add customized ntp servers
+      blockinfile:
+        dest: /etc/ntp.conf
+        insertafter: EOF
+        block: "{{ item }}"
+      with_items: "{{ ntp_servers }}"
+  when: ntp_servers is defined
+
 - name: start the NTP service
   become: true
   service:
