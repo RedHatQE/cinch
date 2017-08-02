@@ -19,6 +19,7 @@ def backupUserContents = {{ jenkins_backup.user_contents|default(false)|to_json 
 def cleanupDiff = {{ jenkins_backup.cleanup_diffs|default(false)|to_json }};
 def backupNextBuildNumber = {{ jenkins_backup.next_build_number|default(false)|to_json }};
 def moveOldBackupsToZipFile = {{ jenkins_backup.move_to_zip|default(false)|to_json }};
+def backupPluginArchives = {{ jenkins_backup.plugin_archives|default(false)|to_json }};
 
 def void changed(String field, def value) {
 	changes = true;
@@ -63,7 +64,7 @@ if( thinbackup.isBackupUserContents() != backupUserContents ) {
 }
 if( thinbackup.isCleanupDiff() != cleanupDiff ) {
 	thinbackup.setCleanupDiff(cleanupDiff);
-	changed("cleanup diffs", cleanuDiff);
+	changed("cleanup diffs", cleanupDiff);
 }
 if( thinbackup.isBackupNextBuildNumber() != backupNextBuildNumber ) {
 	thinbackup.setBackupNextBuildNumber(backupNextBuildNumber);
@@ -72,6 +73,11 @@ if( thinbackup.isBackupNextBuildNumber() != backupNextBuildNumber ) {
 if( thinbackup.isMoveOldBackupsToZipFile() != moveOldBackupsToZipFile ) {
 	thinbackup.setMoveOldBackupsToZipFile(moveOldBackupsToZipFile);
 	changed("move old backups to zip", moveOldBackupsToZipFile);
+}
+
+if( thinbackup.isBackupPluginArchives() != backupPluginArchives ) {
+	thinbackup.setBackupPluginArchives(backupPluginArchives);
+	changed("backup plugin archives", backupPluginArchives);
 }
 
 if( changes && !checkMode )

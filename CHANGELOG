@@ -1,7 +1,9 @@
 v 0.8.0
-- Added significnat updates to Jenkins configuration for
+- Added significant updates to Jenkins configuration for
   Kerberos, LDAP/basic auth, backup configurations, and
   more
+- Added oneshot Jenkins backup playbook for cases where cinch will run on
+  existing Jenkins masters created without cinch
 
 v 0.7.1 (30 June 2017)
 - Updated Jenkins repo URL
