@@ -16,6 +16,12 @@
   register: install_deps
   until: install_deps|success
 
+- name: install additional packages
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ extra_rpms }}"
+
 - name: upload common requirements file
   copy:
     src: requirements-common.txt

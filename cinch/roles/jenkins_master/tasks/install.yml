@@ -38,7 +38,7 @@
   package:
     name: "{{ item }}"
     state: present
-  with_items: "{{ additional_packages }}"
+  with_items: "{{ jmaster_extra_rpms }}"
 
 - name: install gcc_compat where necessary
   package:
