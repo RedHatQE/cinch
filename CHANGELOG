@@ -1,4 +1,4 @@
-v 0.7.1 (30 June 2017)
+v 0.7.1 (next release)
 - Updated Jenkins repo URL
 - Added ability to exclude changes to Jenkins plugins+configuration
 - Added configurable NTP server support
