@@ -44,7 +44,7 @@ session_timeout: 480
 jenkins_args:
 # A list of additional packages you wish to install using the default package
 # manager.
-additional_packages: []
+jmaster_extra_rpms: []
 
 # ############################################################################
 # Security settings - users, passwords, etc.

@@ -2,6 +2,10 @@ v 0.7.1 (30 June 2017)
 - Updated Jenkins repo URL
 - Added ability to exclude changes to Jenkins plugins+configuration
 - Added configurable NTP server support
+- Added ability to install packages on both master and slave with single var.
+  This renames the `additional_packages` var to `jmaster_extra_rpms` to be
+  consistent with the existing `jslave_extra_rpms`, and adds a new var called
+  `extra_rpms` for use in the `jenkins_common` role.
 
 v 0.7.0 (30 June 2017)
 - Baseline
