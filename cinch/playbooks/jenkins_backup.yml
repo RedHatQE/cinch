@@ -1,0 +1,97 @@
+# This playbook is specifically provided for scenarios where cinch will be used
+# to manage configurations of Jenkins masters that were *not* created by cinch,
+# but by some other method, either manually or via another configuration
+# management tool.  In this case, it's highly recommended to configure backups
+# before running cinch against a Jenkins master for the first time.
+
+# For this playbook to succeed, the thinBackup plugin must be installed, a
+# valid Jenkins user with admin rights must be provided, along with a target
+# directory for the backup data to live.
+
+# It's important to avoid submitting a Jenkins admin username that does not
+# exist on the target Jenkins master.  If this happens, then the
+# jenkins_user_api module will happily create a useless Jenkins user with the
+# name given, which is best avoided.
+
+# Example:
+# ansible-playbook -u root --private-key /path/to/key
+# -i 'jenkins.example.com', jenkins_backup.yml
+# -e "jenkins_admin=example_username"
+# -e "backup_dir=/var/lib/jenkins/thinBackup_data"
+
+- hosts: all
+  vars:
+    jenkins_url: "http://localhost:8080"
+    jenkins_user: jenkins
+    jenkins_backup:
+      directory: "{{ backup_dir }}"
+      full_schedule: H 0 * * 0
+      diff_schedule: H 0 * * *
+      max_sets: 2
+      exclude: ''
+      wait_for_idle: true
+      quiet_mode_timeout: 480
+      build_results: false
+      user_contents: true
+      cleanup_diffs: true
+      next_build_number: true
+      move_to_zip: false
+      plugin_archives: true
+  tasks:
+    - name: check jenkins_admin and backup_dir required variables
+      set_fact:
+        jenkins_admin: "{{ jenkins_admin | mandatory }}"
+        backup_dir: "{{ backup_dir | mandatory }}"
+
+    - name: get Jenkins admin user API details
+      jenkins_user_api:
+        user: "{{ jenkins_admin }}"
+      register: jenkins_admin_api
+      become: true
+      become_user: "{{ jenkins_user }}"
+
+    - name: save Jenkins admin user API key
+      set_fact:
+        admin_api_key: "{{ jenkins_admin_api.api_key }}"
+
+    - name: stat {{ jenkins_backup.directory }}
+      stat:
+        path: "{{ jenkins_backup.directory }}"
+      register: jenkins_backup_dir
+
+    - name: fail if {{ jenkins_backup.directory }} path does not exist
+      fail:
+        msg: "path {{ jenkins_backup.directory }} does not exist, cannot continue"
+      when: jenkins_backup_dir.stat.isdir is not defined
+
+    - name: set ownership/permissions for {{ jenkins_backup.directory }}
+      file:
+        path: "{{ jenkins_backup.directory }}"
+        owner: "{{ jenkins_user }}"
+        group: "{{ jenkins_user }}"
+        mode: 0755
+      become: true
+
+    - name: configure Jenkins thinBackup plugin
+      block:
+        - name: configure Jenkins thinBackup plugin
+          jenkins_script:
+            url: "{{ jenkins_url }}"
+            script:
+              "{{ lookup('template', '../roles/jenkins_master/templates/init_backup.groovy') }}"
+            user: "{{ jenkins_admin }}"
+            password: "{{ admin_api_key }}"
+          register: script_output
+          changed_when: "script_output.output.find('CHANGED') != -1"
+          # Since the jenkins_script module doesn't support check_mode, we disable it
+          # here so that we can handle check mode inside of the Groovy scripts.
+          check_mode: false
+          become: true
+          become_user: "{{ jenkins_user }}"
+      rescue:
+        - name: jenkins_script error message help
+          fail:
+            msg: >-
+              'thinBackup configuration failed.  Is the thinBackup plugin installed?
+              Is the jenkins_admin variable set to an existing Jenkins user with
+              admin rights?'
