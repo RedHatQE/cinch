@@ -167,13 +167,15 @@ jenkins_java_options:
   - -Xmx{{ java_heap_size }}
 # the path to the Java executable
 jenkins_java_cmd: /usr/bin/java
-# These four values change the default ulimits for file and process counts in
+# These values change the default ulimits for file and process counts in
 # order to avoid failure of the system when these (typically very low) default
-# values are hit
+# values are hit. The last value limits maximum file size to prevent corrupt jobs
+# from using dangerously large amounts of disks space.
 jenkins_soft_nofile_ulimit: 4096
 jenkins_hard_nofile_ulimit: 4096
 jenkins_soft_nproc_ulimit: 4096
 jenkins_hard_nproc_ulimit: 30654
+jenkins_fsize_ulimit: "{{ ansible_memtotal_mb }}"
 # This variable points to the file where the RPM version for specific packages
 # (most importantly, the Jenkins RPM) can be pinned. For yum-based distros,
 # like CentOS or RHEL <= 7, this is the yum conf file, but for Fedora and the
