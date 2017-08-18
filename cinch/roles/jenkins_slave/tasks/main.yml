@@ -8,19 +8,6 @@
     name: "{{ ( jslave_rpm_deps + jslave_extra_rpms ) | join(',') }}"
     state: present
 
-- name: install pip packages
-  pip:
-    requirements: /tmp/requirements-common.txt
-    state: present
-
-- name: install additional pip packages
-  pip:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - ansible==1.8.4
-    - nose
-
 - name: add host to hosts file
   lineinfile:
     line: "{{ ansible_ssh_host }} {{ inventory_hostname }}.localdomain"

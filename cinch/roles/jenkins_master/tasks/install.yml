@@ -3,36 +3,16 @@
     name: "{{ item }}"
     state: present
   with_items:
-    - git
-    - python-paramiko
-    - nss
-    - iptables
-    - iptables-services
     - "{{ jenkins_rpm }}"
-    - graphviz
-    - lftp
-    - gcc
-    - libffi-devel
-    - python-devel
-    - openssl-devel
-    - libxml2-devel
-    - libxslt-devel
-    - krb5-workstation
-    - python-futures
-    - python-six
-    - python-unittest2
-    - python-configobj
-    - python-nose
-    - cloud-utils
-    - python-glanceclient
-    - python-keystoneclient
-    - python-novaclient
-    - python-neutronclient
-    - wget
     - "{{ python_pip_package }}"
+    - libvirt-devel
     - python-virtualenv
-    - initscripts
-    - cloud-utils
+    - libyaml-devel
+    - openssl-devel
+    - libffi-devel
+    - gcc
+    - redhat-rpm-config
+    - ansible
 
 - name: install additional packages
   package:
