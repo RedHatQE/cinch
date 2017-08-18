@@ -64,6 +64,9 @@ jenkins_admin:
   nickname: jenkins-admin
   email: root@localhost
   password: changeme
+# A list of users, groups, etc (SIDs, in Jenkins-speak) who should be added to
+# the admin role
+jenkins_admin_sids: []
 # An array of users to create in the local Jenkins database, regardless of the
 # authentication methods actually in place. Elements in this array should match
 # the form of the jenkins_admin variable immediately above this

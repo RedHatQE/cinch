@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
 			"repositories" => ["master", "slave"],
 			"jenkins_slave:vars" => {
 				"jenkins_master_url" => "http://{{ hostvars['master']['ansible_default_ipv4']['address'] }}:8080",
-				"jenkins_user_password" => "vagrant",
+				"jenkins_user_password" => "{{ hostvars['master']['_admin_api_key'] }}",
 				"jenkins_user" => "jenkins",
 				"jenkins_user_home" => "/var/lib/jenkins",
 				"jenkins_slave_username" => "jenkins-admin",
@@ -31,7 +31,11 @@ Vagrant.configure("2") do |config|
 					"group_membership" => "memberUid={1}",
 					"display_name_attr" => "displayname",
 					"email_addr_attr" => "mail"
-				}.to_json
+				}.to_json,
+				"jenkins_admin_sids" => [
+					"jenkins-admin",
+					"anonymous"
+				].to_json
 			}
 		}
 		#ansible.tags = "totest"

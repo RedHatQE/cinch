@@ -99,6 +99,9 @@ for ( PermissionGroup group : groups ) {
 }
 createdRole = createRole("admin", rolePermissions, strategy);
 strategy.assignRole(strategy.GLOBAL, createdRole, "{{ jenkins_admin.nickname }}");
+{% for sid in jenkins_admin_sids %}
+	strategy.assignRole(strategy.GLOBAL, createdRole, "{{ sid }}");
+{% endfor %}
 
 // Create the user-defined roles that are desired
 {% for role in jenkins_security_roles %}
