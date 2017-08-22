@@ -20,7 +20,6 @@
     - script: "{{ lookup('template', role_path + '/templates/set_slaveport.groovy') }}"
     - script: "{{ lookup('template', role_path + '/templates/user.groovy') }}"
     - script: "{{ lookup('template', role_path + '/templates/setenvvars.groovy') }}"
-    - script: "{{ lookup('template', role_path + '/templates/init_backup.groovy') }}"
     - script: "{{ lookup('template', role_path + '/templates/jenkins_root_url.groovy') }}"
       when: "{{ jenkins_security_enabled }}"
     - script: "{{ lookup('template', role_path + '/templates/roles_and_ldap_auth.groovy') }}"
