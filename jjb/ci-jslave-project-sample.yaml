@@ -63,10 +63,6 @@
           flatten: true
       - shell: |
             #!/bin/bash -ex
-            # work-around for output file naming issue with linchpin:
-            # https://github.com/CentOS-PaaS-SIG/linchpin/issues/294
-            ln -s ${{WORKSPACE}}/{topology_path}/${{PROVIDER}}/resources/cinch-test.output
-                ${{WORKSPACE}}/{topology_path}/${{PROVIDER}}/resources/cinch-test.output.yaml
             source "${{JENKINS_HOME}}/opt/cinch/bin/activate"
             cinchpin destroy -w {topology_path}/${{PROVIDER}}
 
