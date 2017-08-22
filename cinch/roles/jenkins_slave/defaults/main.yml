@@ -31,10 +31,7 @@ jenkins_slave_password: ''
 # These are variables that you really should not override
 # unless you really know what you're doing
 jslave_rpm_deps:
-  - git
-  - gcc
   - wget
   - python-pip
-  - redhat-rpm-config
 
 jslave_extra_rpms: []

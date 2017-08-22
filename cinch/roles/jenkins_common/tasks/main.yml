@@ -12,6 +12,9 @@
     - java-1.{{ java_version }}.0-openjdk-devel
     - libselinux-python
     - openssh
+    - gcc
+    - redhat-rpm-config
+    - git
   retries: 2
   register: install_deps
   until: install_deps|success

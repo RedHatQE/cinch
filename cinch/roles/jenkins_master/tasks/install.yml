@@ -10,8 +10,6 @@
     - libyaml-devel
     - openssl-devel
     - libffi-devel
-    - gcc
-    - redhat-rpm-config
     - ansible
 
 - name: install additional packages
