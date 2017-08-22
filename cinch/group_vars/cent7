@@ -5,8 +5,6 @@ _repositories:
     mirrorlist: "{{ fedora_mirrors }}repo=testing-epel7"
   - name: epel
     mirrorlist: "{{ fedora_mirrors }}repo=epel-7"
-  - name: cloud
-    baseurl: "{{ centos_mirrors }}/$releasever/cloud/$basearch/openstack-liberty/"
 
 _download_repositories:
   - https://fedorapeople.org/~semyers/jenkins-rpm/jenkins1651.repo

@@ -31,20 +31,7 @@ jenkins_slave_password: ''
 # These are variables that you really should not override
 # unless you really know what you're doing
 jslave_rpm_deps:
-  - python-paramiko
-  - git
-  - gcc
-  - krb5-workstation
   - wget
   - python-pip
-  - python-unittest2
-  - python-pep8
-  # This package is not available in RHEL6
-  # TODO: fix
-  # - python-flake8
-  - python-futures
-  - python-devel
-  - nss
-  - redhat-rpm-config
 
 jslave_extra_rpms: []
