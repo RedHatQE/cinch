@@ -5,8 +5,6 @@ _repositories:
     mirrorlist: "{{ fedora_mirrors }}repo=testing-epel6"
   - name: epel
     mirrorlist: "{{ fedora_mirrors }}repo=epel-6"
-  - name: cloud
-    baseurl: "{{ centos_mirrors }}/$releasever/cloud/$basearch/openstack-juno/"
 
 _download_repositories:
   - http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo

@@ -1,4 +1,11 @@
-v 0.7.1 (next release)
+v 0.8.0
+- Added significant updates to Jenkins configuration for
+  Kerberos, LDAP/basic auth, backup configurations, and
+  more
+- Added oneshot Jenkins backup playbook for cases where cinch will run on
+  existing Jenkins masters created without cinch
+
+v 0.7.1 (next)
 - Updated Jenkins repo URL
 - Added ability to exclude changes to Jenkins plugins+configuration
 - Added configurable NTP server support

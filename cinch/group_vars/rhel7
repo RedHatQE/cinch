@@ -19,9 +19,6 @@ all_repositories:
   epel:
     name: epel
     mirrorlist: "{{ fedora_mirrors }}repo=epel-7"
-  openstack:
-    name: openstack
-    baseurl: http://mirror.centos.org/centos/7/cloud/x86_64/openstack-mitaka/
   certificate:
     name: certificate-system
     baseurl: "{{ rhel_base }}/$basearch/certificate-system/9/os/"
@@ -43,7 +40,6 @@ jenkins_master_repositories:
   - "{{ all_repositories.optional }}"
   - "{{ all_repositories.debug }}"
   - "{{ all_repositories.epel }}"
-  - "{{ all_repositories.openstack }}"
   - "{{ all_repositories.certificate }}"
 
 jenkins_master_download_repositories:
