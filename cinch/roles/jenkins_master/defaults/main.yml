@@ -167,13 +167,22 @@ jenkins_java_options:
   - -Xmx{{ java_heap_size }}
 # the path to the Java executable
 jenkins_java_cmd: /usr/bin/java
-# These four values change the default ulimits for file and process counts in
+# These values change the default ulimits for file and process counts in
 # order to avoid failure of the system when these (typically very low) default
 # values are hit
 jenkins_soft_nofile_ulimit: 4096
 jenkins_hard_nofile_ulimit: 4096
 jenkins_soft_nproc_ulimit: 4096
 jenkins_hard_nproc_ulimit: 30654
+# Malicious or poorly written job can either generate ridiculously large
+# artefact file to be archived on master or produce long console log.
+# Even an infinite loop in a job (that has some output) can exhaust all disk
+# space on JENKINS_HOME partition (Jenkins does not handle out of disk space
+# well). Largest file you will ever need on master, from our experience, is
+# heap/core dump of Jenkins process (or some other more memory greedy process).
+# Restricting max file size to the size of virtual memory should work
+# reasonably well for everyone.
+jenkins_fsize_ulimit: "{{ ansible_memtotal_mb * 1024 }}"
 # This variable points to the file where the RPM version for specific packages
 # (most importantly, the Jenkins RPM) can be pinned. For yum-based distros,
 # like CentOS or RHEL <= 7, this is the yum conf file, but for Fedora and the
