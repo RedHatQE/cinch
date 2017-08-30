@@ -51,4 +51,4 @@
     state: present
   become: true
   notify: restart Jenkins
-  with_items: "{{ jenkins_admin_sids }}"
+  with_items: "{{ [jenkins_admin.nickname] + jenkins_cli_users }}"

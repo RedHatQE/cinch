@@ -15,7 +15,7 @@
   become: true
   ignore_errors: true
   notify: restart Jenkins
-  with_items: "{{ jenkins_admin_sids }}"
+  with_items: "{{ [jenkins_admin.nickname] + jenkins_cli_users }}"
   # Errors ignored because the file might not exist on slaves, and it might not
   # yet be configured with roles, etc if this is executed on first run. However,
   # it becomes important to have this running during subsequent executions

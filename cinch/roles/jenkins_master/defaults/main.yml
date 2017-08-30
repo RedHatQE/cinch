@@ -95,6 +95,11 @@ jenkins_admin:
 # A list of users, groups, etc (SIDs, in Jenkins-speak) who should be added to
 # the admin role
 jenkins_admin_sids: []
+# A list of users who should be given access to the Jenkins CLI. Users must exist
+# in the Jenkins filesystem already (they must have logged into the system at
+# least once, already). They will be configured with the SSH key from the system
+# shell user named "jenkins" as their pubkey.
+jenkins_cli_users: []
 # An array of users to create in the local Jenkins database, regardless of the
 # authentication methods actually in place. Elements in this array should match
 # the form of the jenkins_admin variable immediately above this
