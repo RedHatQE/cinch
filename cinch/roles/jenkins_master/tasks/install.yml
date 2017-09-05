@@ -1,3 +1,11 @@
+- name: unpin jenkins package for version upgrades
+  lineinfile:
+    dest: "{{ version_pin_file }}"
+    state: present
+    regexp: "^exclude=.*"
+    line: "exclude={{ upgrade_blacklist | difference(['jenkins']) | join(' ') }}"
+  when: jenkins_upgrade
+
 - name: install necessary RPM files
   package:
     name: "{{ item }}"
