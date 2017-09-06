@@ -34,6 +34,7 @@ def main():
             'cli_jar': {'default':
                         '/var/cache/jenkins/war/WEB-INF/jenkins-cli.jar'},
             'jenkins_url': {'default': 'http://localhost:8080'},
+            'remoting': {'required': True, 'type': 'bool'},
             'java_command': {'type': 'str', 'default': '/usr/bin/java'}
         }
     )
@@ -46,13 +47,17 @@ def main():
     groovy = NamedTemporaryFile(delete=False)
     groovy.write(MYFILE.format(args.user))
     groovy.close()
-    process = [args.java_command,
-               '-jar',
-               args.cli_jar,
-               '-s',
-               args.jenkins_url,
-               'groovy',
-               groovy.name]
+    process_named_args = [args.java_command,
+                          '-jar',
+                          args.cli_jar,
+                          '-s',
+                          args.jenkins_url]
+    # Append -remoting argument to named argument list depending on the version
+    # of Jenkins
+    if args.remoting:
+        process_named_args.append('-remoting')
+    process_positional_args = ['groovy', groovy.name]
+    process = process_named_args + process_positional_args
     # The groovy code simply prints out the value of the API key, so we want
     # to be able to capture that output
     p = subprocess.Popen(process,

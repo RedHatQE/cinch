@@ -32,9 +32,18 @@
     'status' in jenkins_status and
     (jenkins_status['status'] == 200 or jenkins_status['status'] == 401)
 
+# Newer Jenkins versions require the -remoting flag to allow the Jenkins CLI to
+# be available in the way that we use it currently. The 'X-Jenkins' response
+# header gives us the current version.
+# https://jenkins.io/doc/book/managing/cli/#remoting-connection-mode
+- name: check Jenkins version for -remoting flag
+  set_fact:
+    jenkins_cli_remoting: "{{ jenkins_status.x_jenkins | version_compare('2.46.2', '>=') }}"
+
 - name: get user api key
   jenkins_user_api:
     user: "{{ jenkins_admin.nickname }}"
+    remoting: "{{ jenkins_cli_remoting }}"
   register: jenkins_admin_api_key
   become: true
   become_user: "{{ jenkins_user }}"
