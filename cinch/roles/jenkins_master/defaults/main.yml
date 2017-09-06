@@ -26,8 +26,16 @@ jenkins_version: "1.651.3"
 # incantation strips the '.z' version off of jenkins_version.
 jenkins_uc_version: "{{ jenkins_version.rsplit('.', 1)[0] }}"
 # The list of Jenkins plugins that should be installed by default from the
-# configured Update Centers.
-jenkins_plugins: "{{ lookup('file', 'files/jenkins-plugin-lists/default.txt').split('\n') }}"
+# configured Update Centers. Each element in this list takes two different values
+# in a dict. The first is "plugins", which is a list of plugin names. Each name can
+# be either just the plugin's name, or the name pinned to a version in the form of
+# a string such as "plugin-name==1.2.3". The second dict element is optional, and is
+# named "url". If you are installing plugins from an update center other than the
+# default one provided by jenkins-ci.org, then use the "url" key to specify the base
+# URL for that update center
+jenkins_plugins:
+  - plugins: "{{ lookup('file', 'files/jenkins-plugin-lists/default.txt').split('\n') }}"
+    url: "{{ omit }}" # Omit in order to use default update center
 # Bundled plugins are ones that are included by default with Jenkins. The process
 # of pinning a bundled plugin tells Jenkins to not overwrite the correct version
 # of plugin with an included version during a Jenkins upgrade but rather use the

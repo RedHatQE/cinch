@@ -35,16 +35,19 @@
 - name: perform plugin install
   jenkins_plugin:
     url: "{{ _jenkins_url }}"
-    name: "{{ item.split('=')[0] }}"
+    name: "{{ item.1.split('=')[0] }}"
     state: present
-    version: "{{ item.split('=')[2] | default(omit) }}"
+    version: "{{ item.1.split('=')[2] | default(omit) }}"
     validate_certs: false
     url_username: "{{ jenkins_admin.nickname }}"
     url_password: "{{ admin_api_key | default('') }}"
+    updates_url: "{{ item.0.url | default(omit) }}"
   register: plugin_install
   retries: 3
   until: not plugin_install|failed
-  with_items: "{{ jenkins_plugins }}"
+  with_subelements:
+    - "{{ jenkins_plugins }}"
+    - plugins
   notify: restart Jenkins
 
 - name: flush handlers
