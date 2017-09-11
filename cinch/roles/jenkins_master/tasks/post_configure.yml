@@ -6,7 +6,7 @@
     user: "{{ jenkins_admin.nickname }}"
     password: "{{ admin_api_key | default('') }}"
   register: script_output
-  changed_when: "script_output.output.find('CHANGED') != -1"
+  changed_when: "(script_output.output|default('')).find('CHANGED') != -1"
   # Since the jenkins_script module doesn't support check_mode, we disable it
   # here so that we can handle check mode inside of the Groovy scripts.
   check_mode: false
