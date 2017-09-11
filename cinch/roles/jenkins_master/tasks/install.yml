@@ -18,7 +18,6 @@
     - libyaml-devel
     - openssl-devel
     - libffi-devel
-    - ansible
   notify: restart Jenkins during upgrade
 
 - name: install additional packages
