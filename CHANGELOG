@@ -1,4 +1,5 @@
 v 0.7.1 (next)
+- Significant improvements to Groovy script error reporting
 - Added ability to configure multiple admin users (jenkins_admin_sids), and to
   configure users with CLI access independently of them being admins
   (jenkins_cli_users)
