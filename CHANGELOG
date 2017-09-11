@@ -1,6 +1,7 @@
 v 0.8.0 (6 Sep 2017)
 - Added support for upgrading to Jenkins 2 from Jenkins 1
 - Added support for installing pinned plugins from multiple update centers
+- Significant improvements to Groovy script error reporting
 - Added ability to configure multiple admin users (jenkins_admin_sids), and to
   configure users with CLI access independently of them being admins
   (jenkins_cli_users)
