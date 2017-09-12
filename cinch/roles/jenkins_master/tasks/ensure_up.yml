@@ -20,7 +20,8 @@
 
 - name: construct Jenkins URL
   set_fact:
-    _jenkins_url: "http{{ https_enabled | ternary('s', '') }}://{{ _jenkins_host }}:{{ _listening_port }}"
+    _jenkins_url: "http{{ https_enabled | ternary('s', '') }}://{{ _jenkins_host }}:\
+                   {{ _listening_port }}"
   tags:
     - jenkins_check_mode
 
@@ -52,7 +53,7 @@
     remoting: "{{ jenkins_cli_remoting }}"
   register: jenkins_admin_api_key
   become: true
-  become_user: "{{ jenkins_user }}"
+  become_user: "{{ jenkins_cli_shell_user }}"
 
 - name: save API key
   set_fact:
