@@ -12,9 +12,15 @@
   tags:
     - jenkins_check_mode
 
+- name: discover valid hostname
+  set_fact:
+    _jenkins_host: "{{ ansible_host | default(inventory_hostname | default('localhost')) }}"
+  tags:
+    - jenkins_check_mode
+
 - name: construct Jenkins URL
   set_fact:
-    _jenkins_url: "http{{ https_enabled | ternary('s', '') }}://localhost:{{ _listening_port }}"
+    _jenkins_url: "http{{ https_enabled | ternary('s', '') }}://{{ _jenkins_host }}:{{ _listening_port }}"
   tags:
     - jenkins_check_mode
 
