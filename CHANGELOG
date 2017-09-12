@@ -1,3 +1,9 @@
+v 0.8.2 (12 Sep 2017)
+- Added jenkins_cli_shell_user and jenkins_cli_shell_user_home, to allow better
+  configuration of where to configure Jenkins CLI users' SSH keys
+- Improved internal construction of the _jenkins_url variable to avoid possible
+  SSL hostname mismatch errors
+
 v 0.8.1 (11 Sep 2017)
 - Removed ansible RPM package from jenkins_master role
 
