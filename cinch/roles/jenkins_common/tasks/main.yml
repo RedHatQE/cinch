@@ -31,7 +31,7 @@
     password: "{{ jenkins_user_password }}"
     home: "{{ jenkins_user_home }}"
     shell: /bin/bash
-    uid: "{{ jenkins_user_uid }}"
+    uid: "{{ jenkins_user_uid | default(omit) }}"
 
 - name: ensure SSH directory exists
   file:
