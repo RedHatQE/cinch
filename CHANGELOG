@@ -1,4 +1,6 @@
 v 0.8.3 (next)
+- Clean up TravisCI tests
+- Clean up Docker UID variable for OpenShift support
 - Stop Jenkins process before upgrading
 - Avoid modifying Beaker during upgrades
 - Make jenkins user passwords optional, to avoid unnecessarily changing them
