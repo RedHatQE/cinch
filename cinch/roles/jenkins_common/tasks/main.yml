@@ -28,7 +28,7 @@
 - name: create jenkins user
   user:
     name: "{{ jenkins_user }}"
-    password: "{{ jenkins_user_password }}"
+    password: "{{ jenkins_user_password | default(omit) }}"
     home: "{{ jenkins_user_home }}"
     shell: /bin/bash
     uid: "{{ jenkins_user_uid | default(omit) }}"
