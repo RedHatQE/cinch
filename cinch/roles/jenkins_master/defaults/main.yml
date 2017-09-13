@@ -85,6 +85,10 @@ jenkins_backup: {}
 #  cleanup_diffs: false
 #  next_build_number: false
 #  move_to_zip: false
+# The shell user on the master system whose SSH key is configured with admin access
+# on the Jenkins CLI. Also, the home directory for that user
+jenkins_cli_shell_user: "{{ jenkins_user }}"
+jenkins_cli_shell_user_home: "{{ jenkins_user_home }}"
 
 
 # ############################################################################
