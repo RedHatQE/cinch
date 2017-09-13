@@ -1,3 +1,9 @@
+v 0.8.3 (next)
+- Stop Jenkins process before upgrading
+- Avoid modifying Beaker during upgrades
+- Make jenkins user passwords optional, to avoid unnecessarily changing them
+  on existing systems
+
 v 0.8.2 (12 Sep 2017)
 - Added jenkins_cli_shell_user and jenkins_cli_shell_user_home, to allow better
   configuration of where to configure Jenkins CLI users' SSH keys

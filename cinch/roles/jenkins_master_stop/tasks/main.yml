@@ -1,0 +1,5 @@
+- name: stop the Jenkins process
+  service:
+    name: jenkins
+    state: stopped
+  become: true
