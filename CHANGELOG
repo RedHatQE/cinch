@@ -1,4 +1,4 @@
-v 0.8.3 (next)
+v 0.8.3 (13 Sep 2017)
 - Clean up TravisCI tests
 - Clean up Docker UID variable for OpenShift support
 - Stop Jenkins process before upgrading
