@@ -40,12 +40,12 @@
     mode: 0700
     state: directory
 
-- name: add private SSH key
-  copy:
-    src: "{{ jenkins_ssh_keyfile }}"
-    dest: "{{ jenkins_user_home }}/.ssh/id_rsa"
-    owner: "{{ jenkins_user }}"
-    mode: 0600
+- name: generate new SSH key
+  command: |-
+    ssh-keygen -b 4096 -t rsa -f {{ jenkins_user_home }}/.ssh/id_rsa
+    -N '' creates={{ jenkins_user_home }}/.ssh/id_rsa
+  become: true
+  become_user: "{{ jenkins_user }}"
   notify: generate public SSH key
 
 - name: add ssh keys to authorized_keys for the jenkins user
