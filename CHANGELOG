@@ -1,6 +1,10 @@
 v 0.8.3 (next)
 - Clean up TravisCI tests
 - Clean up Docker UID variable for OpenShift support
+- Stop Jenkins process before upgrading
+- Avoid modifying Beaker during upgrades
+- Make jenkins user passwords optional, to avoid unnecessarily changing them
+  on existing systems
 
 v 0.8.2 (12 Sep 2017)
 - Added jenkins_cli_shell_user and jenkins_cli_shell_user_home, to allow better

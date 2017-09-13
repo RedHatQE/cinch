@@ -4,6 +4,12 @@
   roles:
     - check_ssh
 
+- name: stop Jenkins process when upgrading
+  hosts: jenkins_master
+  roles:
+    - role: jenkins_master_stop
+      when: jenkins_upgrade is defined and jenkins_upgrade
+
 - name: upload files before
   hosts: all
   roles:
@@ -34,7 +40,8 @@
   become: true
   hosts: jenkins_master
   roles:
-    - beaker-client
+    - role: beaker-client
+      when: jenkins_upgrade is not defined or not jenkins_upgrade
     - role: nginx
       when: ansible_connection != 'docker'
     - jenkins_master
