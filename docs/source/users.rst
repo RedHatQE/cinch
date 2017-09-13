@@ -179,11 +179,7 @@ Create a layout file by saving the following example template as
             - jenkins_slave
 
 Create an Ansible group_vars file by saving the following example template as
-**/path/to/workdir/inventories/group_vars/all** and edit to taste.  For the
-**jenkins_user_password** variable, please use the `Ansible documentation
-<https://docs.ansible.com/ansible/faq.html#how-do-i-generate-crypted-passwords-for-the-user-module>`_
-to generate a suitable password hash.  **For security in production
-environments, DO NOT copy the existing hash from this example.** ::
+**/path/to/workdir/inventories/group_vars/all** and edit to taste.::
 
     ---
     ansible_user: root
@@ -195,7 +191,6 @@ environments, DO NOT copy the existing hash from this example.** ::
       - https://example.com/ca2.crt
     # Base URL for repository mirror
     rhel_base: http://example.com/content/dist/rhel/server/7/7Server
-    jenkins_user_password: '$6$rounds=656000$YQKMBktZ/Gaggxf0$KC7xhatWzdDJyvCDo7htomtiSsvd2MWN87RB3TsAbq1Nmwddy/z2Et8kQi1/tZkHjfD2vG1r7W2R9rjpaA1C5/'
     jenkins_master_url: 'http://jenkins.example.com' # URL to Jenkins master for the slave to connect to
     jslave_name: 'cinch-slave'
     jslave_label: 'cinch-slave'
