@@ -1,10 +1,3 @@
-- name: set listening port
-  set_fact:
-    _listening_port: "{{ https_enabled | ternary(443, 80) }}"
-  when: ansible_connection != 'docker'
-  tags:
-    - jenkins_check_mode
-
 - name: check for running in a container
   set_fact:
     _listening_port: "{{ https_enabled | ternary(8443, 8080) }}"
@@ -20,8 +13,14 @@
 
 - name: construct Jenkins URL
   set_fact:
-    _jenkins_url: "http{{ https_enabled | ternary('s', '') }}://{{ _jenkins_host }}:\
-                   {{ _listening_port }}"
+    _jenkins_url: "http{{ https_enabled | ternary('s', '') }}://{{ _jenkins_host }}"
+  tags:
+    - jenkins_check_mode
+
+- name: modify Jenkins URL for non-standard ports
+  set_fact:
+    _jenkins_url: "{{ _jenkins_url }}:{{ _listening_port }}"
+  when: _listening_port is defined
   tags:
     - jenkins_check_mode
 
