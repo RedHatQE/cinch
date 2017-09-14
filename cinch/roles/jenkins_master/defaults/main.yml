@@ -255,3 +255,6 @@ jenkins_usebrowser: false
 # to manage production Jenkins masters and changes to the Jenkins application
 # are not desired to lessen customer impact.
 jenkins_plugin_install_configure: true
+
+# Number of times to retry getting the API key before we give up and admit defeat
+jenkins_user_api_retries: 10
