@@ -60,20 +60,35 @@ def main():
     process = process_named_args + process_positional_args
     # The groovy code simply prints out the value of the API key, so we want
     # to be able to capture that output
+    err, output = None, None
     p = subprocess.Popen(process,
                          stdout=subprocess.PIPE,
                          stderr=subprocess.PIPE)
-    output, err = p.communicate()
-    os.unlink(groovy.name)
-    success = False
-    # It's possible the Popen process has an error code for a whole host of
-    # reasons
-    if p.returncode == 0:
-        success = True
-    module.exit_json(api_key=output.strip(),
-                     err=err,
-                     changed=False,
-                     success=success)
+    try:
+        output, err = p.communicate()
+        os.unlink(groovy.name)
+        # It's possible the Popen process has an error code for a whole host of
+        # reasons
+        if p.returncode == 0:
+            module.exit_json(api_key=output.strip(),
+                             err=err,
+                             changed=False,
+                             success=True)
+        else:
+            msg = "Error occurred while executing jenkins-cli.jar"
+    except subprocess.CalledProcessError:
+        msg = "Error received while attempting to execute Java"
+        # If err and output are some type of empty, but not the empty string
+        if not err and err != "":
+            err = "No stderr detected"
+        if not output and output != "":
+            output = "No stdout detected"
+    # There are lots of reasons to fall through to here. But if we have, then
+    # something has most definitely gone wrong. We should report on that
+    module.fail_json(msg=msg,
+                     stderr=err,
+                     stdout=output,
+                     api_key='')
 
 
 main()
