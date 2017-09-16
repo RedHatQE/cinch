@@ -1,6 +1,6 @@
 - name: ensure firewalld is installed
   package:
-    name: firewalld
+    name: firewalld,python-firewall
     state: present
   become: true
 
