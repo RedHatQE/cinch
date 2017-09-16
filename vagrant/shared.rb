@@ -16,6 +16,8 @@ def get_image(base_box)
         return 'CentOS-7-x86_64-GenericCloud-released-latest'
     elsif base_box == 'centos/6'
         return 'CentOS-6-x86_64-GenericCloud-released-latest'
+    elsif base_box == 'fedora/26-cloud-base'
+        return 'Fedora-Cloud-Base-26-compose-latest'
     elsif base_box == 'fedora/25-cloud-base'
         return 'Fedora-Cloud-Base-25-compose-latest'
     elsif base_box == 'fedora/24-cloud-base'
