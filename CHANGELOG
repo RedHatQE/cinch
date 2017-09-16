@@ -1,3 +1,6 @@
+v 0.8.4
+- Bump to linchpin 1.0.3 and Ansible >= 2.3.2 because of syntax errors (GH #176)
+
 v 0.8.3 (13 Sep 2017)
 - Clean up TravisCI tests
 - Clean up Docker UID variable for OpenShift support
