@@ -15,6 +15,7 @@
     - gcc
     - redhat-rpm-config
     - git
+    - "{{ python_pip_package }}"
   retries: 2
   register: install_deps
   until: install_deps|success

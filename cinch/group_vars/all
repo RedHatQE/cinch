@@ -9,9 +9,6 @@ repository_defaults:
   skip_if_unavailable: false
   gpgcheck: false
 
-# This is the default name of this package, but it's not the same on every
-# system
-python_pip_package: python2-pip
 # Default user and directory to place the Jenkins files in
 jenkins_user: jenkins
 jenkins_user_home: /var/lib/jenkins
