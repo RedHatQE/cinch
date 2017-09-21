@@ -15,3 +15,5 @@ jenkins_authorized_keys: []
 # A list of additional packages that you wish to install on both masters and
 # slaves using the default package manager.
 extra_rpms: []
+# The name of the RPM that includes pip
+python_pip_package: python2-pip

@@ -12,7 +12,6 @@
     state: present
   with_items:
     - "{{ jenkins_rpm }}"
-    - "{{ python_pip_package }}"
     - libvirt-devel
     - python-virtualenv
     - libyaml-devel

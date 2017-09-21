@@ -1,15 +1,15 @@
 require "../shared.rb"
 
 Vagrant.configure("2") do |config|
-	vm(config, "master", "fedora/25-cloud-base")
-	vm(config, "slave", "fedora/25-cloud-base") do |ansible|
+	vm(config, "master", "fedora/26-cloud-base")
+	vm(config, "slave", "fedora/26-cloud-base") do |ansible|
 		ansible.groups = {
 			"jenkins_master" => ["master"],
 			"jenkins_slave" => ["slave"],
 			"fedora" => ["master", "slave"],
 			"repositories" => ["master"],
 			"jenkins_slave:vars" => {
-				"jenkins_master_url" => "http://{{ hostvars['master']['ansible_default_ipv4']['address'] }}:8080"
+				"jenkins_master_url" => "http://{{ hostvars['master']['ansible_default_ipv4']['address'] }}"
 			}
 		}
 	end

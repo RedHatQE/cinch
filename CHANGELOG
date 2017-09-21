@@ -1,5 +1,6 @@
 v 0.8.4
  - Capture errors from jenkins-cli.jar more robustly (GH #151)
+- Streamline installation of the Python pip module (GH #147)
 
 v 0.8.3 (13 Sep 2017)
 - Clean up TravisCI tests
