@@ -78,7 +78,12 @@ def main():
             msg = "Error occurred while executing jenkins-cli.jar"
     except subprocess.CalledProcessError:
         msg = "Error received while attempting to execute Java"
-        # If err and output are some type of empty, but not the empty string
+        # If err and output are some type of empty, but not the empty string,
+        # then we reached this point without any output. If they are the empty
+        # string, then we reached this point but the subprocess output nothing
+        # on the specified pipe. Providing this data, or a status message such
+        # as these defaults, provides a better way for users to diagnose the
+        # problems encountered
         if not err and err != "":
             err = "No stderr detected"
         if not output and output != "":
