@@ -32,6 +32,5 @@ jenkins_slave_password: ''
 # unless you really know what you're doing
 jslave_rpm_deps:
   - wget
-  - python-pip
 
 jslave_extra_rpms: []

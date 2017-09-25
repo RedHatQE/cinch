@@ -1,4 +1,5 @@
 gcc_compat_package: compat-gcc-34
+python_pip_package: python-pip
 
 _repositories:
   - name: epel-testing
