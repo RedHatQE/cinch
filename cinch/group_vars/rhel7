@@ -1,11 +1,5 @@
 gcc_compat_package: compat-gcc-44
 
-# It is important to import the RPM signing key for the Jenkins repository
-# if you plan to use that repository
-rpm_key_imports:
-  - key: http://pkg.jenkins-ci.org/redhat-stable/jenkins.io.key
-    validate_certs: true
-
 all_repositories:
   latest:
     name: rhel7-latest

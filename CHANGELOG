@@ -1,3 +1,7 @@
+v 0.8.5 (10 Oct 2017)
+- Remove management of the executor setting on masters (GH #182)
+- Remove stale, unused repo key that began failing (GH #184)
+
 v 0.8.4 (25 Sep 2017)
 - Bump to linchpin 1.0.4 and Ansible >= 2.3.2 because of syntax errors (GH #176)
 - Capture errors from jenkins-cli.jar more robustly (GH #151)

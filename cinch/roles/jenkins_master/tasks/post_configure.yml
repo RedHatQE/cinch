@@ -15,7 +15,6 @@
   # These scripts are run in the order listed below, so please edit this list
   # using the desired execution order.
   with_items:
-    - script: "{{ lookup('template', role_path + '/templates/set_executors.groovy') }}"
     - script: "{{ lookup('template', role_path + '/templates/set_usebrowser.groovy') }}"
     - script: "{{ lookup('template', role_path + '/templates/set_slaveport.groovy') }}"
     - script: "{{ lookup('template', role_path + '/templates/user.groovy') }}"
