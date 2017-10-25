@@ -245,6 +245,25 @@ firewall_tcp_ports:
   - "22/tcp"
   - "80/tcp"
   - "{{ https_enabled | ternary('443/tcp', omit) }}"
+# If this is set to true, nginx rate limiting will be enabled. This is to
+# prevent undesired impact of the Jenkins application from external
+# requests which could cause service disruption or other unwanted impact
+# of the Jenkins application.
+# https://www.nginx.com/blog/rate-limiting-nginx/
+jenkins_nginx_rate_limiting: false
+# Default rate limiting values are below, customize as desired.
+# Size of ip address state cache (10m = ~160,000 ip addresses):
+nginx_zone_cache_size: "10m"
+# Rate limit for requests per second:
+nginx_request_limit: "200r/s"
+# Limit maximum number of simultaneous connections per ip:
+nginx_max_connections_per_ip: 25
+# Enable bandwidth limiting for files this size or larger (200m = 200MB file):
+nginx_bandwidth_limit_after_size: "200m"
+# Set bandwidth limit for downloading large files (5m = 5Mb/s):
+nginx_max_bandwidth_outbound: "5m"
+# Set the burst queue size (number of addional requests allowed over limits):
+nginx_burst_queue: "100"
 # This setting affects how the update center downloads plugin metadata
 # http://javadoc.jenkins-ci.org/jenkins/model/DownloadSettings.html
 jenkins_usebrowser: false
