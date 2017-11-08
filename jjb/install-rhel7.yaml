@@ -31,9 +31,15 @@
     builders:
       - shell: |
             #!/bin/bash -ex
+            virtualenv ansible.venv && source ansible.venv/bin/activate
+            pip install --upgrade setuptools pip
+            pip install 'ansible==2.4.1.0'
+
             export PYTHONUNBUFFERED=1 # Enable real-time output for Ansible
             ansible-playbook -i localhost, -c local \
                 "${WORKSPACE}/cinch/cinch/playbooks/install-rhel7.yml" \
                 -e delete_venv="${DELETE_VENV}" \
                 -e latest_tip="${LATEST_TIP}" \
                 -e beaker_kerberos="${BEAKER_KERBEROS}"
+
+            deactivate
