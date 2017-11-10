@@ -1,6 +1,7 @@
 ---
 - job-template:
-    name: 'jslave-{project}-{topology}-1-provision'
+    name: '{project}-{topology}-provision'
+    description: '{description}'
     defaults: cinch-topology-setup
     node: master
     parameters:
@@ -12,8 +13,13 @@
     builders:
       - shell: |
             #!/bin/bash -ex
+            source "${{JENKINS_HOME}}/opt/linchpin/bin/activate"
+            linchpin -v --creds-path {topology_path}/${{PROVIDER}}/credentials -w {topology_path}/${{PROVIDER}} up
+            deactivate
+
             source "${{JENKINS_HOME}}/opt/cinch/bin/activate"
-            cinchpin up -w {topology_path}/${{PROVIDER}}
+            cinch {topology_path}/${{PROVIDER}}/inventories/cinch-test.inventory
+            deactivate
     publishers:
       - archive:
           artifacts: '{topology_path}/${{PROVIDER}}/inventories/cinch-test.inventory'
@@ -22,17 +28,18 @@
           artifacts: '{topology_path}/${{PROVIDER}}/resources/cinch-test.output'
           allow-empty: 'true'
       - trigger-parameterized-builds:
-          - project: 'jslave-{project}-{topology}-2-runtest'
+          - project: '{project}-{topology}-runtest'
             current-parameters: true
             condition: 'SUCCESS'
             fail-on-missing: true
-          - project: 'jslave-{project}-{topology}-3-teardown'
+          - project: '{project}-{topology}-teardown'
             current-parameters: true
             condition: 'UNSTABLE_OR_WORSE'
             fail-on-missing: true
 
 - job-template:
-    name: 'jslave-{project}-{topology}-2-runtest'
+    name: '{project}-{topology}-runtest'
+    description: '{description}'
     node: '{jslave_name}'
     builders:
       - shell: |
@@ -43,42 +50,58 @@
           artifacts: 'test_artifact.txt'
           allow-empty: 'false'
       - trigger-parameterized-builds:
-          - project: 'jslave-{project}-{topology}-3-teardown'
+          - project: '{project}-{topology}-teardown'
             current-parameters: true
 
 - job-template:
-    name: 'jslave-{project}-{topology}-3-teardown'
+    name: '{project}-{topology}-teardown'
+    description: '{description}'
     defaults: cinch-topology-setup
     node: master
     builders:
       - copyartifact:
-          project: 'jslave-{project}-{topology}-1-provision'
+          project: '{project}-{topology}-provision'
           filter: '{topology_path}/${{PROVIDER}}/inventories/cinch-test.inventory'
           target: '{topology_path}/${{PROVIDER}}/inventories'
           flatten: true
       - copyartifact:
-          project: 'jslave-{project}-{topology}-1-provision'
+          project: '{project}-{topology}-provision'
           filter: '{topology_path}/${{PROVIDER}}/resources/cinch-test.output'
           target: '{topology_path}/${{PROVIDER}}/resources'
           flatten: true
       - shell: |
             #!/bin/bash -ex
             source "${{JENKINS_HOME}}/opt/cinch/bin/activate"
-            cinchpin destroy -w {topology_path}/${{PROVIDER}}
+            # Try to remove the Jenkins slave from the Jenkins master, but do not fail
+            # the entire teardown job if Jenkins slave disconnection cannot be done.
+            # This is for cases where the provision step failed to attach the slave,
+            # but the instance should still be destroyed by linchpin.
+            set +e
+            teardown {topology_path}/${{PROVIDER}}/inventories/cinch-test.inventory
+            set -e
+            deactivate
+
+            source "${{JENKINS_HOME}}/opt/linchpin/bin/activate"
+            linchpin -v --creds-path {topology_path}/${{PROVIDER}}/credentials -w {topology_path}/${{PROVIDER}} destroy
+            deactivate
 
 - job-group:
-    name: jslave-provision-runtest-teardown
+    name: provision-runtest-teardown
     jobs:
-      - 'jslave-{project}-{topology}-1-provision'
-      - 'jslave-{project}-{topology}-2-runtest'
-      - 'jslave-{project}-{topology}-3-teardown'
+      - '{project}-{topology}-provision'
+      - '{project}-{topology}-runtest'
+      - '{project}-{topology}-teardown'
 
 - project:
-    name: jslave-cinch-jobs
+    name: cinch-jobs
     project: cinch
     topology:
       - example
     jobs:
-      - jslave-provision-runtest-teardown
+      - provision-runtest-teardown
     jslave_name: cinch-slave
-    topology_path: 'cinch-example/examples/linch-pin-topologies'
+    topology_path: 'cinch-example/examples/linchpin-topologies'
+    description: |
+        cinch Jenkins slave provisioning example workflow using Jenkins Job Builder
+
+        https://github.com/RedHatQE/cinch/blob/master/jjb/ci-jslave-project-sample.yaml

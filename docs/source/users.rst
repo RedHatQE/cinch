@@ -123,8 +123,8 @@ provided an `Ansible playbook
 <https://github.com/RedHatQE/cinch/blob/master/cinch/playbooks/install-rhel7.yml>`_
 that will install a newer version of the necessary Python packaging tools to
 allow for installation on RHEL7.  This playbook is intended for use on Jenkins
-masters and will install cinch into a virtualenv at
-**/var/lib/jenkins/opt/cinch**.  For convenience, an optional `Jenkins Job
+masters and will install cinch and linchpin into a virtualenv at
+**/var/lib/jenkins/opt/**.  For convenience, an optional `Jenkins Job
 Builder template
 <https://github.com/RedHatQE/cinch/blob/master/jjb/install-rhel7.yaml>`_ is
 provided and will create a Jenkins job that will run the aforementioned
@@ -133,39 +133,24 @@ playbook on your Jenkins master.
 Execution
 ---------
 
-With linch-pin
+With linchpin
 ``````````````
 
-The ``cinchpin`` command can be used to call `linch-pin
-<https://linch-pin.readthedocs.io/en/latest/>`_ automatically to provision
-instances and then configure the instances.  ``cinchpin`` supports a subset of
-linch-pin commands, such as **up**, **destroy**, and **init**.
+If you'd like to automate the process of provisioning a host to later configure
+with cinch, the `linchpin project
+<https://github.com/CentOS-PaaS-SIG/linchpin>`_ can be used for this task.
+linchpin can dynamically generate an Ansible inventory file that cinch can
+consume for host configuration.  In the following steps we will outline how to
+configure cinch-specific values within a linchpin workspace.
 
-In the following example we will provision a RHEL7 instance in OpenStack as a
-Jenkins slave.
-
-First, generate a linch-pin working directory for use with cinch by running the
-following commands:
-
-``mkdir /path/to/workdir``
-
-``cinchpin init -w /path/to/workdir``
-
-Next, create necessary credentials for linch-pin provisioning for your target
-infrastructure in
-**/path/to/workdir/credentials/cinch.yml**: ::
-
-    ---
-    clouds:
-      openstack:
-        auth:
-          auth_url: 'http://openstack-api-endpoint.example.com:5000/v2.0'
-          project_name: 'myproject'
-          username: 'myuser'
-          password: 'mypass'
+.. note::  For linchpin topology and workspace examples, including various host
+           environments, see the `linchpin documentation
+           <https://linchpin.readthedocs.io/en/latest/topologies.html>`_.
 
 Create a layout file by saving the following example template as
-**/path/to/workdir/layouts/cinch.yml** and edit to taste.::
+**/path/to/linchpin/workspace/layouts/mylayout.yml** and edit to taste based on
+your cinch role requirements.  In this example we configure a RHEL7 Jenkins
+slave::
 
     ---
     inventory_layout:
@@ -178,8 +163,12 @@ Create a layout file by saving the following example template as
             - repositories
             - jenkins_slave
 
-Create an Ansible group_vars file by saving the following example template as
-**/path/to/workdir/inventories/group_vars/all** and edit to taste.::
+Create an Ansible **group\_vars** file by saving the following example template
+as **/path/to/linchpin/workspace/inventories/group_vars/all** and edit to taste
+based on your desired configuration parameters.  In this example we configure a
+RHEL7 Jenkins slave to attach to a Jenkins master which requires
+authentication, along with some installed certificate authorities and
+repositories::
 
     ---
     ansible_user: root
@@ -201,48 +190,11 @@ Create an Ansible group_vars file by saving the following example template as
     jenkins_slave_username: 'automation-user'
     jenkins_slave_password: 'jenkinsAPItoken'
 
-Create a topology file by saving the following example template as
-**/path/to/workdir/topologies/cinch.yml** and edit to taste::
+Finally, If you'd like to automate this process in Jenkins, please see our
+example `Jenkins Job Builder workflow template
+<https://github.com/RedHatQE/cinch/blob/master/jjb/ci-jslave-project-sample.yaml>`_
+for guidance on putting it all together.
 
-    ---
-    topology_name: "cinch-test"
-    resource_groups:
-      -
-        resource_group_name: "cinch-group"
-        resource_group_type: "openstack"
-        resource_definitions:
-          -
-            name: "jslave"
-            flavor: "m1.small"
-            type: "os_server"
-            image: "rhel-7.2-server-x86_64-released"
-            count: 1 # Number of instances to create
-            keypair: "openstack-keypair-name" # Name of SSH keypair configured for OpenStack account
-            networks:
-              - "openstack-network-name" # OpenStack network name
-        # Name of credentials file to use for the OpenStack API
-        credentials:
-          filename: "cinch.yml"
-          profile: "openstack"
-
-.. note::  For more topology examples, including various host environments, see
-           the `linch-pin documentation
-           <https://linch-pin.readthedocs.io/en/latest/topologies.html>`_.
-
-Provision and configure your Jenkins slave automatically with the following
-command:
-
-``cinchpin up -w /path/to/workdir``
-
-To terminate the OpenStack instance and remove the Jenkins slave from the
-Jenkins master, run the following command:
-
-``cinchpin destroy -w /path/to/workdir``
-
-.. note::  Once the working directory is configured successfully, a common next
- step would be to check this directory into source control where it can be
- consumed by CI automation tools such as Jenkins Job Builder or Jenkins
- Pipeline.
 
 Manual
 ``````
@@ -268,6 +220,13 @@ arises. There is even a shell script in **bin/run\_jenkins\_local.sh** that
 will execute **ansible-playbook** from the **.venv/** virtualenv and point it
 to the **inventory/local/hosts** file to make executing against your own
 environment as easy as a single command.
+
+The cinch project can be used as a standard Ansible project, by running
+**ansible-playbook** and calling **site.yml** for Jenkins master or slave
+configuration and **teardown.yml** for removing a Jenkins slave from a Jenkins
+master. For convenience, we also provide CLI wrappers for these tasks, with the
+**cinch** command running **site.yml** and the **teardown** command running
+**teardown.yml**.
 
 
 Support

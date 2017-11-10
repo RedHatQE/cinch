@@ -9,15 +9,7 @@
       - bool:
           name: DELETE_VENV
           default: false
-          description: "Delete pre-existing cinch virtualenv and re-install"
-      - bool:
-          name: LATEST_TIP
-          default: false
-          description: "Install latest tip of cinch+linch-pin instead of latest release from pypi"
-      - bool:
-          name: BEAKER_KERBEROS
-          default: true
-          description: "Install kerberos module for Beaker"
+          description: "Delete pre-existing linchpin/cinch virtualenvs and re-install"
     wrappers:
       - ansicolor
       - workspace-cleanup
@@ -38,8 +30,6 @@
             export PYTHONUNBUFFERED=1 # Enable real-time output for Ansible
             ansible-playbook -i localhost, -c local \
                 "${WORKSPACE}/cinch/cinch/playbooks/install-rhel7.yml" \
-                -e delete_venv="${DELETE_VENV}" \
-                -e latest_tip="${LATEST_TIP}" \
-                -e beaker_kerberos="${BEAKER_KERBEROS}"
+                -e delete_venv="${DELETE_VENV}"
 
             deactivate
