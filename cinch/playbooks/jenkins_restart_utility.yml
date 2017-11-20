@@ -5,9 +5,25 @@
 
 # Example:
 # ansible-playbook -u root --private-key /path/to/key
-# -i '10.0.183.169', jenkins_restart_utility.yml -e "restart_jenkins=true"
+# jenkins_restart_utility.yml
+# -e "restart_jenkins=true hostname=jenkins
+# domain=example.com"
 
-- hosts: all
+# Optionally include an arbitary role here
+# to run before the playbook is executed if needed"
+
+- hosts: localhost
+  connection: local
+  tasks:
+    - name: Add host to inventory
+      add_host:
+        name: "{{ hostname }}.{{ domain }}"
+        groups: "jenkins_master"
+
+- hosts: jenkins_master
+  roles:
+    - role: "{{ dependency_role | default() }}"
+
   vars:
     jenkins_pid_path: '/run/jenkins.pid'
     diag_path_prefix: '/var/lib/jenkins/cinch_diagnostics'
