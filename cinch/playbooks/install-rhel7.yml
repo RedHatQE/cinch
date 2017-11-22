@@ -4,18 +4,16 @@
 # on RHEL7 to work with newer Python libraries such as those required by
 # 'cinch'.
 #
-# This playbook was tested with Ansible 1.8.4.
+# This playbook was tested with Ansible 2.4.1.0
 
 - name: install cinch into a virtualenv on RHEL7
   hosts: localhost
   vars:
     jenkins_home: /var/lib/jenkins
-    venv_dir: "{{ jenkins_home }}/opt/cinch"
-    temp_dir: "{{ venv_dir }}/tmp"
-    python: "{{ venv_dir }}/bin/python"
+    venvs:
+      cinch: "{{ jenkins_home }}/opt/cinch"
+      linchpin: "{{ jenkins_home }}/opt/linchpin"
     delete_venv: false
-    latest_tip: false
-    beaker_kerberos: true
 
   tasks:
     - name: fail if we are not running this playbook on RHEL7
@@ -38,77 +36,48 @@
         msg: "directory {{ jenkins_home }} must exist for this playbook to run"
       when: not jenkins_home_stat_result.stat.exists
 
-    - name: check for /var/lib/jenkins/opt/cinch directory
+    - name: check for existing virtualenvs
       stat:
-        path: "{{ venv_dir }}"
+        path: "{{ item.value }}"
+      with_dict: "{{ venvs }}"
       register: venv_stat_result
 
     - name: >-
-        fail if pre-existing cinch installation at
-        /var/lib/jenkins/opt/cinch is found and it cannot be deleted
+        fail if pre-existing virtualenvs are found and cannot be deleted because
+        delete_venv is set to 'false'
       fail:
-        msg: "directory {{ venv_dir }} exists, but 'delete_venv' setting is False"
-      when: venv_stat_result.stat.exists and not (delete_venv|bool)
+        msg: "directory {{ item.item.value }} exists, but 'delete_venv' setting is False"
+      with_items: "{{ venv_stat_result.results }}"
+      when: item.stat.exists == true and not (delete_venv|bool)
 
     - name: >-
         delete existing virtualenv directory (disabled by default, override
         with DELETE_VENV Jenkins job parameter or delete_venv playbook variable)
       file:
-        path: "{{ venv_dir }}"
+        path: "{{ item.value }}"
         state: absent
+      with_dict: "{{ venvs }}"
       when: (delete_venv|bool)
 
-    - name: create virtualenv
-      command: virtualenv --no-setuptools "{{ venv_dir }}"
-      args:
-        creates: "{{ venv_dir }}"
+    - name: >-
+        create virtualenvs with --system-site-packages to allow for selinux
+        module compatibility, then upgrade setuptools and pip
+      pip:
+        name: setuptools pip
+        virtualenv: "{{ item.value }}"
+        extra_args: -U
+        virtualenv_site_packages: true
+      with_dict: "{{ venvs }}"
 
-    - name: create temp dir in root of virtualenv
-      file:
-        path: "{{ temp_dir }}"
-        state: directory
+    - name: install version 1.0.4 of linchpin using pip
+      pip:
+        name: linchpin
+        virtualenv: "{{ venvs.linchpin }}"
+        extra_args: -U
+        version: 1.0.4
 
-    - name: download latest version of pip (version included with RHEL7 is too old)
-      get_url:
-        url: https://bootstrap.pypa.io/get-pip.py
-        dest: "{{ temp_dir }}"
-
-    - name: install pip manually by running get-pip.py script
-      command: "{{ python }} {{ temp_dir }}/get-pip.py"
-      args:
-        creates: "{{ venv_dir }}/lib/python2.7/site-packages/setuptools"
-
-    - name: install released versions of cinch+linch-pin using pip
+    - name: install released version of cinch using pip
       pip:
         name: cinch
-        virtualenv: "{{ venv_dir }}"
+        virtualenv: "{{ venvs.cinch }}"
         extra_args: -U
-      when: not (latest_tip|bool)
-
-    # This pip install should be non-editable, but the pip module in Ansible
-    # 1.8.4. does not support that flag
-    - name: install latest tip of cinch+linch-pin instead of latest release from pypi
-      command: >-
-        "{{ venv_dir }}/bin/pip" install -U
-        https://github.com/CentOS-PaaS-SIG/linchpin/archive/develop.tar.gz
-        https://github.com/RedHatQE/cinch/archive/master.tar.gz
-      when: (latest_tip|bool)
-
-    - name: install beaker-client and python-krbV with pip to use kerberos with Beaker
-      pip:
-        name: "{{ item }}"
-        virtualenv: "{{ venv_dir }}"
-        extra_args: -U
-      with_items:
-        - beaker-client
-        - python-krbV
-      when: (beaker_kerberos|bool)
-
-    ## https://dmsimard.com/2016/01/08/selinux-python-virtualenv-chroot-and-ansible-dont-play-nice/
-    - name: >-
-        set up symlink in virtualenv for selinux module in system site-packages
-        since it's not pip installable
-      file:
-        src: /usr/lib64/python2.7/site-packages/selinux
-        dest: "{{ venv_dir }}/lib/python2.7/site-packages/selinux"
-        state: link

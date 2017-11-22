@@ -1,3 +1,15 @@
+v 0.9.0 (16 Nov 2017)
+- IMPORTANT - The 'cinchpin' command has been REMOVED for linchpin 1.0.4
+  compatibility.  The new 'teardown' command replaces Jenkins slave
+  disconnection functionality previously handled by the 'cinchpin' command.
+- The RHEL7 installer now creates two virtualenvs, one for linchpin and one for
+  cinch
+- Removed 'latest tip' and Beaker python package installation options from
+  RHEL7 installer as they are no longer necessary
+- Fixed a bug where Jenkins slaves would not be removed from the master during
+  a provisioning failure in our JJB example workflow
+  (ci-jslave-project-sample.yaml)
+
 v 0.8.5 (10 Oct 2017)
 - Remove management of the executor setting on masters (GH #182)
 - Remove stale, unused repo key that began failing (GH #184)
