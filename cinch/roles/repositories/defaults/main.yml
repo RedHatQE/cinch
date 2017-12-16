@@ -1,5 +1,11 @@
 # Override with an array of objects like you would find in playbook/group_vars/rhel7
-# if you want a different set of repositories than this package installs by default
+# if you want a different set of repositories than this package installs by default.
+# It is not recommended that you touch the "repositories" variable in your
+# variables, as that value is set to include repositories that are necessary for
+# master and slave software installation. Extra repositories is unused by this
+# software and is designed to be overridden by the user with any extra repositories
+# they want added to the host.
+extra_repositories: []
 repositories: []
 
 # Override with an array of strings that are URLs to repository files, if you want
