@@ -1,8 +1,8 @@
 To run this box, you will need to find and add a Vagrant box for RHEL7. Currently the
-version supported is RHEL 7.2. If you have access to provided RHEL7.2 Vagrant box file,
+version supported is RHEL 7.4. If you have access to provided RHEL7.4 Vagrant box file,
 you can add it to your local system with a command like
 
-```vagrant box add --name rhel7.2 http://somewhere.com/vagrant/box/files/rhel7.2.box```
+```vagrant box add --name rhel7.4 http://somewhere.com/vagrant/box/files/rhel7.4.box```
 
 Since RHEL7 is under license, these images are probably not readily available to public
 infrastructure, but this Vagrantfile is provided in the interest of testing and for those
