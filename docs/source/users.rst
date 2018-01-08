@@ -205,10 +205,15 @@ configured. Use normal methods for setting **group\_vars** and **host\_vars**
 within the inventory or its associated folders that suits your own needs and
 preferences.
 
-While most default settings should be functional, there are lots of options
-configured in the various **default/main.yml** files within the various roles
-folders. Check in those files for more details on specific options that can be
-set and a description of what they each mean.
+.. seealso:: While most default settings should be functional, there are lots
+             of options configured in the various **default/main.yml** files
+             within the various roles folders. Check in those files for more
+             details on specific options that can be set and a description of
+             what they each mean. *These files are heavily commented, and serve
+             as the best source of documentation for the way that cinch
+             configures a system.  If you feel the need to modify cinch
+             playbooks directly, first check to see if the behavior you want is
+             configurable via the provided Ansible variables.*
 
 See a few examples of such in either the **inventory/** folder or inside of the
 various **vagrant/** subfolders where known good working environments are
@@ -224,9 +229,22 @@ environment as easy as a single command.
 The cinch project can be used as a standard Ansible project, by running
 **ansible-playbook** and calling **site.yml** for Jenkins master or slave
 configuration and **teardown.yml** for removing a Jenkins slave from a Jenkins
-master. For convenience, we also provide CLI wrappers for these tasks, with the
-**cinch** command running **site.yml** and the **teardown** command running
-**teardown.yml**.
+master.
+
+For convenience, we also provide CLI wrappers for these tasks.  These wrappers
+simplify the task of finding and running the desired cinch playbooks for
+configuration or teardown, and also can optionally pass through any additional
+CLI arguments to the 'ansible-playbook' command that you may need.
+
+The following commands are available:
+
+- ``cinch`` - runs the **site.yml** playbook to configure a Jenkins master or
+  slave
+- ``teardown`` - runs the **teardown.yml** playbook to disconnect a Jenkins
+  slave
+
+Use the ``-h`` or ``--help`` arguments for the CLI wrappers to get further
+info.
 
 
 Support

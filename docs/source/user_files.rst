@@ -4,7 +4,7 @@ User Files
 Motivation
 ----------
 
-Anyone using Cinch to provision either a Jenkins master os slave may have the
+Anyone using Cinch to provision either a Jenkins master or slave may have the
 need to perform configuration to the system that exceeds the ability of Cinch to
 reasonably include support for within these playbooks. These could cover nearly
 any aspect of system administration, monitoring, configuration, and setup. For
