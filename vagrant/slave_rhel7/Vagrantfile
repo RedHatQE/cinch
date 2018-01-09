@@ -1,16 +1,18 @@
 require "../shared.rb"
 
 Vagrant.configure("2") do |config|
-    vm(config, "slave", "rhel7.2") do |ansible|
+    vm(config, "master", "rhel7.4")
+    vm(config, "slave", "rhel7.4") do |ansible|
         ansible.groups = {
+            "jenkins_master" => ["master"],
             "jenkins_slave" => ["slave"],
-            "rhel7" => ["slave"],
+            "rhel7" => ["master", "slave"],
+            "repositories" => ["master", "slave"],
             "jenkins_slave:vars" => {
-                "jenkins_master_url" => "http://10.8.172.6",
-                "jenkins_user_password" => "threeblindmice"
+                "jenkins_master_url" => "http://{{ hostvars['master']['ansible_default_ipv4']['address'] }}"
             },
             "rhel7:vars" => {
-                "rhel_base" => "http://example.com/content/dist/rhel/server/7/7.2"
+                "rhel_base" => "http://example.com/content/dist/rhel/server/7/7Server"
             }
         }
     end

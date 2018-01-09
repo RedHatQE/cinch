@@ -1,3 +1,8 @@
+v 0.10.0 (NEXT)
+- Update default Jenkins version to 2.60
+- Update plugins list to 2.60-friendly list
+- Add support for extra_repositories in repo list
+
 v 0.9.0 (16 Nov 2017)
 - IMPORTANT - The 'cinchpin' command has been REMOVED for linchpin 1.0.4
   compatibility.  The new 'teardown' command replaces Jenkins slave
