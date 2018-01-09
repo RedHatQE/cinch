@@ -7,15 +7,16 @@ from wrappers import call_ansible
 import sys
 
 
-def cinch_generic(playbook):
+def cinch_generic(playbook, help_description):
     # Parse the command line arguments
-    parser = ArgumentParser(description='A wrapper around Cinch for the most '
-                            'common use case')
+    parser = ArgumentParser(description='A CLI wrapper for ansible-playbook '
+                            'to run cinch playbooks.  ' + help_description)
     # The inventory file that the user provides which will get passed along to
     # Ansible for its consumption
-    parser.add_argument('inventory')
+    parser.add_argument('inventory', help='Ansible inventory file (required)')
     # All remaining arguments are passed through, untouched, to Ansible
-    parser.add_argument('args', nargs=REMAINDER)
+    parser.add_argument('args', nargs=REMAINDER, help='extra args to '
+                        'pass to the ansible-playbook command (optional)')
     args = parser.parse_args()
     if len(args.inventory) > 0:
         if args.inventory[0] == '/':
@@ -40,7 +41,9 @@ def cinch():
     if an unknown error occurs. If ansible-playbook exits with an error code,
     this executable will exit with the same code.
     """
-    cinch_generic('site.yml')
+    help_description = '''This command runs the 'site.yml' playbook to
+                          configure a Jenkins master or slave.'''
+    cinch_generic('site.yml', help_description)
 
 
 def teardown():
@@ -52,7 +55,9 @@ def teardown():
     an unknown error occurs. If ansible-playbook exits with an error code, this
     executable will exit with the same code.
     """
-    cinch_generic('teardown.yml')
+    help_description = '''This command runs the 'teardown.yml' playbook to
+                          disconnect a Jenkins slave.'''
+    cinch_generic('teardown.yml', help_description)
 
 
 if __name__ == '__main__':
