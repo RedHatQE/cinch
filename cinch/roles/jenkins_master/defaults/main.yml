@@ -41,6 +41,13 @@ jenkins_uc_version: "{{ jenkins_version.rsplit('.', 1)[0] }}"
 jenkins_plugins:
   - plugins: "{{ lookup('file', 'files/jenkins-plugin-lists/default.txt').split('\n') }}"
     url: "{{ omit }}" # Omit in order to use default update center
+# Plugin lists may also be fetched via a URL using Ansible's url lookup plugin.
+# Given the same plugin list input file as described above, note that you must
+# split on commas rather than newlines due to the behavior of the Ansible url
+# lookup plugin:
+#jenkins_plugins:
+#  - plugins: "{{ lookup('url', 'http://example.com/default.txt').split(',') }}"
+#    url: "{{ omit }}" # Omit in order to use default update center
 # Bundled plugins are ones that are included by default with Jenkins. The process
 # of pinning a bundled plugin tells Jenkins to not overwrite the correct version
 # of plugin with an included version during a Jenkins upgrade but rather use the
