@@ -14,6 +14,7 @@ Welcome to cinch's documentation!
    docker_image
    user_files
    config
+   maintainers
 
 
 
