@@ -46,7 +46,7 @@
   retries: 3
   until: not plugin_install|failed
   with_subelements:
-    - "{{ jenkins_plugins }}"
+    - "{{ jenkins_plugins + jenkins_extra_plugins }}"
     - plugins
   notify: restart Jenkins
 
