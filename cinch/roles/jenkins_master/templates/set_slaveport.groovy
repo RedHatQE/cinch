@@ -12,7 +12,7 @@ def change_msg = "CHANGED: slave agent port from " + slave_agent_port +
     " to " + jenkins_slave_agent_port
 
 if (slave_agent_port != jenkins_slave_agent_port) {
-    if (check_mode == true) {
+    if (check_mode) {
         println change_msg
     } else {
         jenkins.setSlaveAgentPort(jenkins_slave_agent_port)

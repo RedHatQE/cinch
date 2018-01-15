@@ -8,7 +8,7 @@ def check_mode = {{ ansible_check_mode|to_json }};
 String oldUrl = StringUtils.stripEnd(jlc.getUrl(), "/");
 
 if( !oldUrl.equals(newUrl) ) {
-	jlc.setUrl(newUrl);
+	if ( !check_mode ) jlc.setUrl(newUrl);
 	print "CHANGED: Updated base URL to " + newUrl;
 	changed = true;
 }
