@@ -15,7 +15,7 @@ def change_msg = "CHANGED: setUseBrowser from " + usebrowser + " to " +
     jenkins_usebrowser
 
 if (usebrowser != jenkins_usebrowser) {
-    if (check_mode == true) {
+    if (check_mode) {
         println change_msg
     } else {
         ds.setUseBrowser(jenkins_usebrowser)

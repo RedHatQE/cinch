@@ -7,6 +7,7 @@ def jenkins = Jenkins.getActiveInstance();
 def thinbackup = ThinBackupPluginImpl.getInstance();
 boolean changes = false;
 
+def check_mode = {{ ansible_check_mode|to_json }};
 String backupPath = "{{ jenkins_backup.directory|default('/jenkins_backup/.backups') }}";
 String fullBackupSchedule = "{{ jenkins_backup.full_schedule|default('H 0 * * 0') }}";
 String diffBackupSchedule = "{{ jenkins_backup.diff_schedule|default('H 0 * * *') }}";
@@ -27,58 +28,58 @@ def void changed(String field, def value) {
 }
 
 if( !thinbackup.getBackupPath().equals(backupPath) ){
-	thinbackup.setBackupPath(backupPath);
+	if( !check_mode ) thinbackup.setBackupPath(backupPath);
 	changed("backup path", backupPath);
 }
 if( !thinbackup.getFullBackupSchedule().equals(fullBackupSchedule) ) {
-	thinbackup.setFullBackupSchedule(fullBackupSchedule);
+	if( !check_mode ) thinbackup.setFullBackupSchedule(fullBackupSchedule);
 	changed("full backup schedule", fullBackupSchedule);
 }
 if( !thinbackup.getDiffBackupSchedule().equals(diffBackupSchedule) ){
-	thinbackup.setDiffBackupSchedule(diffBackupSchedule);
+	if( !check_mode ) thinbackup.setDiffBackupSchedule(diffBackupSchedule);
 	changed("diff backup schedule", diffBackupSchedule);
 }
 if( thinbackup.getNrMaxStoredFull() != maxSets ) {
-	thinbackup.setNrMaxStoredFull(maxSets);
+	if( !check_mode ) thinbackup.setNrMaxStoredFull(maxSets);
 	changed("max number of backups stored", maxSets);
 }
 if( !thinbackup.getExcludedFilesRegex().equals(excludedFiles) ) {
-	thinbackup.setExcludedFilesRegex(excludedFiles);
+	if( !check_mode ) thinbackup.setExcludedFilesRegex(excludedFiles);
 	changed("excluded files", excludedFiles);
 }
 if( thinbackup.isWaitForIdle() != waitForIdle ) {
-	thinbackup.setWaitForIdle(waitForIdle);
+	if( !check_mode ) thinbackup.setWaitForIdle(waitForIdle);
 	changed("wait for idle", waitForIdle);
 }
 if( thinbackup.getForceQuietModeTimeout() != forceQuietModeTimeout ) {
-	thinbackup.setForceQuietModeTimeout(forceQuietModeTimeout);
+	if( !check_mode ) thinbackup.setForceQuietModeTimeout(forceQuietModeTimeout);
 	changed("force quiet mode timeout", forceQuietModeTimeout);
 }
 if( thinbackup.isBackupBuildResults() != backupBuildResults ) {
-	thinbackup.setBackupBuildResults(backupBuildResults);
+	if( !check_mode ) thinbackup.setBackupBuildResults(backupBuildResults);
 	changed("backup build results", backupBuildResults);
 }
 if( thinbackup.isBackupUserContents() != backupUserContents ) {
-	thinbackup.setBackupUserContents(backupUserContents);
+	if( !check_mode ) thinbackup.setBackupUserContents(backupUserContents);
 	changed("backup user contents", backupUserContents);
 }
 if( thinbackup.isCleanupDiff() != cleanupDiff ) {
-	thinbackup.setCleanupDiff(cleanupDiff);
+	if( !check_mode ) thinbackup.setCleanupDiff(cleanupDiff);
 	changed("cleanup diffs", cleanupDiff);
 }
 if( thinbackup.isBackupNextBuildNumber() != backupNextBuildNumber ) {
-	thinbackup.setBackupNextBuildNumber(backupNextBuildNumber);
+	if( !check_mode ) thinbackup.setBackupNextBuildNumber(backupNextBuildNumber);
 	changed("backup next build number", backupNextBuildNumber);
 }
 if( thinbackup.isMoveOldBackupsToZipFile() != moveOldBackupsToZipFile ) {
-	thinbackup.setMoveOldBackupsToZipFile(moveOldBackupsToZipFile);
+	if( !check_mode ) thinbackup.setMoveOldBackupsToZipFile(moveOldBackupsToZipFile);
 	changed("move old backups to zip", moveOldBackupsToZipFile);
 }
 
 if( thinbackup.isBackupPluginArchives() != backupPluginArchives ) {
-	thinbackup.setBackupPluginArchives(backupPluginArchives);
+	if( !check_mode ) thinbackup.setBackupPluginArchives(backupPluginArchives);
 	changed("backup plugin archives", backupPluginArchives);
 }
 
-if( changes && !checkMode )
+if( changes && !check_mode )
 	thinbackup.save();

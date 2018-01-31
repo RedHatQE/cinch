@@ -11,12 +11,16 @@ def check_mode = {{ ansible_check_mode|to_json }};
 
 {% for var in jenkins_envvars %}
 if (isEmptyNode) {
-	j.globalNodeProperties.replaceBy([new EnvironmentVariablesNodeProperty(new EnvironmentVariablesNodeProperty.Entry("{{ var.key }}", "{{ var.value }}"))]);
-	isEmptyNode = false;
-} else {
-	j.globalNodeProperties.get(0).getEnvVars().put("{{ var.key }}", "{{ var.value }}");
+  if ( !check_mode )
+    j.globalNodeProperties.replaceBy([new EnvironmentVariablesNodeProperty()]);
+  isEmptyNode = false;
 }
+
+if ( !check_mode )
+  j.globalNodeProperties.get(0).getEnvVars().put("{{ var.key }}", "{{ var.value }}");
+println "Adding environment variable {{ var.key }}={{ var.value }}";
+
 {% endfor %}
 
 if ( !check_mode )
-	j.save();
+  j.save();
