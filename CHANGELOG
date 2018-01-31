@@ -1,7 +1,17 @@
-v 0.10.0 (NEXT)
+v 1.0.0 (01 Feb 2018)
 - Update default Jenkins version to 2.60
 - Update plugins list to 2.60-friendly list
 - Add support for extra_repositories in repo list
+- Add support for the jenkins_extra_plugins variable, which appends to the
+  existing provided plugin lists for further customization
+- Add check_mode support for kerberos sso Groovy script
+- Improved check_mode support for Groovy scripts to ensure modifications are
+  not made
+- Improved documentation for CLI --help and Sphinx docs for Ansible variable
+  customization
+- Fixed issue with spaces in SSH key file path
+- Added an example for using URLs to fetch Jenkins plugin lists
+- Added Sphinx documentation for maintainer release process
 
 v 0.9.0 (16 Nov 2017)
 - IMPORTANT - The 'cinchpin' command has been REMOVED for linchpin 1.0.4
