@@ -48,6 +48,8 @@ jenkins_plugins:
 #jenkins_plugins:
 #  - plugins: "{{ lookup('url', 'http://example.com/default.txt').split(',') }}"
 #    url: "{{ omit }}" # Omit in order to use default update center
+# Extra plugins to install, specified by the user with the same format as jenkins_plugins
+jenkins_extra_plugins: []
 # Bundled plugins are ones that are included by default with Jenkins. The process
 # of pinning a bundled plugin tells Jenkins to not overwrite the correct version
 # of plugin with an included version during a Jenkins upgrade but rather use the
