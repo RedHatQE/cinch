@@ -8,6 +8,9 @@ service_name: "{{ hostvars[inventory_hostname]['ansible_host'] | default(invento
 nginx_error_level: "warn"
 nginx_worker_processes: 1
 nginx_gzip_status: "on"
+# Increase upload limits to allow jenkins plugin uploads
+nginx_max_body_size: 100M
+nginx_send_timeout: 120s
 
 ## variables unset by default
 httpd_no_error_pages: false
