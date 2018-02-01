@@ -12,6 +12,7 @@ v 1.0.0 (01 Feb 2018)
 - Fixed issue with spaces in SSH key file path
 - Added an example for using URLs to fetch Jenkins plugin lists
 - Added Sphinx documentation for maintainer release process
+- nginx configuration now allows Jenkins plugin uploads
 
 v 0.9.0 (16 Nov 2017)
 - IMPORTANT - The 'cinchpin' command has been REMOVED for linchpin 1.0.4
