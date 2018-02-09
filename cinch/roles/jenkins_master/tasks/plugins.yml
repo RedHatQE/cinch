@@ -21,6 +21,7 @@
   copy:
     src: "{{ update_center_certificate }}"
     dest: "{{ jenkins_home }}/update-center-rootCAs/update-center.crt"
+    remote_src: "{{ update_center_certificate_remote_src }}"
     owner: jenkins
     group: jenkins
   notify: restart Jenkins
