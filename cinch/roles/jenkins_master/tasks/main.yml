@@ -1,3 +1,6 @@
+- name: setup things before install
+  include: pre_install.yml
+
 - name: install necessary packages
   include: install.yml
 
