@@ -57,8 +57,15 @@ jenkins_extra_plugins: []
 # should be pinned. NOTE: This only works for Jenkins 1.X
 jenkins_pinned_plugins: []
 # Java max heap size argument. Set this value based on the amount of RAM that
-# your instance needs and your infrastructure is able to support
+# your instance needs and your infrastructure is able to support. This argument
+# is set on the JVM with -Xmx{{ java_heap_size }} in the command line options
 java_heap_size: 3g
+# A list of command line options passed to the Java command line, in addition to
+# the ones listed in the vars folder. These options can allow you tweak either the
+# JVM directly or base, hidden features in the Jenkins world. A simply array of
+# string values should be supplied, that will spliced together with spaces on the
+# command line
+jenkins_java_extra_options: []
 # A default session timeout of 8hrs (480 mins) is needed to work
 # comfortably without having to re-login.
 session_timeout: 480
@@ -134,15 +141,11 @@ jenkins_local_users: []
 # "admin" will always be created that has access to every permission. You can
 # override this by creating a role in this array named "admin" that has a
 # different set of permisisons, if you would rather. The "sids" array is a list
-# of the roles/users/groups that should be assigned to that role.
-jenkins_security_roles:
-  - name: anonymous
-    permissions:
-      - com.synopsys.arc.jenkins.plugins.ownership.OwnershipPlugin.Jobs
-      - hudson.model.Hudson.Read
-      - hudson.model.View.Read
-    sids:
-      - anonymous
+# of the roles/users/groups that should be assigned to that role. For the structure
+# of this array, see the jenkins_security_roles variable in the vars folder of
+# this Ansible role
+jenkins_security_extra_roles: []
+# LDAP plugin configuration values
 jenkins_ldap:
   server: ldaps://ldap.example.com
   root_dn: dc=example,dc=com
@@ -172,33 +175,6 @@ upgrade_blacklist:
 # such as one would pass to yum or dnf or a full path to the RPM file
 # (including a full URL). See note above on the variable "jenkins_version"
 jenkins_rpm: jenkins-{{ jenkins_version }}-1.1
-# A set of command-line Java options to be passed into Jenkins. These values
-# can be anything accepted either by Jenkins or by the JVM
-jenkins_java_options:
-  # Tell Java it is running on a headless system
-  - -Djava.awt.headless=true
-  # disables SNI extension in case of Java 1.7, which causes problems with SSL
-  - -Djsse.enableSNIExtension=false
-  # Allows all parameters to be passed between jobs in trigger pipelines
-  - -Dhudson.model.ParametersAction.keepUndefinedParameters=true
-  # Alows creation of synthetic users that exist only in Jenkins and not external auth
-  - -Dhudson.model.User.allowNonExistentUserToLogin=true
-  # allows the creation of a synthetic/virtual user to be created via an Url.
-  - -Dhudson.model.User.allowUserCreationViaUrl=true
-  # Allows admin users to see the API tokens of all users
-  - -Djenkins.security.ApiTokenProperty.showTokenToAdmins=true
-  # adds performance log messages during Jenkins initialization.
-  - -Djenkins.model.Jenkins.logStartupPerformance=true
-  # helps in cases where SSH slave startup can block. See JENKINS-20108
-  - -Djava.security.egd=file:/dev/./urandom
-  # Needed for Jenkins 2.X to bypass SetupWizard.
-  - -Djenkins.install.runSetupWizard=false
-  # Needed to disable DNSMulticast
-  - -Dhudson.DNSMultiCast.disabled=true
-  # Set default session timeout.
-  - -DsessionTimeout={{ session_timeout }}
-  # Increase max Java heap size
-  - -Xmx{{ java_heap_size }}
 # the path to the Java executable
 jenkins_java_cmd: /usr/bin/java
 # These values change the default ulimits for file and process counts in

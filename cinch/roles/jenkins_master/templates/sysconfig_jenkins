@@ -44,7 +44,7 @@ JENKINS_USER="{{ jenkins_user }}"
 #
 # Options to pass to java when running Jenkins.
 #
-JENKINS_JAVA_OPTIONS="{{ jenkins_java_options | join(' ') }}"
+JENKINS_JAVA_OPTIONS="{{ (jenkins_java_options + jenkins_java_extra_options) | join(' ') }}"
 ## Type:        integer(0:65535)
 ## Default:     8080
 ## ServiceRestart: jenkins
