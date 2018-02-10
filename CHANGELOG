@@ -1,3 +1,9 @@
+v 1.1.0 (Next)
+- Adds support for jenkins_java_extra_options (#204)
+- Adds support for jenkins_security_extra_roles (#204)
+- Allow update_center_certificate to be pulled from remote instead of
+  only local files (PR#214)
+
 v 1.0.0 (01 Feb 2018)
 - Update default Jenkins version to 2.60
 - Update plugins list to 2.60-friendly list
