@@ -15,7 +15,7 @@ addons:
     packages:
       - shellcheck
 install:
-  - tests/install.sh
+  - travis_retry tests/install.sh
 script:
   - tests/${TEST}
 
