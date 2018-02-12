@@ -15,13 +15,13 @@ addons:
     packages:
       - shellcheck
 before_install:
-  - pip install -U pip
+  - travis_retry pip install -U pip
   - pip --version
 install:
-  - pip install tox
+  - travis_retry pip install tox
   - tox --version
 script:
-  - tox -v
+  - travis_retry tox -v
 
 # Test matrix will be constructed from here. Listing out each set of tests
 # to execute will permit them to be executed in parallel
