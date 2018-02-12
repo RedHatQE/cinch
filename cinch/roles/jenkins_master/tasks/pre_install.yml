@@ -1,0 +1,7 @@
+- name: create jenkins_cli_shell_user
+  become: true
+  user:
+    name: "{{ jenkins_cli_shell_user }}"
+    home: "{{ jenkins_cli_shell_user_home }}"
+    generate_ssh_key: true
+  when: jenkins_cli_shell_user != jenkins_user
