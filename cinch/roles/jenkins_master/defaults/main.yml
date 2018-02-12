@@ -13,6 +13,16 @@
 update_centers:
   - id: default
     url: "https://updates.jenkins-ci.org/{{ jenkins_uc_version }}/update-center.json"
+# If necessary, you may upload an update center certificate file by defining
+# a local filesystem path to the certificate on the the system running Ansible.
+# This is not necessary for the upstream Jenkins update center, but may be
+# useful for deployments where custom downstream update centers are in use.
+#update_center_certificate: /tmp/update-center.crt
+# If update_center_certificate is defined, you may wish to override the default
+# behavior of uploading the certificate from the local system running Ansible
+# and instead copy the file from a location on the remote Jenkins master to the
+# proper destination in JENKINS_HOME by setting this variable to true:
+update_center_certificate_remote_src: false
 # If set to true, Jenkins will be run over HTTPS. If you set this value to true,
 # you can override jenkins_ssl_cert and jenkins_ssl_key if you want to use custom
 # SSL certificate, otherwise a self signed certificate will be used.

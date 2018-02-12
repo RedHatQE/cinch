@@ -3,6 +3,7 @@ v 1.1.0 (Next)
 - Adds support for jenkins_security_extra_roles (#204)
 - Allow update_center_certificate to be pulled from remote instead of
   only local files (PR#214)
+- Removed gather_facts from upload_files roles (#218)
 
 v 1.0.0 (01 Feb 2018)
 - Update default Jenkins version to 2.60
