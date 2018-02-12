@@ -104,7 +104,7 @@ strategy.assignRole(strategy.GLOBAL, createdRole, "{{ jenkins_admin.nickname }}"
 {% endfor %}
 
 // Create the user-defined roles that are desired
-{% for role in jenkins_security_roles %}
+{% for role in (jenkins_security_roles + jenkins_security_extra_roles) %}
 	rolePermissions = new HashSet<Permission>();
 	{% for permission in role.permissions %}
 		rolePermissions.add(Permission.fromId("{{ permission }}"));

@@ -1,2 +1,54 @@
+# A set of command-line Java options to be passed into Jenkins. These values
+# can be anything accepted either by Jenkins or by the JVM
+jenkins_java_options:
+  # Tell Java it is running on a headless system
+  - -Djava.awt.headless=true
+  # disables SNI extension in case of Java 1.7, which causes problems with SSL
+  - -Djsse.enableSNIExtension=false
+  # Allows all parameters to be passed between jobs in trigger pipelines
+  - -Dhudson.model.ParametersAction.keepUndefinedParameters=true
+  # Alows creation of synthetic users that exist only in Jenkins and not external auth
+  - -Dhudson.model.User.allowNonExistentUserToLogin=true
+  # allows the creation of a synthetic/virtual user to be created via an Url.
+  - -Dhudson.model.User.allowUserCreationViaUrl=true
+  # Allows admin users to see the API tokens of all users
+  - -Djenkins.security.ApiTokenProperty.showTokenToAdmins=true
+  # adds performance log messages during Jenkins initialization.
+  - -Djenkins.model.Jenkins.logStartupPerformance=true
+  # helps in cases where SSH slave startup can block. See JENKINS-20108
+  - -Djava.security.egd=file:/dev/./urandom
+  # Needed for Jenkins 2.X to bypass SetupWizard.
+  - -Djenkins.install.runSetupWizard=false
+  # Needed to disable DNSMulticast
+  - -Dhudson.DNSMultiCast.disabled=true
+  # Set default session timeout.
+  - -DsessionTimeout={{ session_timeout }}
+  # Increase max Java heap size
+  - -Xmx{{ java_heap_size }}
+
+# The baseline RPMs that are installed to every Jenkins master
+jmaster_rpms:
+  - "{{ jenkins_rpm }}"
+  - libvirt-devel
+  - python-virtualenv
+  - libyaml-devel
+  - openssl-devel
+  - libffi-devel
+# The default access roles that all Jenkins masters should have. Permissions are
+# listed according to their Java name, and users/groups/etc that should have
+# access to that role are lisetd in the "sids" array. In addition to this, every
+# master will have an "admin" role created that has knowledge of every permission
+# availble at the role's creation time. To add new roles or to override that
+# admin role, use the jenkins_security_extra_roles variable in the defaults folder
+# of this Ansible role
+jenkins_security_roles:
+  - name: anonymous
+    permissions:
+      - com.synopsys.arc.jenkins.plugins.ownership.OwnershipPlugin.Jobs
+      - hudson.model.Hudson.Read
+      - hudson.model.View.Read
+    sids:
+      - anonymous
+
 jenkins_cli_jar: "{{ jenkins_cli_shell_user_home }}/jenkins-cli.jar"
 jenkins_cli_jar_src: /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar

@@ -1,4 +1,8 @@
-v 1.1.0
+v 1.1.0 (Next)
+- Adds support for jenkins_java_extra_options (#204)
+- Adds support for jenkins_security_extra_roles (#204)
+- Allow update_center_certificate to be pulled from remote instead of
+  only local files (PR#214)
 - Fixed jenkins_cli_shell_user variable to work properly, and generate an SSH
   key for it if one does not yet exist (#181)
 - Removed gather_facts from upload_files roles (#218)

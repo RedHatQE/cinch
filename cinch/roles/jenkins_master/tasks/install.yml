@@ -10,13 +10,7 @@
   package:
     name: "{{ item }}"
     state: present
-  with_items:
-    - "{{ jenkins_rpm }}"
-    - libvirt-devel
-    - python-virtualenv
-    - libyaml-devel
-    - openssl-devel
-    - libffi-devel
+  with_items: "{{ jmaster_rpms }}"
   notify: restart Jenkins during upgrade
 
 - name: install additional packages
