@@ -1,4 +1,6 @@
 v 1.1.0
+- Fixed jenkins_cli_shell_user variable to work properly, and generate an SSH
+  key for it if one does not yet exist (#181)
 - Removed gather_facts from upload_files roles (#218)
 
 v 1.0.0 (01 Feb 2018)

@@ -1,0 +1,2 @@
+jenkins_cli_jar: "{{ jenkins_cli_shell_user_home }}/jenkins-cli.jar"
+jenkins_cli_jar_src: /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar
