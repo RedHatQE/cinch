@@ -48,6 +48,9 @@ jswarm_filename: swarm-client-{{ jswarm_version }}-jar-with-dependencies.jar
 # module documentation for the "copy" module. Variables in this array match
 # the arguments to that module of the same name.
 # http://docs.ansible.com/ansible/copy_module.html
+# NOTE: Variables are not defined here, as the playbook group_vars/all file overrides
+# variables in the inventory file's group vars section (although they do not override
+# variables in the inventory dir's group_vars folder).
 # Example
 # pre_upload_files:
 #   - src: /home/deployuser/somehost/ssl.key
@@ -58,5 +61,3 @@ jswarm_filename: swarm-client-{{ jswarm_version }}-jar-with-dependencies.jar
 #     dest: /var/lib/jenkins/.ssh/id_rsa
 #     owner: jenkins
 #     mode: 0600
-pre_upload_files: []
-post_upload_files: []

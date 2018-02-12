@@ -12,10 +12,11 @@
 
 - name: upload files before
   hosts: all
+  gather_facts: false
   roles:
     - role: upload_files
       vars:
-        upload_files: "{{ pre_upload_files }}"
+        upload_files: "{{ pre_upload_files | default([]) }}"
 
 - name: configure certificate authority, if necessary
   become: true
@@ -70,7 +71,8 @@
 
 - name: upload files after
   hosts: all
+  gather_facts: false
   roles:
     - role: upload_files
       vars:
-        upload_files: "{{ post_upload_files }}"
+        upload_files: "{{ post_upload_files | default([]) }}"

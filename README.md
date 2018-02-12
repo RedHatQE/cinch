@@ -23,7 +23,7 @@ Settings
 
 Some notable defaults for Jenkins masters currently enabled are
 - Java 8
-- Jenkins LTS 1.651.3
+- Jenkins LTS 2.63.3
 - an extensive list of plugins found in files/jenkins-plugin-lists/default.txt
 - SSL disabled, but Jenkins served off of port 80
 
