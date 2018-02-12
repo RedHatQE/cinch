@@ -14,21 +14,25 @@ addons:
       - debian-sid
     packages:
       - shellcheck
+before_install:
+  - pip install -U pip
+  - pip --version
 install:
-  - travis_retry tests/install.sh
+  - pip install tox
+  - tox --version
 script:
-  - travis_retry tests/${TEST}
+  - tox -v
 
 # Test matrix will be constructed from here. Listing out each set of tests
 # to execute will permit them to be executed in parallel
 env:
-  - TEST=lint.sh
-  - TEST=docs.sh
-  - TEST=coverage.sh
-  - TEST=cent6_slave.sh
-  - TEST=cent7_slave.sh
-  - TEST=fedora_slave.sh
-  - TEST=cent7_master.sh
+  - TOXENV=lint
+  - TOXENV=docs
+  - TOXENV=py27
+  - TOXENV=cent6_slave
+  - TOXENV=cent7_slave
+  - TOXENV=fedora_slave
+  - TOXENV=cent7_master
 
 deploy:
   - provider: pypi

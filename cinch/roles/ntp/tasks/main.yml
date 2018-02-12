@@ -8,7 +8,7 @@
   block:
     - name: remove existing ntp server values
       lineinfile:
-        backup: yes
+        backup: true
         dest: /etc/ntp.conf
         state: absent
         regexp: "^server"
