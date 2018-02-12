@@ -17,7 +17,7 @@ addons:
 install:
   - travis_retry tests/install.sh
 script:
-  - tests/${TEST}
+  - travis_retry tests/${TEST}
 
 # Test matrix will be constructed from here. Listing out each set of tests
 # to execute will permit them to be executed in parallel
