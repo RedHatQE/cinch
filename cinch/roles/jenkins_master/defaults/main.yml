@@ -168,6 +168,10 @@ jenkins_ldap:
   email_addr_attr: mail
   manager_dn: ''
   manager_password: ''
+# By default, the Kerberos plugin is configured to disallow anonymous login access.
+# If you want to enable anonymous access while still using Kerberos auth, then set
+# this value to true.
+jenkins_kerberos_anonymous_access: false
 
 # ############################################################################
 # A list of variables that don't really need to be overridden, but which can be
