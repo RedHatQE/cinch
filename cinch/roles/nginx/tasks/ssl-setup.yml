@@ -2,6 +2,7 @@
   copy:
     src: "{{ item }}"
     dest: "/etc/nginx/conf.d/ssl.key"
+    remote_src: "{{ httpd_ssl_keytab_files_remote_src }}"
     owner: nginx
     group: nginx
     mode: 0600
@@ -19,6 +20,7 @@
   copy:
     src: "{{ item }}"
     dest: "/etc/nginx/conf.d/ssl.pem"
+    remote_src: "{{ httpd_ssl_keytab_files_remote_src }}"
     owner: nginx
     group: nginx
     mode: 0644

@@ -15,6 +15,12 @@ nginx_send_timeout: 120s
 ## variables unset by default
 httpd_no_error_pages: false
 https_enabled: false
+# If httpd_keytab_file, httpd_ssl_key_file, httpd_ssl_crt_file, and
+# httpd_ssl_pem_file are already present on the remote Jenkins master being
+# configured by cinch, set the following variable to true to copy the files
+# from the filesystem of the remote host rather than from the system running
+# Ansible.
+httpd_ssl_keytab_files_remote_src: false
 # local path to use as source for keytab
 httpd_keytab_file: "/THIS/FILE/PROBABLY/DOESNT/EXIST"
 # Local path to the SSL certificate to use in configuring HTTPS. Can be full or relative
