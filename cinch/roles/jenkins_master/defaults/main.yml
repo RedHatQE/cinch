@@ -168,6 +168,21 @@ jenkins_ldap:
   email_addr_attr: mail
   manager_dn: ''
   manager_password: ''
+# By default, when the Kerberos plugin is enabled, it preempts any requests
+# that are unauthenticated (anonymous) to Jenkins. This will force any visitor
+# to the web UI or the API to authenticate against Jenkins. By setting this
+# following value to "true", then the Kerberos plugin will be configured to
+# pass anonymous requests through to the Jenkins roles plugin.
+#
+# Without this value set to true, then setting anonymous permissions will still
+# leave anonymous access to the system unavailable. Most users will not expect
+# this, as most Jenkins systems are configured to allow at least a modicum of
+# access and visibility to jobs, logs, and lists without authentication.
+#
+# If, however, job logs might contain private, embargoed, or sensitive data,
+# then not only should anonymous access be disabled, but this value should be
+# left as "false" in order to force authentication of every web request.
+jenkins_kerberos_anonymous_access: false
 
 # ############################################################################
 # A list of variables that don't really need to be overridden, but which can be
