@@ -8,10 +8,10 @@
   with_first_found:
     - files:
         - "{{ httpd_ssl_key_file }}"
-      skip: True
+      skip: true
   register: setup_ssl_key
   notify: restart nginx service
-  no_log: True
+  no_log: true
   tags:
     - update_ssl_certs
 
@@ -26,7 +26,7 @@
     - files:
         - "{{ httpd_ssl_pem_file }}"
         - "{{ httpd_ssl_crt_file }}"
-      skip: True
+      skip: true
   register: setup_ssl_pem
   when: setup_ssl_key|success
   tags:

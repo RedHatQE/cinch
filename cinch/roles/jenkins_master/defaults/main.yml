@@ -50,7 +50,7 @@ jenkins_uc_version: "{{ jenkins_version.rsplit('.', 1)[0] }}"
 # URL for that update center
 jenkins_plugins:
   - plugins: "{{ lookup('file', 'files/jenkins-plugin-lists/default.txt').split('\n') }}"
-    url: "{{ omit }}" # Omit in order to use default update center
+    url: "{{ omit }}"  # Omit in order to use default update center
 # Plugin lists may also be fetched via a URL using Ansible's url lookup plugin.
 # Given the same plugin list input file as described above, note that you must
 # split on commas rather than newlines due to the behavior of the Ansible url
