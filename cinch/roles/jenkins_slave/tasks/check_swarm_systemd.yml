@@ -4,7 +4,7 @@
   changed_when: false
   register: service_swarm_status
   tags:
-    - skip_ansible_lint # systemctl module does not support "status"
+    - skip_ansible_lint  # systemctl module does not support "status"
 
 # Some shell magic is required here to grab the log output from *only* the last
 # run of the swarm service in systemd.  To do this, we find the last PID that

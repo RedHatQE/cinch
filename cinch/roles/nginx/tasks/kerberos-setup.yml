@@ -5,5 +5,5 @@
   with_first_found:
     - files:
         - "{{ httpd_keytab_file }}"
-      skip: True
-  no_log: True
+      skip: true
+  no_log: true

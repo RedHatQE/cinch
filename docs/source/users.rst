@@ -145,7 +145,7 @@ configure cinch-specific values within a linchpin workspace.
 
 .. note::  For linchpin topology and workspace examples, including various host
            environments, see the `linchpin documentation
-           <https://linchpin.readthedocs.io/en/latest/topologies.html>`_.
+           <https://linchpin.readthedocs.io/en/latest/managing_resources.html>`_.
 
 Create a layout file by saving the following example template as
 **/path/to/linchpin/workspace/layouts/mylayout.yml** and edit to taste based on
