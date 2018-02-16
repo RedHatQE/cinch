@@ -15,25 +15,23 @@ nginx_send_timeout: 120s
 ## variables unset by default
 httpd_no_error_pages: false
 https_enabled: false
-# If httpd_keytab_file, httpd_ssl_key_file, httpd_ssl_crt_file, and
-# httpd_ssl_pem_file are already present on the remote Jenkins master being
-# configured by cinch, set the following variable to true to copy the files
-# from the filesystem of the remote host rather than from the system running
-# Ansible.
+# If httpd_keytab_file, httpd_ssl_key_file and httpd_ssl_crt_file
+# are already present on the remote Jenkins master being configured by cinch,
+# set the following variable to true to copy the files from the filesystem
+# of the remote host rather than from the system running Ansible
 httpd_ssl_keytab_files_remote_src: false
 # local path to use as source for keytab
-httpd_keytab_file: "/THIS/FILE/PROBABLY/DOESNT/EXIST"
+#httpd_keytab_file: "/THIS/FILE/PROBABLY/DOESNT/EXIST"
 # Local path to the SSL certificate to use in configuring HTTPS. Can be full or relative
 # to the path from where the main playbook is run. This can be overriden if you want
 # secure access to Jenkins using your own SSL certificate. By default, a self signed
 # certificate will be created and used.
-httpd_ssl_key_file: "{{ ssl_key_file | default('/THIS/FILE/PROBABLY/DOESNT/EXIST') }}"
-# Local path to the SSL private key in crt format. For more details see comment above.
-# When using own SSL certificates, you need to override either this variable or
-# httpd_ssl_pem_file along with httpd_ssl_key_file.
-httpd_ssl_crt_file: "{{ ssl_crt_file | default('/THIS/FILE/PROBABLY/DOESNT/EXIST') }}"
+#httpd_ssl_key_file: "/THIS/FILE/PROBABLY/DOESNT/EXIST"
+# Local path to the SSL private key in crt or pem format. For more details see comment above.
+# When using own SSL certificates, you need to override either this variable
+#httpd_ssl_crt_file: "/THIS/FILE/PROBABLY/DOESNT/EXIST"
 # Local path to the SSL private key in PEM format. For more details see comment above.
-httpd_ssl_pem_file: "{{ ssl_pem_file | default('/THIS/FILE/PROBABLY/DOESNT/EXIST') }}"
+#httpd_ssl_pem_file: "/THIS/FILE/PROBABLY/DOESNT/EXIST"
 # location and CN settings for the self signed certificate
 ssl_self_signed_string: "/C=US/ST=New York/L=New York City/O=My Department/CN={{ service_name }}"
 # whether to use a speedy method to generate Diffie Hellman parameters

@@ -1,36 +1,28 @@
 - name: copy over ssl key
   copy:
-    src: "{{ item }}"
+    src: "{{ httpd_ssl_key_file }}"
     dest: "/etc/nginx/conf.d/ssl.key"
     remote_src: "{{ httpd_ssl_keytab_files_remote_src }}"
     owner: nginx
     group: nginx
     mode: 0600
-  with_first_found:
-    - files:
-        - "{{ httpd_ssl_key_file }}"
-      skip: true
   register: setup_ssl_key
-  notify: restart nginx service
+  when: httpd_ssl_key_file is defined
   no_log: true
   tags:
     - update_ssl_certs
 
-- name: copy over ssl pem file
+- name: copy over ssl crt file
   copy:
-    src: "{{ item }}"
+    src: "{{ httpd_ssl_crt_file }}"
     dest: "/etc/nginx/conf.d/ssl.pem"
     remote_src: "{{ httpd_ssl_keytab_files_remote_src }}"
     owner: nginx
     group: nginx
     mode: 0644
-  with_first_found:
-    - files:
-        - "{{ httpd_ssl_pem_file }}"
-        - "{{ httpd_ssl_crt_file }}"
-      skip: true
   register: setup_ssl_pem
   when: setup_ssl_key|success
+  notify: restart nginx service
   tags:
     - update_ssl_certs
 

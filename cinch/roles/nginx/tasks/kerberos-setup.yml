@@ -1,10 +1,7 @@
 - name: copy over keytab
   copy:
-    src: "{{ item }}"
+    src: "{{ httpd_keytab_file }}"
     dest: "/etc/nginx/conf.d/httpd.keytab"
     remote_src: "{{ httpd_ssl_keytab_files_remote_src }}"
-  with_first_found:
-    - files:
-        - "{{ httpd_keytab_file }}"
-      skip: true
+  when: httpd_keytab_file is defined
   no_log: true
