@@ -9,7 +9,7 @@ with open(path.join(here, 'README.md')) as f:
 
 setup(
     name='cinch',
-    version='1.0.0',
+    version='1.1.0',
     description='Cinch continuous integration setup',
     long_description=description,
     url='https://github.com/RedHatQE/cinch',
@@ -39,16 +39,6 @@ setup(
         ]
     },
     extras_require={
-        'lint': [
-            'flake8',
-            'ansible-lint',
-            'yamllint'
-        ],
-        'test': [
-            'docker-py',
-            'pytest-cov',
-            'codecov'
-        ],
         'docs': [
             'sphinx_rtd_theme',
             'sphinx'
