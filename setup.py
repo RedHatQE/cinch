@@ -39,16 +39,6 @@ setup(
         ]
     },
     extras_require={
-        'lint': [
-            'flake8',
-            'ansible-lint',
-            'yamllint'
-        ],
-        'test': [
-            'docker-py',
-            'pytest-cov',
-            'codecov'
-        ],
         'docs': [
             'sphinx_rtd_theme',
             'sphinx'
