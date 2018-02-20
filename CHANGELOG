@@ -6,6 +6,11 @@ v 1.1.0 (Next)
 - Fixed jenkins_cli_shell_user variable to work properly, and generate an SSH
   key for it if one does not yet exist (#181)
 - Removed gather_facts from upload_files roles (#218)
+- Improved internal movement of some files and variables to avoid collisions
+- Improvements to CI testing runs (#216)
+- Move Python testing to tox (#221)
+- Provide option to allow anonymous access when Kerberos is enabled (#205)
+- Allow keytab and SSL certs to be pulled from remote sources (#224)
 
 v 1.0.0 (01 Feb 2018)
 - Update default Jenkins version to 2.60
