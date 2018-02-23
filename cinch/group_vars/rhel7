@@ -20,7 +20,11 @@ all_repositories:
 # These types of repositories will download the requested URL into the /etc/yum.repos.d
 # folder in order to enable them
 all_download_repositories:
-  jenkins: https://fedorapeople.org/~semyers/jenkins-rpm/jenkins1651.repo
+  jenkins: http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
+
+rpm_key_imports:
+  - key: http://pkg.jenkins-ci.org/redhat-stable/jenkins.io.key
+    validate_certs: true
 
 jenkins_slave_repositories:
   - "{{ all_repositories.latest }}"
