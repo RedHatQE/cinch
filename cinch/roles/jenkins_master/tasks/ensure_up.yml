@@ -8,14 +8,14 @@
 - name: discover valid hostname for containers
   set_fact:
     _jenkins_host: 'localhost'
-  when: ansible_connection == 'docker'
+  when: ansible_connection == 'docker' or ansible_connection == 'local'
   tags:
     - jenkins_check_mode
 
 - name: discover valid hostname
   set_fact:
     _jenkins_host: "{{ ansible_host | default(inventory_hostname | default('localhost')) }}"
-  when: ansible_connection != 'docker'
+  when: ansible_connection != 'docker' and ansible_connection != 'local'
   tags:
     - jenkins_check_mode
 
