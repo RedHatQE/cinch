@@ -69,12 +69,12 @@
         virtualenv_site_packages: true
       with_dict: "{{ venvs }}"
 
-    - name: install version 1.0.4 of linchpin using pip
+    - name: install version 1.5.2 of linchpin using pip
       pip:
         name: linchpin
         virtualenv: "{{ venvs.linchpin }}"
         extra_args: -U
-        version: 1.0.4
+        version: 1.5.2
 
     - name: install released version of cinch using pip
       pip:

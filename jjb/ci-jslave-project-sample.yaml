@@ -10,6 +10,7 @@
           choices:
             - openstack-slave
             - beaker-slave
+            - aws_ec2-slave
     builders:
       - shell: |
             #!/bin/bash -ex
