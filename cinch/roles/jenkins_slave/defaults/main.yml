@@ -12,10 +12,6 @@ jswarm_execs: 10
 jswarm_extra_args: ''
 # Directory where the swarm will live and execute
 jswarm_home: "{{ jenkins_user_home }}"
-# User which will execute swarm service
-jswarm_user: "{{ jenkins_user }}"
-# Whether the swarm should execute as the jenkins user. False means it will exec as root
-run_swarm_as_jenkins: true
 # Path to Java interpreter to use to run the Swarm client
 jenkins_java_cmd: /usr/bin/java
 # Command line args to the Java executable, such as heap size, etc

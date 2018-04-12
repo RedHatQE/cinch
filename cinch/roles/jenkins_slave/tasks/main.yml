@@ -57,14 +57,6 @@
   set_fact:
     swarm_retry_timer: 10
 
-# The default user to execute swarm service is jenkins. Users can override this
-# by setting the 'run_swarm_as_jenkins' variable to false. This will tell
-# cinch to execute the swarm service as root user.
-- name: set swarm to run as root user
-  set_fact:
-    jswarm_user: root
-  when: run_swarm_as_jenkins == false
-
 - name: upload swarm config file
   template:
     src: sysconfig_jenkins_swarm

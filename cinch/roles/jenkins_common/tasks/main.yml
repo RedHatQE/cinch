@@ -33,6 +33,7 @@
     home: "{{ jenkins_user_home }}"
     shell: /bin/bash
     uid: "{{ jenkins_user_uid | default(omit) }}"
+  when: jenkins_user != ansible_user and jenkins_user != 'root'
 
 - name: ensure SSH directory exists
   file:

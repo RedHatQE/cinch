@@ -2,7 +2,7 @@
 After=network-online.target
 Wants=network-online.target
 [Service]
-User={{ jswarm_user }}
+User={{ jenkins_user }}
 EnvironmentFile=/etc/sysconfig/jenkins_swarm
 Restart=on-failure
 
