@@ -7,6 +7,11 @@ python:  # Only one version for now
   - "2.7"
 cache: pip
 
+# Installation of the system
+addons:
+  apt:
+    packages:
+      - shellcheck
 before_install:
   - travis_retry pip install -U pip
   - pip --version
