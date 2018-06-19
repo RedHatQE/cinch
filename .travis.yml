@@ -10,8 +10,6 @@ cache: pip
 # Installation of the system
 addons:
   apt:
-    sources:
-      - debian-sid
     packages:
       - shellcheck
 before_install:
