@@ -1,0 +1,12 @@
+name: cinch
+title: Cinch Profile
+maintainer: Alexander Braverman Masis
+copyright: Red Hat
+copyright_email: abraverm@redhat.com
+license: GPL-3.0
+summary: Cinch Compliance Profile
+version: 0.1.0
+depends:
+  - name: jenkins
+    git: https://github.com/RedHatQe/jenkins-profile.git
+    branch: master

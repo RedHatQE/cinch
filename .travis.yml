@@ -16,6 +16,7 @@ before_install:
   - travis_retry pip install -U pip
   - pip --version
 install:
+  - travis_retry gem install inspec
   - travis_retry pip install tox
   - tox --version
 script:

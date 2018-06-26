@@ -26,7 +26,8 @@ ansible -i /dev/null \
 		detach=true \
 		command='/usr/lib/systemd/systemd \
 		--system' \
-		privileged=true"
+		capabilities=SYS_ADMIN \
+		$([[ $TRAVIS = true ]] && echo privileged=true)"
 # Fedora is lacking python in base image
 docker exec -it "${container_name}" "${pkg_mgr}" install -y python
 ansible -i "${inventory}" \
@@ -44,6 +45,11 @@ echo "Building container into a Jenkins master for Cinch ${cinch_version}"
 ansible-playbook -i "${inventory}" \
 	"${cinch}/cinch/site.yml" \
 	-e jenkins_user_password=somedummyvalue
+########################################################
+# Run inspec against the container
+########################################################
+erb "${cinch}/tests/profile.yml.erb" > "${cinch}/tests/profile.yml"
+inspec exec "${cinch}/tests/cinch" --attrs "${cinch}/tests/profile.yml" -t "docker://${container_name}"
 ########################################################
 # Finish and close up the container
 ########################################################

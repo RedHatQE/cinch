@@ -1,0 +1,18 @@
+version: 2.60.3-1.1
+jenkins_home: /var/lib/jenkins
+ports:
+  - 8080
+jenkins_url: http://localhost:8080
+jenkins_settings:
+  - key: "hudson/useSecurity"
+    value:
+      - 'true'
+  - key: "hudson/securityRealm/@class"
+    value:
+      - 'hudson.security.HudsonPrivateSecurityRealm'
+  - key: hudson/slaveAgentPort
+    value:
+      - '50000'
+
+jenkins_plugins:
+<%= %x(cat cinch/files/jenkins-plugin-lists/default.txt | awk -F '==' '{print "  -", $1}') %>
