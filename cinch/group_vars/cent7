@@ -1,8 +1,6 @@
 gcc_compat_package: compat-gcc-44
 
 _repositories:
-  - name: epel-testing
-    mirrorlist: "{{ fedora_mirrors }}repo=testing-epel7"
   - name: epel
     mirrorlist: "{{ fedora_mirrors }}repo=epel-7"
 
