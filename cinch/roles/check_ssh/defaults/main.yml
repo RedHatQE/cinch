@@ -1,3 +1,2 @@
-ssh_retries: 100
+ssh_timeout: 600
 ssh_retry_delay: 6
-host: "{{ hostvars[inventory_hostname]['ansible_host'] | default(inventory_hostname) }}"
