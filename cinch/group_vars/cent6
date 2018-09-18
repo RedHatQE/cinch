@@ -2,8 +2,6 @@ gcc_compat_package: compat-gcc-34
 python_pip_package: python-pip
 
 _repositories:
-  - name: epel-testing
-    mirrorlist: "{{ fedora_mirrors }}repo=testing-epel6"
   - name: epel
     mirrorlist: "{{ fedora_mirrors }}repo=epel-6"
 

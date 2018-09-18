@@ -52,7 +52,7 @@
 # https://jenkins.io/doc/book/managing/cli/#remoting-connection-mode
 - name: check Jenkins version for -remoting flag
   set_fact:
-    jenkins_cli_remoting: "{{ jenkins_status.x_jenkins | version_compare('2.46.2', '>=') }}"
+    jenkins_cli_remoting: "{{ jenkins_status.x_jenkins is version_compare('2.46.2', '>=') }}"
 
 - name: copy jenkins-jar file to readable place
   become: true

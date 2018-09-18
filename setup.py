@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 from setuptools import setup, find_packages
 from os import path
 
@@ -9,14 +7,14 @@ with open(path.join(here, 'README.md')) as f:
 
 setup(
     name='cinch',
-    version='1.1.0',
+    version='1.2.0',
     description='Cinch continuous integration setup',
     long_description=description,
     url='https://github.com/RedHatQE/cinch',
     author='RedHatQE',
     license='GPLv3',
     classifiers=[
-        'Development Status :: 3 - Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'Intended Audience :: Information Technology',
         'Topic :: Software Development :: Quality Assurance',
@@ -29,7 +27,7 @@ setup(
     packages=find_packages(exclude=('library', 'bin')),
     include_package_data=True,
     install_requires=[
-        'ansible>=2.3.2',
+        'ansible>=2.4',
         'plumbum>=1.6.0'
     ],
     entry_points={

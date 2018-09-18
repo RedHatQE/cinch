@@ -1,0 +1,9 @@
+jenkins_common_packages:
+  - java-1.{{ java_version }}.0-openjdk
+  - java-1.{{ java_version }}.0-openjdk-devel
+  - libselinux-python
+  - openssh
+  - gcc
+  - redhat-rpm-config
+  - git
+  - "{{ python_pip_package }}"

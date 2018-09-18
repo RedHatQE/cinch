@@ -79,7 +79,7 @@
   systemd:
     daemon_reload: true
     name: swarm
-  when: systemd_file|changed
+  when: systemd_file is changed
   tags:
     - skip_ansible_lint
 
