@@ -7,7 +7,7 @@ with open(path.join(here, 'README.md')) as f:
 
 setup(
     name='cinch',
-    version='1.2.0',
+    version='1.3.0',
     description='Cinch continuous integration setup',
     long_description=description,
     url='https://github.com/RedHatQE/cinch',

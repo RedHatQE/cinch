@@ -30,7 +30,7 @@ https_enabled: false
 # The version of Jenkins to install from the repository. This value is used
 # to construct the name of the RPM below as well as update center URLS, so this
 # must include the complete "x.y.z" version, e.g. 1.651.3.
-jenkins_version: "2.89.4"
+jenkins_version: "2.121.3"
 # Temporarily remove the jenkins package from the package mananger pinning
 # configuration to allow upgrades of the jenkins package.  Note that other
 # packages blacklisted by the upgrade_blacklist variable will remain pinned via
