@@ -41,22 +41,22 @@ deploy:
     distributions: "sdist bdist_wheel"
     on:
       tags: true
-      condition: $TEST = lint.sh
+      condition: $TOXENV = lint
   - provider: script
     repo: RedHatQE/cinch
     script: ./scripts/deploy.sh centos6 false
     on:
       tags: true
-      condition: $TEST = cent6_slave.sh
+      condition: $TOXENV = cent6_slave
   - provider: script
     repo: RedHatQE/cinch
     script: ./scripts/deploy.sh centos7 true
     on:
       tags: true
-      condition: $TEST = cent7_slave.sh
+      condition: $TOXENV = cent7_slave
   - provider: script
     repo: RedHatQE/cinch
     script: ./scripts/deploy.sh fedora25 false
     on:
       tags: true
-      condition: $TEST = fedora_slave.sh
+      condition: $TOXENV = fedora_slave
