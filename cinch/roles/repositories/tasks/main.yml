@@ -11,3 +11,7 @@
     validate_certs: "{{ item.validate_certs }}"
   with_items: "{{ rpm_key_imports }}"
   notify: clean yum cache
+  retries: 3
+  delay: 10
+  register: result
+  until: result.msg is not defined
