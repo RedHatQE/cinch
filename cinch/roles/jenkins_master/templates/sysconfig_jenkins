@@ -157,4 +157,4 @@ JENKINS_HANDLER_IDLE="{{ jenkins_handler_idle }}"
 # Pass arbitrary arguments to Jenkins.
 # Full option list: java -jar jenkins.war --help
 #
-JENKINS_ARGS="{{ jenkins_args }}"
+JENKINS_ARGS="{{ _jenkins_args }}"

@@ -21,8 +21,6 @@ jenkins_java_options:
   - -Djenkins.install.runSetupWizard=false
   # Needed to disable DNSMulticast
   - -Dhudson.DNSMultiCast.disabled=true
-  # Set default session timeout.
-  - -DsessionTimeout={{ session_timeout }}
   # Increase max Java heap size
   - -Xmx{{ java_heap_size }}
 
@@ -52,3 +50,7 @@ jenkins_security_roles:
 
 jenkins_cli_jar: "{{ jenkins_cli_shell_user_home }}/jenkins-cli.jar"
 jenkins_cli_jar_src: /var/cache/jenkins/war/WEB-INF/jenkins-cli.jar
+# Session timeout doesn't work through java options and has to pass as an
+# argument. To support both session timeout and custon jenkins args without
+# mistakenly override it, a proxy variable will be used.
+_jenkins_args: "--sessionTimeout={{ session_timeout }} {{ jenkins_args }}"
