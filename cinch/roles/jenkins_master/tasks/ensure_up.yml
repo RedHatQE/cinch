@@ -73,7 +73,7 @@
   become_user: "{{ jenkins_cli_shell_user }}"
   retries: "{{ jenkins_user_api_retries }}"
   delay: 6
-  until: jenkins_admin_api_key.api_key != ''
+  until: jenkins_admin_api_key.api_key
 
 - name: delete jenkins-cli file
   become: true

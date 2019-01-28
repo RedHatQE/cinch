@@ -2,6 +2,9 @@
   package:
     name: libsemanage-python
     state: present
+  retries: 2
+  register: install_libsemanage
+  until: install_libsemanage is success
 
 - name: enable selinux overrides
   seboolean:

@@ -3,6 +3,9 @@
     name: firewalld,python-firewall
     state: present
   become: true
+  retries: 2
+  register: install_firewalld
+  until: install_firewalld is success
 
 - name: ensure firewalld is enabled and started
   service:

@@ -10,19 +10,27 @@
   package:
     name: "{{ jmaster_rpms }}"
     state: present
+  retries: 2
+  register: install_master_rpms
+  until: install_master_rpms is success
   notify: restart Jenkins during upgrade
 
 - name: install additional packages
   package:
-    name: "{{ item }}"
+    name: "{{ jmaster_extra_rpms }}"
     state: present
-  with_items: "{{ jmaster_extra_rpms }}"
+  retries: 2
+  register: install_master_extra_rpms
+  until: install_master_extra_rpms is success
 
 - name: install gcc_compat where necessary
   package:
     name: "{{ gcc_compat_package }}"
     state: present
   when: gcc_compat_package is defined
+  retries: 2
+  register: install_gcc_compat_rpms
+  until: install_gcc_compat_rpms is success
 
 # This blacklist must be done *after* the package installation defined above,
 # otherwise packages can be blacklisted before they are installed initially.

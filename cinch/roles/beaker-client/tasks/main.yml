@@ -1,9 +1,11 @@
 - name: install beaker
   package:
-    name: "{{ item }}"
+    name:
+      - beaker-client
     state: present
-  with_items:
-    - beaker-client
+  retries: 2
+  register: install_beaker
+  until: install_beaker is success
 
 - name: install beaker client config file
   become: true

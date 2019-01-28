@@ -48,7 +48,7 @@
       fail:
         msg: "directory {{ item.item.value }} exists, but 'delete_venv' setting is False"
       with_items: "{{ venv_stat_result.results }}"
-      when: item.stat.exists == true and not (delete_venv|bool)
+      when: item.stat.exists and not (delete_venv|bool)
 
     - name: >-
         delete existing virtualenv directory (disabled by default, override
@@ -68,6 +68,9 @@
         extra_args: -U
         virtualenv_site_packages: true
       with_dict: "{{ venvs }}"
+      retries: 2
+      register: create_virtualenvs
+      until: create_virtualenvs is success
 
     - name: install version 1.5.2 of linchpin using pip
       pip:
@@ -75,9 +78,15 @@
         virtualenv: "{{ venvs.linchpin }}"
         extra_args: -U
         version: 1.5.2
+      retries: 2
+      register: install_linchpin
+      until: install_linchpin is success
 
     - name: install released version of cinch using pip
       pip:
         name: cinch
         virtualenv: "{{ venvs.cinch }}"
         extra_args: -U
+      retries: 2
+      register: install_cinch
+      until: install_cinch is success

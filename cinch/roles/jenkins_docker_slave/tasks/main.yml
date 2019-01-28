@@ -1,11 +1,13 @@
 - name: ensure docker is installed
   package:
-    name: "{{ item }}"
+    name:
+      - docker
+      - python-docker-py
     state: present
   become: true
-  with_items:
-    - docker
-    - python-docker-py
+  retries: 2
+  register: install_docker
+  until: install_docker is success
 
 - name: make sure docker is started
   service:

@@ -13,9 +13,11 @@
 
 - name: install additional packages
   package:
-    name: "{{ item }}"
+    name: "{{ extra_rpms }}"
     state: present
-  with_items: "{{ extra_rpms }}"
+  retries: 2
+  register: install_docker
+  until: install_docker is success
 
 - name: create jenkins user
   user:

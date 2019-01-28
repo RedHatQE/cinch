@@ -3,6 +3,9 @@
     name: nginx
     state: installed
   when: "repos_add is not defined or 'epel' not in repos_add"
+  retries: 2
+  register: install_nginx
+  until: install_nginx is success
   notify:
     - reload systemd
     - restart nginx service
@@ -13,6 +16,9 @@
     state: installed
     disablerepo: epel
   when: "repos_add is defined and 'epel' in repos_add"
+  retries: 2
+  register: install_nginx_no_epel
+  until: install_nginx_no_epel is success
   notify: restart nginx service
 
 - name: install nginx logrotation file

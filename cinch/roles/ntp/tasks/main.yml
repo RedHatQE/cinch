@@ -3,6 +3,9 @@
   package:
     name: ntp
     state: present
+  retries: 2
+  register: install_ntp
+  until: install_ntp is success
 
 - name: override ntp servers when ntp_servers is defined
   block:
