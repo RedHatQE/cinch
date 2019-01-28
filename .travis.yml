@@ -4,7 +4,7 @@ services:
   - docker
 language: python
 python:  # Only one version for now
-  - "2.7"
+  - "3.6"
 cache: pip
 
 # Installation of the system
