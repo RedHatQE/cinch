@@ -72,12 +72,12 @@
       register: create_virtualenvs
       until: create_virtualenvs is success
 
-    - name: install version 1.5.2 of linchpin using pip
+    - name: install version 1.6.2 of linchpin using pip
       pip:
         name: linchpin
         virtualenv: "{{ venvs.linchpin }}"
         extra_args: -U
-        version: 1.5.2
+        version: 1.6.2
       retries: 2
       register: install_linchpin
       until: install_linchpin is success
