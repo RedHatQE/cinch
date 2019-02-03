@@ -1,0 +1,8 @@
+This file spins up a pair of Jenkins master and slave instances
+running RHEL8.  They will be based on a rhel8.0 box.
+
+You will still need to modify the Vagrantfile to update the value
+of the rhel_base variable to point to the base directory of your
+available RHEL8 repositories. Since those files are also under
+license, you will need to have access to such a repository in order
+for the Ansible playbooks to properly install the software.

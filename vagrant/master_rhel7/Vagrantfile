@@ -1,7 +1,7 @@
 require "../shared.rb"
 
 Vagrant.configure("2") do |config|
-    vm(config, "master", "rhel7.4") do |ansible|
+    vm(config, "master", "generic/rhel7") do |ansible|
          ansible.groups = {
             "jenkins_master" => ["master"],
             "rhel7" => ["master"],

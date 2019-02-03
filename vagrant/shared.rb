@@ -4,7 +4,9 @@ $ip = 2
 def get_username(base_box)
     if base_box.start_with?('centos')
         return 'centos'
-    elsif base_box.start_with?('rhel')
+    elsif base_box == 'generic/rhel8'
+        return 'cloud-user'
+    elsif base_box.include?('rhel')
         return 'root'
     else
         return 'fedora'
@@ -18,16 +20,10 @@ def get_image(base_box)
         return 'CentOS-6-x86_64-GenericCloud-1612'
     elsif base_box == 'fedora/26-cloud-base'
         return 'Fedora-Cloud-Base-26-compose-latest'
-    elsif base_box == 'fedora/25-cloud-base'
-        return 'Fedora-Cloud-Base-25-compose-latest'
-    elsif base_box == 'fedora/24-cloud-base'
-        return 'Fedora-Cloud-Base-24-compose-latest'
-    elsif base_box == 'rhel7.2'
-        return 'rhel-7.2-server-x86_64-updated'
-    elsif base_box == 'rhel7.3'
-        return 'rhel-7.3-server-x86_64-updated'
-    elsif base_box == 'rhel7.4'
-        return 'rhel-7.4-server-x86_64-updated'
+    elsif base_box == 'generic/rhel7'
+		return 'rhel-7.6-server-x86_64-updated'
+    elsif base_box == 'generic/rhel8'
+        return 'rhel-8.0-x86_64-latest'
     elsif base_box == 'rhel6'
         return 'rhel-6.9-server-x86_64-updated'
     end
