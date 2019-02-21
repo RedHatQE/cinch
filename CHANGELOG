@@ -1,3 +1,11 @@
+v 1.4.0 (20 Feb 2019)
+- Support Linchpin 1.6.2
+- Support RHEL 8 slaves
+- Upgrade to Python 3 for testing everything we can
+- upgrade ansible-lint
+- Fix rpm key import timeout 
+- Fix Jenkins session timeout configuration being ignored
+
 v 1.3.0 (20 Sep 2018)
 - Bump default Jenkins to 2.121
 - Update plugins for 2.121 compatibility
