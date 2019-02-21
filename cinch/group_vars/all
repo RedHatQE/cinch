@@ -20,9 +20,9 @@ jenkins_user_home: /var/lib/jenkins
 # files and jobs
 jenkins_home: /var/lib/jenkins
 # Directives on jswarm file and destination
-jswarm_version: 2.1
+jswarm_version: 3.9
 jswarm_local_directory: /opt/jswarm
-jswarm_filename: swarm-client-{{ jswarm_version }}-jar-with-dependencies.jar
+jswarm_filename: swarm-client-{{ jswarm_version }}.jar
 
 # Override default distro NTP server configuration
 # Define the var ntp_servers as below to optionally override default NTP
