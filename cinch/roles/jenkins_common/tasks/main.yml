@@ -1,6 +1,6 @@
 - name: install necessary python packages
   command: dnf install -y python2-dnf
-  when: ansible_distribution == 'Fedora'
+  when: ansible_distribution == 'Fedora' and ansible_distribution_major_version < 30
   changed_when: false
 
 - name: install java and other necessary packages
