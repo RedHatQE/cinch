@@ -49,7 +49,8 @@ ansible-playbook -i "${inventory}" \
 # Run inspec against the container
 ########################################################
 erb "${cinch}/tests/profile.yml.erb" > "${cinch}/tests/profile.yml"
-inspec exec "${cinch}/tests/cinch" --attrs "${cinch}/tests/profile.yml" -t "docker://${container_name}"
+inspec exec --chef-license=accept-silent "${cinch}/tests/cinch" \
+  --attrs "${cinch}/tests/profile.yml" -t "docker://${container_name}"
 ########################################################
 # Finish and close up the container
 ########################################################
