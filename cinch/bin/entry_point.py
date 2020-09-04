@@ -1,7 +1,7 @@
 from __future__ import print_function
 from argparse import ArgumentParser, REMAINDER
 from os import getcwd, path
-from wrappers import call_ansible
+from .wrappers import call_ansible
 
 import sys
 
